@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+    <link rel="stylesheet" href="files.css">
+    <link rel="stylesheet" href="dialog.css">
+    <script src="shared.js"></script>
+    <script src="custom-bottom-sheet.js"></script>
+    <script src="custom-dialog.js"></script>
+    <script src="custom-toast.js"></script>
+    <script src="actions.js"></script>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+</head>
+
+<body>
+    <div bind="wrapper" class="wrapper"></div>
+    <div style="height: 49px"></div>
+    <div class="bar-renderer">
+        <div bind @click="newFile" class="bar-item-renderer">
+            <span class="material-symbols-outlined">
+                draft
+            </span>
+            <div class="bar-item-title">
+                新建文件
+            </div>
+        </div>
+        <div bind @click="newDirectory" class="bar-item-renderer">
+            <span class="material-symbols-outlined">
+                create_new_folder
+            </span>
+            <div class="bar-item-title">
+                新建文件夹
+            </div>
+        </div>
+        <div bind @click="onShowFavorites" class="bar-item-renderer">
+            <span class="material-symbols-outlined">
+                favorite
+            </span>
+            <div class="bar-item-title">
+                收藏夹
+            </div>
+        </div>
+        <div bind @click="onMove" class="bar-item-renderer">
+            <span class="material-symbols-outlined">
+                file_copy
+            </span>
+            <div class="bar-item-title">
+                移动
+            </div>
+        </div>
+        <div bind @click="onDelete" class="bar-item-renderer">
+            <span class="material-symbols-outlined">
+                close
+            </span>
+            <div class="bar-item-title">
+                删除
+            </div>
+        </div>
+        <div bind @click="onMenu" class="bar-item-renderer">
+            <span class="material-symbols-outlined">
+                menu
+            </span>
+            <div class="bar-item-title">
+                菜单
+            </div>
+        </div>
+    </div>
+
+
+    <custom-toast class="toast"></custom-toast>
+
+
+    <div class="dialog">
+        <div class="dialog-mask">
+        </div>
+        <div class="dialog-wrapper">
+            <div class="dialog-container">
+                <div class="dialog-container-wrapper">
+                    <div class="dialog-content">
+                        <div class="spinner">
+                        </div>
+                        <span>正在上传文件...
+                        </span>
+                    </div>
+                    <div class="dialog-footer" style="display: none;">
+                        <div class="dialog-button">
+                            确认
+                        </div>
+                        <div class="dialog-button" style="color: #db4437;">
+                            删除
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/files.js"></script>
+</body>
+
+</html>
