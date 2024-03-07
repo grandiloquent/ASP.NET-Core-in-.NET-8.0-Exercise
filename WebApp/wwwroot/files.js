@@ -1,4 +1,3 @@
-const baseUri = window.location.host === "127.0.0.1:5500" ? "http://192.168.8.55:8500" : "";
 const imageRe = new RegExp(/\.(?:jpeg|jpg|webp|gif|png|bmp|v)$/);
 const binaryRe = new RegExp(/\.(?:pdf|epub|apk|azw3|mobi)$/);
 const audioRe = new RegExp(/\.(?:mp3|wav|m4a)$/);
@@ -84,7 +83,6 @@ window.addEventListener("popstate", function (e) {
 ////////////////////////////////////////////////////////////////
 bind();
 initializeDropZone();
-render();
 
 // fetch(`http://192.168.8.55:3000/api/files/size?path=/storage/emulated/0/Download`).then(res => res.text())
 //     .then(res => {

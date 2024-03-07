@@ -1,4 +1,4 @@
-const pathSeperator = "/";
+
 
 function addContextMenuItem(bottomSheet, title, handler) {
     const item = document.createElement('div');
@@ -67,10 +67,7 @@ function initializeDropZone() {
         }
     });
 }
-async function loadData(path, size) {
-    const res = await fetch(`${baseUri}/files?path=${encodeURIComponent(path || '')}&size=${size || 'false'}`);
-    return res.json();
-}
+
 function newFile() {
     const dialog = document.createElement('custom-dialog');
     dialog.setAttribute('title', "新建文件")
@@ -164,85 +161,6 @@ function renameFile(path) {
         //window.location.reload();
     });
     document.body.appendChild(dialog);
-}
-async function render(path) {
-    setDocumentTitle(path);
-    const searchParams = new URL(window.location).searchParams;
-    path = path || searchParams.get("path") || '/storage/emulated/0';
-    const isSize = searchParams.get("size") || false;
-    const res = await loadData(path, isSize);
-    this.wrapper.innerHTML = res
-        .sort((x, y) => {
-            if (x.isDirectory !== y.isDirectory) if (x.isDirectory) return -1; else return 1;
-            if (isSize === "0") {
-                const dif = y.lastWriteTime - x.lastWriteTime;
-                if (dif > 0) {
-                    return 1;
-                } else if (dif < 0) {
-                    return -1;
-                } else {
-                    return 0;
-                }
-            } else if (isSize) {
-                if (y.length && x.length) {
-                    const dif = y.length - x.length;
-                    if (dif > 0) {
-                        return 1;
-                    } else if (dif < 0) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
-                }
-            }
-            else {
-                return x.path.localeCompare(y.path)
-            }
-        })
-        .map(x => {
-            return `<div class="item" data-path="${x.path}" data-isdirectory=${x.isDirectory}>
-            <div class="item-icon ${x.isDirectory ? 'item-directory' : 'item-file'}" 
-            ${imageRe.test(x.path) ? `style="background-repeat:no-repeat;background-size:contain;background-position:50% 50%;background-image:url(${baseUri}/file?path=${x.path})"` : ''}
-            ></div>
-          <div class="item-title">
-          <div>${substringAfterLast(x.path, "/")}</div>
-          <div class="item-subtitle" style="${x.length === 0 ? 'display:none' : ''}">${humanFileSize(x.length)}</div>
-          </div>
-          
-          <div class="item-more">
-            <svg viewBox="0 0 24 24">
-              <path d="M12 15.984q0.797 0 1.406 0.609t0.609 1.406-0.609 1.406-1.406 0.609-1.406-0.609-0.609-1.406 0.609-1.406 1.406-0.609zM12 9.984q0.797 0 1.406 0.609t0.609 1.406-0.609 1.406-1.406 0.609-1.406-0.609-0.609-1.406 0.609-1.406 1.406-0.609zM12 8.016q-0.797 0-1.406-0.609t-0.609-1.406 0.609-1.406 1.406-0.609 1.406 0.609 0.609 1.406-0.609 1.406-1.406 0.609z"></path>
-            </svg>
-          </div>
-          </div>`
-        }).join('');
-    document.querySelectorAll('.item').forEach(item => {
-        item.addEventListener('click', onItemClick);
-    })
-    document.querySelectorAll('.item-more').forEach(item => {
-        item.addEventListener('click', showContextMenu);
-    })
-    document.querySelectorAll('.item-icon').forEach(item => {
-
-        item.addEventListener('click', async evt => {
-            evt.stopPropagation();
-            // if (buf.indexOf(item.parentNode.dataset.path) === -1)
-            //     buf.push(item.parentNode.dataset.path);
-            // localStorage.setItem("paths", JSON.stringify(buf));
-            if (new URL(window.location).searchParams.get("y") === "true") {
-                const res = await fetch(`${baseUri}/file/delete`, {
-                    method: 'POST',
-                    body: JSON.stringify([item.parentNode.dataset.path])
-                });
-                queryElementByPath(item.parentNode.dataset.path).remove();
-            } else {
-                deleteFile(item.parentNode.dataset.path);
-                const buf = (localStorage.getItem("paths") && JSON.parse(localStorage.getItem("paths"))) || [];
-            }
-        });
-    })
-
-
 }
 function selectSameType(path, isDirectory) {
     const extension = getExtension(path);

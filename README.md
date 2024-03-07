@@ -18,4 +18,4 @@ dotnet new webapi -n WebApp
 - https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-new-sdk-templates
 - https://learn.microsoft.com/en-us/aspnet/core/fundamentals/static-files?view=aspnetcore-8.0
 - https://github.com/dotnet/aspnetcore
-- https://github.com/dotnet/aspnetcore/blob/main/src/Http/Headers/src/EntityTagHeaderValue.cs
+- https://github.com/dotnet/aspnetcore/blob/main/src/Middleware/StaticFiles/src/StaticFileContext.cs
