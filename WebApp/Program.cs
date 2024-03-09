@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text.Json;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
@@ -56,8 +57,8 @@ app.MapGet("/file", ([FromQuery(Name = "path")] string path) =>
 });
 app.MapPost("/file/delete", async (HttpRequest request) =>
 {
-    string body = "";
-    using (StreamReader stream = new StreamReader(request.Body))
+    var body = "";
+    using (var stream = new StreamReader(request.Body))
     {
         body = await stream.ReadToEndAsync();
     }
@@ -70,5 +71,62 @@ app.MapPost("/file/delete", async (HttpRequest request) =>
         if (Directory.Exists(s))
             Directory.Delete(s, true);
     }
+});
+app.MapPost("/file/move", async (HttpRequest request, string dst) =>
+{
+    var body = "";
+    using (var stream = new StreamReader(request.Body))
+    {
+        body = await stream.ReadToEndAsync();
+    }
+
+    var fileList = JsonSerializer.Deserialize<List<string>>(body);
+    foreach (var s in fileList)
+    {
+        var f = Path.Combine(dst, Path.GetFileName(s));
+        if (File.Exists(s) && !File.Exists(f))
+            File.Move(s, f);
+        if (Directory.Exists(s) && !Directory.Exists(f))
+            Directory.Move(s, f);
+    }
+});
+
+app.MapGet("/file/rename", (string path, string dst) =>
+{
+    if (File.Exists(path) && !File.Exists(dst))
+    {
+        File.Move(path, dst);
+    }
+
+    if (Directory.Exists(path) && !Directory.Exists(dst))
+    {
+        Directory.Move(path, dst);
+    }
+});
+app.MapGet("/file/new_dir", (string path) =>
+{
+    if (!Directory.Exists(path))
+        Directory.CreateDirectory(path);
+    return Directory.Exists(path) ? Results.Ok() : Results.NotFound();
+});
+app.MapGet("/tidy", (string path) =>
+{
+    if (!Directory.Exists(path))
+    {
+        return Results.NotFound();
+    }
+
+    var files = Directory.GetFiles(path);
+    foreach (var element in files)
+    {
+        var f = Path.Combine(path, Path.GetExtension(element).ToUpper());
+        if (!Directory.Exists(f))
+            Directory.CreateDirectory(f);
+        f = Path.Combine(f, Path.GetFileName(element));
+        if (!File.Exists(f))
+            File.Move(element, f);
+    }
+
+    return Results.Ok();
 });
 app.Run("http://192.168.8.189:8080");

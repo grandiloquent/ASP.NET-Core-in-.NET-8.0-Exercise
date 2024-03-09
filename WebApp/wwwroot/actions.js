@@ -7,20 +7,7 @@ function addContextMenuItem(bottomSheet, title, handler) {
     bottomSheet.appendChild(item);
     item.addEventListener('click', handler);
 }
-function deleteFile(path) {
-    const dialog = document.createElement('custom-dialog');
-    const div = document.createElement('div');
-    div.textContent = `您确定要删除 ${substringAfterLast(path, "/")} 吗？`;
-    dialog.appendChild(div);
-    dialog.addEventListener('submit', async () => {
-        const res = await fetch(`${baseUri}/file/delete`, {
-            method: 'POST',
-            body: JSON.stringify([path])
-        });
-        queryElementByPath(path).remove();
-    });
-    document.body.appendChild(dialog);
-}
+
 async function downloadDirectory(path) {
     window.open(`${baseUri}/zip?path=${encodeURIComponent(path)}`, '_blank');
 }
@@ -82,20 +69,6 @@ function newFile() {
     });
     document.body.appendChild(dialog);
 }
-function newDirectory() {
-    const dialog = document.createElement('custom-dialog');
-    dialog.setAttribute('title', "新建文件夹")
-    const input = document.createElement('input');
-    input.type = 'text';
-    dialog.appendChild(input);
-    dialog.addEventListener('submit', async () => {
-        let path = new URL(window.location).searchParams.get("path")
-            || '/storage/emulated/0';
-        const res = await fetch(`${baseUri}/file/new_dir?path=${encodeURIComponent(path + "/" + input.value.trim())}`);
-        window.location.reload();
-    });
-    document.body.appendChild(dialog);
-}
 
 function onDelete() {
     const dialog = document.createElement('custom-dialog');
@@ -131,37 +104,7 @@ function onDelete() {
     });
     document.body.appendChild(dialog);
 }
-function queryElementByPath(path) {
-    return document.querySelector(`[data-path="${path}"]`);
-}
-function renameFile(path) {
 
-    const dialog = document.createElement('custom-dialog');
-    dialog.setAttribute('title', "重命名")
-    const input = document.createElement('textarea');
-    input.value = substringAfterLast(path, pathSeperator);
-    const re = /[(（]/;
-    if (re.test(input.value)
-    ) {
-        let filename = `${input.value.split(re)[0].trim()}.${substringAfterLast(input.value, ".")}`;
-        if (filename.indexOf("《") !== -1 && filename.indexOf("》") !== -1) {
-            filename = substringAfterLast(filename, "《")
-            filename = substringBeforeLast(filename, "》") + "." + substringAfterLast(filename, ".")
-        }
-        input.value = filename;
-
-    }
-    dialog.appendChild(input);
-    dialog.addEventListener('submit', async () => {
-        const filename = substringBeforeLast(path, pathSeperator) + pathSeperator + input.value.trim();
-        const res = await fetch(`${baseUri}/file/rename?path=${encodeURIComponent(path)}&dst=${encodeURIComponent(filename)}`);
-        let item = queryElementByPath(path);
-        item.querySelector('.item-title div').textContent = substringAfterLast(filename, pathSeperator);
-        item.dataset.path = filename;
-        //window.location.reload();
-    });
-    document.body.appendChild(dialog);
-}
 function selectSameType(path, isDirectory) {
     const extension = getExtension(path);
     const buf = [];
@@ -269,42 +212,6 @@ function showContextMenu(evt) {
     }
     document.body.appendChild(bottomSheet);
 }
-function onMove() {
-    const dialog = document.createElement('custom-dialog');
-    dialog.setAttribute('title', '移动文件');
-    const div = document.createElement('div');
-    div.className = "list-wrapper";
-    const obj = JSON.parse(localStorage.getItem('paths') || "[]");
-    const buf = [];
-    for (let index = 0; index < obj.length; index++) {
-        const element = obj[index];
-        buf.push(`<div class="list-item" data-path="${element}"><div class="list-item-text">${element}</div>
-        <div class="list-item-action">删除</div>
-        </div>`);
-    }
-    div.innerHTML = buf.join('');
-    dialog.appendChild(div);
-    div.querySelectorAll('.list-item').forEach(listItem => {
-        listItem.addEventListener('click', evt => {
-            let index = obj.indexOf(listItem.dataset.path);
-            if (index !== -1) {
-                obj.splice(index, 1);
-            }
-            listItem.remove();
-        });
-    });
-    let path = new URL(window.location).searchParams.get("path")
-        || '/storage/emulated/0';
-    dialog.addEventListener('submit', async () => {
-        const res = await fetch(`${baseUri}/file/move?dst=${encodeURIComponent(path)}`, {
-            method: 'POST',
-            body: JSON.stringify(obj)
-        });
-        localStorage.setItem('paths', '');
-        location.reload();
-    });
-    document.body.appendChild(dialog);
-}
 function onMenu(evt) {
     evt.stopPropagation();
     const bottomSheet = document.createElement('custom-bottom-sheet');
@@ -339,51 +246,7 @@ function onMenu(evt) {
     });
     document.body.appendChild(bottomSheet);
 }
-function addFavoriteItem(bottomSheet, path) {
-    const item = document.createElement('div');
-    item.className = 'menu-item';
 
-    const div = document.createElement('div');
-    div.style = `height: 48px;display: flex;align-items: center;justify-content: center`
-    div.innerHTML = `<span class="material-symbols-outlined">
-close
-</span>`;
-    div.addEventListener('click', async evt => {
-        evt.stopPropagation();
-        bottomSheet.remove();
-        let res;
-        try {
-            res = await fetch(`${baseUri}/fav/delete?path=${encodeURIComponent(path)}`);
-            if (res.status !== 200) {
-                throw new Error();
-            }
-            toast.setAttribute('message', '成功');
-        } catch (error) {
-            toast.setAttribute('message', '错误');
-        }
-    });
-    item.appendChild(div);
-
-    const textElement = document.createElement('div');
-    textElement.textContent = path;
-    item.appendChild(textElement);
-
-    bottomSheet.appendChild(item);
-    item.addEventListener('click', () => {
-        bottomSheet.remove();
-        const url = new URL(window.location);
-        url.searchParams.set('path', path);
-        window.location = url;
-    });
-}
-async function onShowFavorites() {
-    const bottomSheet = document.createElement('custom-bottom-sheet');
-    const res = await fetch(`${baseUri}/fav/list`);
-    (await res.json()).forEach(p => {
-        addFavoriteItem(bottomSheet, p);
-    })
-    document.body.appendChild(bottomSheet);
-}
 async function addFavorite(path) {
     const res = await fetch(`${baseUri}/fav/insert?path=${path}`);
     toast.setAttribute('message', '成功');
