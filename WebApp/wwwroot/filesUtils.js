@@ -238,7 +238,8 @@ async function onShowFavorites() {
     const bottomSheet = document.createElement('custom-bottom-sheet');
     //const res = await fetch(`${baseUri}/fav/list`);
    [
-       "C:\\Users\\Administrator\\Downloads"
+       "C:\\Users\\Administrator\\Downloads",
+       "C:\\Users\\Administrator\\Desktop\\文档",
        
    ].forEach(p => {
         addFavoriteItem(bottomSheet, p);

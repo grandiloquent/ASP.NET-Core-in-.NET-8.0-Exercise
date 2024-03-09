@@ -1,5 +1,3 @@
-
-
 function addContextMenuItem(bottomSheet, title, handler) {
     const item = document.createElement('div');
     item.className = 'menu-item';
@@ -11,6 +9,7 @@ function addContextMenuItem(bottomSheet, title, handler) {
 async function downloadDirectory(path) {
     window.open(`${baseUri}/zip?path=${encodeURIComponent(path)}`, '_blank');
 }
+
 function getExtension(path) {
     const index = path.lastIndexOf('.');
     if (index !== -1) {
@@ -18,6 +17,7 @@ function getExtension(path) {
     }
     return null;
 }
+
 function initializeDropZone() {
     document.addEventListener("DOMContentLoaded", evt => {
         var dropZone = document.querySelector('body');
@@ -31,6 +31,7 @@ function initializeDropZone() {
             e.preventDefault();
             uploadFiles(e.dataTransfer.files)
         });
+
         async function uploadFiles(files) {
             document.querySelector('.dialog').className = 'dialog dialog-show';
             const dialogContext = document.querySelector('.dialog-content span');
@@ -125,10 +126,12 @@ function selectSameType(path, isDirectory) {
     localStorage.setItem("paths", JSON.stringify(buf));
     toast.setAttribute('message', '已成功写入剪切板');
 }
+
 function setDocumentTitle(path) {
     if (!path) return;
     document.title = substringAfterLast(decodeURIComponent(path), "/")
 }
+
 function showContextMenu(evt) {
     evt.stopPropagation();
     const dataset = evt.currentTarget.parentNode.dataset;
@@ -143,7 +146,10 @@ function showContextMenu(evt) {
     });
     addContextMenuItem(bottomSheet, '选择', () => {
         bottomSheet.remove();
-        localStorage.setItem("paths", JSON.stringify([path]));
+        let array = (localStorage.getItem("paths") && JSON.parse(localStorage.getItem("paths"))) || [];
+        array.push(path)
+        array = [...new Set(array)];
+        localStorage.setItem("paths", JSON.stringify(array));
         toast.setAttribute('message', '已成功写入剪切板');
     });
     addContextMenuItem(bottomSheet, '选择相同类型', () => {
@@ -212,6 +218,7 @@ function showContextMenu(evt) {
     }
     document.body.appendChild(bottomSheet);
 }
+
 function onMenu(evt) {
     evt.stopPropagation();
     const bottomSheet = document.createElement('custom-bottom-sheet');
@@ -251,6 +258,7 @@ async function addFavorite(path) {
     const res = await fetch(`${baseUri}/fav/insert?path=${path}`);
     toast.setAttribute('message', '成功');
 }
+
 async function unCompressFile(path) {
     let res;
     try {
@@ -260,6 +268,7 @@ async function unCompressFile(path) {
         toast.setAttribute('message', '错误');
     }
 }
+
 function showVideoInformation(path) {
     const dialog = document.createElement('custom-dialog');
     const div = document.createElement('div');
@@ -275,6 +284,7 @@ function showVideoInformation(path) {
     });
     document.body.appendChild(dialog);
 }
+
 function showImage(path) {
     const div = document.createElement('div');
     div.className = 'photo-viewer';
@@ -295,7 +305,7 @@ function showImage(path) {
     box-sizing: content-box;
 `
     div.appendChild(deleteButton);
-    deleteButton.addEventListener('click',async evt => {
+    deleteButton.addEventListener('click', async evt => {
         const res = await fetch(`${baseUri}/file/delete`, {
             method: 'POST',
             body: JSON.stringify([path])
