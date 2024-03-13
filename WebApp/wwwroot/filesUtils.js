@@ -6,7 +6,7 @@ const DEFAULT_PATH = 'C:\\Users\\Administrator\\Desktop';
 ////////////////////////////////////////////////////////////////
 
 async function loadData(path, size) {
-    const res = await fetch(`${baseUri}/files?path=${encodeURIComponent(path || '')}`);
+    const res = await fetch(`${baseUri}/files?path=${encodeURIComponent(path || '')}${(size && "&isSize=1")||''}`);
     return res.json();
 }
 
@@ -15,7 +15,7 @@ function normalizePath(path) {
 }
 
 function sortFileList(res) {
-    let isSize = "";
+    let isSize = searchParams.get("isSize");
     return res.sort((x, y) => {
         if (x.isDir !== y.isDir) if (x.isDir) return -1; else return 1;
         if (isSize === "0") {
@@ -47,7 +47,7 @@ function sortFileList(res) {
 async function render(path) {
     setDocumentTitle(path);
     path = normalizePath(path);
-    const res = await loadData(path);
+    const res = await loadData(path, searchParams.get("isSize"));
     this.wrapper.innerHTML = sortFileList(res)
         .map(x => {
             return `<div class="item" data-path="${x.parent + pathSeperator + x.name}" data-isdirectory=${x.isDir}>
@@ -196,6 +196,7 @@ function newDirectory() {
     });
     document.body.appendChild(dialog);
 }
+
 function addFavoriteItem(bottomSheet, path) {
     const item = document.createElement('div');
     item.className = 'menu-item';
@@ -237,12 +238,12 @@ close
 async function onShowFavorites() {
     const bottomSheet = document.createElement('custom-bottom-sheet');
     //const res = await fetch(`${baseUri}/fav/list`);
-   [
-       "C:\\Users\\Administrator\\Downloads",
-       "C:\\Users\\Administrator\\Desktop\\文档",
-       "D:\\文档",
-       "D:\\",
-   ].forEach(p => {
+    [
+        "C:\\Users\\Administrator\\Downloads",
+        "C:\\Users\\Administrator\\Desktop\\文档",
+        "D:\\文档",
+        "D:\\",
+    ].forEach(p => {
         addFavoriteItem(bottomSheet, p);
     })
     document.body.appendChild(bottomSheet);

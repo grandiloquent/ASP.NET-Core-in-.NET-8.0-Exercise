@@ -23,7 +23,7 @@ app.MapGet("/", () =>
     return Results.File(f,
         Shared.GetMimeTypeForFileExtension(f));
 });
-app.MapGet("/files", ([FromQuery(Name = "path")] string path) =>
+app.MapGet("/files", ([FromQuery(Name = "path")] string path, int? isSize = 0) =>
 {
     if (Directory.Exists(path))
     {
@@ -36,7 +36,12 @@ app.MapGet("/files", ([FromQuery(Name = "path")] string path) =>
                 Name = fsi.Name,
                 Parent = fsi.DirectoryName,
                 LastModified = new DateTimeOffset(fsi.LastWriteTimeUtc).ToUnixTimeSeconds(),
-                Length = ((fsi.Attributes & FileAttributes.Directory) == FileAttributes.Directory) ? 0 : fsi.Length
+                Length = ((fsi.Attributes & FileAttributes.Directory) == FileAttributes.Directory)
+                    ? (isSize == 0
+                        ? 0
+                        : new DirectoryInfo(fsi.FullName).EnumerateFiles("*.*", SearchOption.AllDirectories)
+                            .Sum(f => f.Length))
+                    : fsi.Length
             });
         }
 
