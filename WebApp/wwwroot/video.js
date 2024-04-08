@@ -5,6 +5,7 @@ function playVideo(video, path) {
     video.src = path;
     video.play();
 }
+
 function substringAfterLast(string, delimiter, missingDelimiterValue) {
     const index = string.lastIndexOf(delimiter);
     if (index === -1) {
@@ -13,6 +14,7 @@ function substringAfterLast(string, delimiter, missingDelimiterValue) {
         return string.substring(index + delimiter.length);
     }
 }
+
 function appendSubtitle(video) {
     document.querySelectorAll('track').forEach(x => x.remove())
     const track = document.createElement('track');
@@ -24,6 +26,7 @@ function appendSubtitle(video) {
     track.default = true;
     video.appendChild(track);
 }
+
 function substringBeforeLast(string, delimiter, missingDelimiterValue) {
     const index = string.lastIndexOf(delimiter);
     if (index === -1) {
@@ -32,6 +35,7 @@ function substringBeforeLast(string, delimiter, missingDelimiterValue) {
         return string.substring(0, index);
     }
 }
+
 function jumpToSpecificTime(video) {
     const searchParams = new URL(window.location).searchParams;
     let t = searchParams.get('t');
@@ -42,11 +46,13 @@ function jumpToSpecificTime(video) {
         }
     }
 }
+
 function saveBookmark(video, path) {
     const obj = JSON.parse(localStorage.getItem('bookmark') || '{}');
     obj[path] = video.currentTime;
     localStorage.setItem('bookmark', JSON.stringify(obj));
 }
+
 function formatDuration(ms) {
     if (isNaN(ms)) return '0:00';
     if (ms < 0) ms = -ms;
@@ -60,6 +66,7 @@ function formatDuration(ms) {
         .map(val => (val[1] + '').padStart(2, '0'))
         .join(':');
 }
+
 function adjustSize(video) {
     if (video.videoWidth > 0) {
         const w = Math.min(window.outerWidth, window.innerWidth);
@@ -72,6 +79,28 @@ function adjustSize(video) {
         video.style.left = `${(w - width) / 2}px`;
         video.style.top = `${(h - height) / 2}px`
     }
+}
+
+function zoomIn(video, evt) {
+    const b = video.getBoundingClientRect();
+    const x = evt.clientX;
+    const y = evt.clientY;
+
+    const width = (x - b.left) / b.width * video.videoWidth;
+    const height = (y - b.top) / b.height * video.videoHeight;
+
+
+    video.style.width = video.videoWidth + 'px';
+    video.style.height = video.videoHeight + 'px';
+    video.style.left = (window.innerWidth / 2 - width) + 'px';
+    video.style.top = (window.innerHeight / 2 - height) + 'px';
+}
+
+function originalSize(video) {
+    let height = video.videoHeight * 1
+    let width = video.videoWidth * 1
+    video.style.width = `${width}px`;
+    video.style.height = `${height}px`;
 }
 
 // ==============================================================================
@@ -189,12 +218,13 @@ function scheduleHide() {
 
 video.addEventListener('click', evt => {
     evt.stopPropagation();
+    /*
     if (video.getBoundingClientRect().left === 0) {
         zoomIn(video, evt);
     } else {
         adjustSize(video);
-    }
-
+    }*/
+    zoomIn(video, evt);
 });
 document.querySelector('.wrapper').addEventListener('click', evt => {
     topWrapper.style.display = 'flex';
