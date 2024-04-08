@@ -1,8 +1,13 @@
+import { transformSrtTracks } from './main.js';
+
+// ==============================================================================
+
 function playVideo(video, path) {
     document.title = substringAfterLast(path, "/");
     toast.setAttribute('message', document.title);
     video.load();
     video.src = path;
+    transformSrtTracks(video);
     video.play();
 }
 
@@ -22,7 +27,7 @@ function appendSubtitle(video) {
     var numTracks = tracks.length;
     for (var i = numTracks - 1; i >= 0; i--)
         video.textTracks[i].mode = "disabled";
-    track.src = substringBeforeLast(video.src, ".") + ".vtt";
+    track.src = substringBeforeLast(video.src, ".") + ".srt";
     track.default = true;
     video.appendChild(track);
 }
