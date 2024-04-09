@@ -11,8 +11,8 @@ async function playVideo(video, path) {
     await transformSrtTracks(video);
     try {
         await video.play();
-    }catch (e) {
-        
+    } catch (e) {
+
     }
 }
 
@@ -129,7 +129,58 @@ const timeSecond = document.querySelector('#time-second');
 const video = document.querySelector('#video');
 const progressBarPlayed = document.querySelector('#progress-bar-played');
 const toast = document.getElementById('toast');
+let videos;
 
+async function loadVideoList() {
+    const res = await fetch(`/files?path=${encodeURIComponent(
+        substringBeforeLast(path, "\\")
+    )}`);
+    videos = (await res.json())
+        .filter(video => {
+            return !video.isDirectory && (
+                video.name.endsWith(".mp4") ||
+                video.name.endsWith(".v") ||
+                video.name.endsWith(".MP4") ||
+                video.name.endsWith(".MOV") ||
+                video.name.endsWith(".mov")
+            )
+        });
+    videos = videos.sort((v1, v2) => {
+        return v2.length - v1.length
+    })
+}
+
+try {
+    await loadVideoList();
+
+}catch (e) {
+    
+}
+async function showVideoList(path, video) {
+    const dialog = document.createElement('custom-dialog');
+    dialog.setAttribute('title', '视频列表');
+    const d = document.createElement('div');
+    videos.forEach(v => {
+        const div = document.createElement('div');
+        div.style.alignItems = "center";
+        div.style.boxSizing = "border-box";
+        div.style.minHeight = "43px";
+        div.style.display = "flex";
+        div.style.padding = "8px 0";
+        div.style.borderTop = "1px solid rgb(218,220,224)";
+        div.setAttribute("data-src", v.parent + "\\" + v.name);
+        d.appendChild(div);
+        div.textContent = v.name;
+        div.addEventListener('click', evt => {
+            playVideo(baseUri, video, evt.currentTarget.dataset.src);
+            video.play();
+            jumpToBookmark(video);
+            dialog.remove();
+        });
+    })
+    dialog.appendChild(d);
+    document.body.appendChild(dialog);
+}
 
 const fullscreen = document.querySelector('#fullscreen');
 fullscreen.addEventListener('click', async evt => {
@@ -204,7 +255,8 @@ video.addEventListener('ended', evt => {
     } else {
         next = 0;
     }
-    playVideo(video, videos[next].path);
+    let v = videos[next];
+    playVideo(video, v.parent + "\\" + v.name);
 });
 const playPause = document.querySelector('#play-pause');
 playPause.addEventListener('click', evt => {
@@ -245,7 +297,7 @@ document.querySelector('.wrapper').addEventListener('click', evt => {
 
 const videoList = document.querySelector('#video-list');
 videoList.addEventListener('click', evt => {
-    showVideoList(baseUri, path, video);
+    showVideoList(path, video);
 });
 
 window.addEventListener("resize", evt => {
