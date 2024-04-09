@@ -8,6 +8,10 @@ public static class Shared
 
     public static string GetMimeTypeForFileExtension(string filePath)
     {
+        if (filePath.EndsWith(".srt"))
+        {
+            return "application/x-subrip";
+        }
         const string defaultContentType = "application/octet-stream";
 
         if (!Provider.TryGetContentType(filePath, out var contentType))

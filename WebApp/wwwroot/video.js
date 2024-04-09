@@ -2,13 +2,18 @@ import {transformSrtTracks} from './main.js';
 
 // ==============================================================================
 
-function playVideo(video, path) {
+async function playVideo(video, path) {
     document.title = substringAfterLast(path, "/");
     toast.setAttribute('message', document.title);
     video.load();
     video.src = `/file?path=${encodeURIComponent(path)}`;
-    transformSrtTracks(video);
-    video.play();
+    appendSubtitle(video);
+    await transformSrtTracks(video);
+    try {
+        await video.play();
+    }catch (e) {
+        
+    }
 }
 
 function substringAfterLast(string, delimiter, missingDelimiterValue) {
@@ -27,7 +32,7 @@ function appendSubtitle(video) {
     var numTracks = tracks.length;
     for (var i = numTracks - 1; i >= 0; i--)
         video.textTracks[i].mode = "disabled";
-    track.src = `/file?path=${encodeURIComponent(substringBeforeLast(video.src, "."))}` + ".srt";
+    track.src = substringBeforeLast(video.src, ".") + ".srt";
     track.default = true;
     video.appendChild(track);
 }
@@ -136,8 +141,8 @@ fullscreen.addEventListener('click', async evt => {
         fullscreen.dataset.state = '1'
     }
 });
+
 playVideo(video, path);
-appendSubtitle(video);
 jumpToSpecificTime(video)
 
 video.addEventListener('durationchange', evt => {
@@ -166,7 +171,7 @@ customSeekbar.addEventListener("seekbarInput", evt => {
     var time = video.duration * evt.detail;
     video.currentTime = time;
 });
-video.muted = true;
+//video.muted = true;
 video.addEventListener('play', evt => {
     scheduleHide();
     playPause.querySelector('path').setAttribute('d', 'M9 19H7V5h2Zm8-14h-2v14h2Z');
