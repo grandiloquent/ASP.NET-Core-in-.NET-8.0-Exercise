@@ -1,4 +1,5 @@
 using System.Net;
+using System.Net.Sockets;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -134,4 +135,19 @@ app.MapGet("/tidy", (string path) =>
 
     return Results.Ok();
 });
-app.Run("http://192.168.8.189:8080");
+
+string GetLocalIPAddress()
+{
+    var host = Dns.GetHostEntry(Dns.GetHostName());
+    foreach (var ip in host.AddressList)
+    {
+        if (ip.AddressFamily == AddressFamily.InterNetwork)
+        {
+            return ip.ToString();
+        }
+    }
+
+    throw new Exception("No network adapters with an IPv4 address in the system!");
+}
+
+app.Run($"http://{GetLocalIPAddress()}:8080");
