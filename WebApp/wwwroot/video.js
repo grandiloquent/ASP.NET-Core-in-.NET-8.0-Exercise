@@ -1,4 +1,4 @@
-import {transformSrtTracks} from './main.js';
+import { transformSrtTracks } from './main.js';
 
 // ==============================================================================
 
@@ -153,8 +153,8 @@ async function loadVideoList() {
 try {
     await loadVideoList();
 
-}catch (e) {
-    
+} catch (e) {
+
 }
 async function showVideoList(path, video) {
     const dialog = document.createElement('custom-dialog');
@@ -317,6 +317,9 @@ var fps_rounder = [];
 var frame_not_seeked = true;
 
 function ticker(useless, metadata) {
+    if (fps) {
+        return;
+    }
     var media_time_diff = Math.abs(metadata.mediaTime - last_media_time);
     var frame_num_diff = Math.abs(metadata.presentedFrames - last_frame_num);
     var diff = media_time_diff / frame_num_diff;
@@ -372,6 +375,16 @@ window.addEventListener('keydown', async evt => {
     } else if (evt.key === 'ArrowRight') {
         evt.preventDefault();
         video.currentTime += .5;
+    } else if (evt.key === 'k') {
+        evt.preventDefault();
+        if (!seeking) {
+            video.currentTime += 5 / fps;
+        }
+    }  else if (evt.key === 'j') {
+        evt.preventDefault();
+        if (!seeking) {
+            video.currentTime += 5 / fps;
+        }
     } else if (evt.key === 'ArrowUp') {
         evt.preventDefault();
         if (!seeking) {
@@ -382,7 +395,7 @@ window.addEventListener('keydown', async evt => {
         if (!seeking) {
             video.currentTime += 1 / fps;
         }
-    } else if (evt.key === '0') {
+    } else if (evt.key === 'k') {
         evt.preventDefault();
         if (fullscreen.dataset.state === '1') {
             adjustSize(video);
