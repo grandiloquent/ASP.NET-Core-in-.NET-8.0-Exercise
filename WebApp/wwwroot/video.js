@@ -385,12 +385,12 @@ window.addEventListener('keydown', async evt => {
         if (!seeking) {
             video.currentTime += 5 / fps;
         }
-    } else if (evt.key === 'ArrowUp') {
+    } else if (evt.key === 'i') {
         evt.preventDefault();
         if (!seeking) {
             video.currentTime -= 1 / fps;
         }
-    } else if (evt.key === 'ArrowDown') {
+    } else if (evt.key === 'p') {
         evt.preventDefault();
         if (!seeking) {
             video.currentTime += 1 / fps;
