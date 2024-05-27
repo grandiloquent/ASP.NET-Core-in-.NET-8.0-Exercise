@@ -1,6 +1,3 @@
-。随机复制移动
-
-
 #设置源点
 #应用缩放、旋转
 from random import uniform
@@ -9,7 +6,7 @@ for i in range (0,12):
   zo=bpy.context.object.dimensions.z
   xo=bpy.context.object.dimensions.x
   bpy.ops.object.duplicate_move()
-  scale = uniform(0.8,1.1)
+  scale = uniform(0.9,1.1)
   bpy.context.object.scale = (scale,scale,scale)
   bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
   yn = bpy.context.object.dimensions.y
