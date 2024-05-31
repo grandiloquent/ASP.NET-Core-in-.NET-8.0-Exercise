@@ -65,3 +65,13 @@ light_object = bpy.data.objects.new(name="my-light", object_data=light_data)
 bpy.context.collection.objects.link(light_object)
 light_object.rotation_euler[0] = 0.785398
 light_object.rotation_euler[1] = -1.5708
+
+bpy.context.scene.render.engine = 'CYCLES'
+bpy.context.scene.cycles.device = 'GPU'
+bpy.context.scene.cycles.preview_samples = 64
+bpy.context.scene.cycles.use_preview_denoising = True
+bpy.context.scene.cycles.samples = 1024
+bpy.context.scene.view_settings.view_transform = 'Filmic'
+bpy.context.scene.view_settings.view_transform = 'Filmic'
+bpy.context.scene.view_settings.exposure = 0.1
+bpy.context.scene.render.image_settings.file_format = 'PNG'
