@@ -371,16 +371,20 @@ window.addEventListener('keydown', async evt => {
 
     if (evt.key === 'ArrowLeft') {
         evt.preventDefault();
-        video.currentTime -= 1;
+        if (!seeking) {
+            video.currentTime -= .5;
+        }
     } else if (evt.key === 'ArrowRight') {
         evt.preventDefault();
-        video.currentTime += .5;
+        if (!seeking) {
+            video.currentTime += .5;
+        }
     } else if (evt.key === 'j') {
         evt.preventDefault();
         if (!seeking) {
             video.currentTime -= 5 / fps;
         }
-    }  else if (evt.key === 'l') {
+    } else if (evt.key === 'l') {
         evt.preventDefault();
         if (!seeking) {
             video.currentTime += 5 / fps;
