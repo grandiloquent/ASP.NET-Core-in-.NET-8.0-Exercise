@@ -369,15 +369,15 @@ previous.addEventListener('click', evt => {
 
 window.addEventListener('keydown', async evt => {
 
-    if (evt.key === 'ArrowLeft') {
+    if (evt.key === 'n') {
         evt.preventDefault();
         if (!seeking) {
-            video.currentTime -= .5;
+            video.currentTime -= 1;
         }
-    } else if (evt.key === 'ArrowRight') {
+    } else if (evt.key === 'm') {
         evt.preventDefault();
         if (!seeking) {
-            video.currentTime += .5;
+            video.currentTime += 1;
         }
     } else if (evt.key === 'j') {
         evt.preventDefault();
