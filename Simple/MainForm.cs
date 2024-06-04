@@ -213,6 +213,22 @@ public partial class MainForm : Form
 //				}
 //			}
 //		}
+		if(comboBox1.Text.Length>0){
+			listBox1.Items.Clear();
+			using (var cmd = (SQLiteCommand)conn.CreateCommand()) {
+				cmd.CommandText = @"select Title,Content from Notes Order By Views DESC";
+				//cmd.Parameters.Add("q", DbType.String).Value = comboBox1.Text.Trim();
+				var regex = new Regex(comboBox1.Text.Trim());
+				using (var reader = cmd.ExecuteReader()) {
+					while (reader.Read()) {
+						if (regex.IsMatch(reader.GetString(0)) || regex.IsMatch(reader.GetString(1))) {
+							listBox1.Items.Add(reader.GetString(0));
+						}
+					}
+				}
+			}
+			return;
+		}
 		listBox1.Items.Clear();
 		using (var cmd = (SQLiteCommand)conn.CreateCommand()) {
 			cmd.CommandText = @"select Title from Notes Order By Views DESC";
@@ -322,7 +338,7 @@ public partial class MainForm : Form
 			using (var cmd = (SQLiteCommand)conn.CreateCommand()) {
 				cmd.CommandText = @"update Notes set Content = @Content,Views = Views + 1,UpdateAt = (datetime('now','localtime')) where Title = @Title";
 				cmd.Parameters.Add("Title", DbType.String).Value = listBox1.SelectedItem.ToString();
-				cmd.Parameters.Add("Content", DbType.String).Value = text+Environment.NewLine+s.Trim();
+				cmd.Parameters.Add("Content", DbType.String).Value = text+Environment.NewLine+Environment.NewLine+s.Trim();
 				cmd.ExecuteNonQuery();
 			}
 			//LoadData();
@@ -394,6 +410,20 @@ public partial class MainForm : Form
 					}
 				}
 			}
+		}
+	}
+	void 删除ToolStripMenuItemClick(object sender, EventArgs e)
+	{
+
+		if (listBox1.SelectedIndex != -1) {
+			//var pieces = s.Split(new char[]{ '\n' }, 2);
+		
+			using (var cmd = (SQLiteCommand)conn.CreateCommand()) {
+				cmd.CommandText = @"delete from Notes where Title = @Title";
+				cmd.Parameters.Add("Title", DbType.String).Value = listBox1.SelectedItem.ToString();
+				cmd.ExecuteNonQuery();
+			}
+			LoadData();
 		}
 	}
 	 
