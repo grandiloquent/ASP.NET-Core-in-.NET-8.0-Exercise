@@ -79,18 +79,18 @@ bpy.ops.mesh.extrude_region_shrink_fatten(TRANSFORM_OT_shrink_fatten={{""value""
 ",v[0]);
 			                    });
 		}else   if (arg.KeyCode == Keys.M) {
-			ClipboardShare.SetText("bpy.ops.object.modifier_add(type='MIRROR')");
+			//ClipboardShare.SetText("bpy.ops.object.modifier_add(type='MIRROR')");
 		} else if (arg.KeyCode == Keys.B) {
-			ClipboardShare.SetText(@"bpy.ops.object.modifier_add(type='BEVEL')
-bpy.context.object.modifiers[""Bevel""].angle_limit = 0.785398
-bpy.context.object.modifiers[""Bevel""].segments = 2
-bpy.context.object.modifiers[""Bevel""].harden_normals = True
-bpy.context.object.modifiers[""Bevel""].width = 0.013
-bpy.ops.object.subdivision_set(level=2, relative=False)
-bpy.ops.object.shade_smooth()
-");
+//			ClipboardShare.SetText(@"bpy.ops.object.modifier_add(type='BEVEL')
+//bpy.context.object.modifiers[""Bevel""].angle_limit = 0.785398
+//bpy.context.object.modifiers[""Bevel""].segments = 2
+//bpy.context.object.modifiers[""Bevel""].harden_normals = True
+//bpy.context.object.modifiers[""Bevel""].width = 0.013
+//bpy.ops.object.subdivision_set(level=2, relative=False)
+//bpy.ops.object.shade_smooth()
+//");
 		} else if (arg.KeyCode == Keys.S) {
-			ClipboardShare.SetText("bpy.ops.object.modifier_add(type='SOLIDIFY')");
+			//ClipboardShare.SetText("bpy.ops.object.modifier_add(type='SOLIDIFY')");
 		} else if (arg.KeyCode == Keys.L) {
 //			FormatBlenderScript(textBox, v => {
 //				var o1 = 1 - v[0];
