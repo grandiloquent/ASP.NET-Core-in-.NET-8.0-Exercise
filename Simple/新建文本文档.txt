@@ -1,0 +1,101 @@
+if (args.Control && args.KeyCode == Keys.S) {
+				if (_destinationFileName != null) {
+					File.WriteAllText(_destinationFileName, textBox1.Text.Replace("\r", ""));
+				}
+			}
+			
+			if (args.Control && args.KeyCode == Keys.C) {
+				
+				var s = textBox1.Text;
+				var i = textBox1.SelectionStart;
+				var j = textBox1.SelectionStart + textBox1.SelectionLength;
+				if (i == j) {
+					while (i > 0 && s[i] != '\n') {
+						i--;
+					}
+					while (j <= s.Length - 1 && s[j] != '\n') {
+						j++;
+					}
+					
+					Clipboard.SetText(s.Substring(i, j - i).Trim());
+				} else {
+					textBox1.Copy();
+				}
+				
+			}
+			if (args.KeyCode == Keys.F1) {
+				Utils.BlenderTranslate(textBox1);
+			}
+			if (args.KeyCode == Keys.F2) {
+				Utils.BlenderResize(textBox1);
+			}
+			if (args.KeyCode == Keys.F3) {
+				Utils.BlenderExtrudeRegionMove(textBox1);
+			}
+			if (args.KeyCode == Keys.F4) {
+//				var s = textBox1.Text;
+//				var i = textBox1.SelectionStart;
+//				var j = textBox1.SelectionStart + textBox1.SelectionLength;
+//				while (i > 0 && char.IsLetter(s[i])) {
+//					i--;
+//				}
+//				while (j < s.Length - 1 && char.IsLetter(s[j])) {
+//					j++;
+//				}
+//				
+//				Clipboard.SetText(s.Substring(i, j - i));
+				//Utils.SortCode(textBox1.Text);
+				Utils.FormatStyle(textBox1.Text);
+			}
+			if (args.KeyCode == Keys.F5) {
+				//FormatString();
+				Utils.TranslateBlenderPythonClass();//NewCollection();
+				//Utils.CreateFile(textBox1.SelectedText);
+			}
+			if (args.KeyCode == Keys.F6) {
+//				var s = Clipboard.GetText().Trim();
+//				try {
+//					var req = WebRequest.Create(s);
+//					req.Proxy = new WebProxy("127.0.0.1", 10809);
+//					var res = req.GetResponse();
+//					var sb = new StreamReader(res.GetResponseStream()).ReadToEnd();
+//					s = string.Format("{2}[{0}]({1})", sb.SubstringAfter("<title>").SubstringBefore("</title>").Trim(), s, Environment.NewLine);
+//					textBox1.Text =	textBox1.Text.Insert(textBox1.SelectionStart, s);
+//				} catch {
+//					
+//				}
+				TranslateChinese();
+			}
+			if (args.KeyCode == Keys.F7) {
+				var s1=textBox1.Text.Trim();
+				var s2=s1.SubstringBefore("\n");
+				var s3=s1.SubstringAfter("\n");
+				
+				var str =s2.Split(new char[]{ ' ' }, 2);
+				textBox1.Text =s2+"\n"+ s3.Replace(str[0], str[1]);
+				
+//				var str = textBox1.Text.Split(new char[]{ '\n' });
+//				var s = "        ";
+//				textBox1.Text = string.Join("\r\n", str.Select(x => {
+//					if (x.StartsWith(s))
+//						return x.Substring(s.Length);
+//					return x;
+//				}));
+			}
+			if (args.KeyCode == Keys.F9) {
+				Utils.FormatGetCode(Clipboard.GetText().Trim());
+			}
+			
+			if (args.KeyCode == Keys.F12) {
+//				if (_destinationFileName != null) {
+//					textBox1.Text = File.ReadAllText(_destinationFileName).Replace("\n", "\r\n");
+//				}
+//				var str = Clipboard.GetText();
+//				textBox1.Text += Environment.NewLine + string.Join(Environment.NewLine, Regex.Split(str, "',").Select(x => x.Trim(new  [] {
+//					'\'',
+//					' ',
+//					'\t'
+//				})));
+
+				Utils.ExtractVideoFrames();
+			}
