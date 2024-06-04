@@ -63,11 +63,22 @@ public static class Android
 			});
 		} else if (arg.KeyCode == Keys.F5) {
 			FormatBlenderScript(textBox, v => {
-				return string.Format("bpy.ops.mesh.bevel(offset={0}, affect='EDGES')", v[0], v[1], v[2]);
+				return string.Format("bpy.ops.mesh.bevel(offset={0},segments=1, affect='EDGES')", v[0], v[1], v[2]);
 			});
 			
 			
-		} else if (arg.KeyCode == Keys.M) {
+		}else if(arg.KeyCode==Keys.F6){
+			FormatBlenderScript(textBox,v=>{
+			                    	return string.Format(@"
+bpy.ops.object.mode_set(mode='OBJECT')
+bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+bpy.ops.object.mode_set(mode='EDIT')
+bpy.ops.mesh.select_all(action='SELECT')
+bpy.ops.mesh.normals_make_consistent(inside=False)
+bpy.ops.mesh.extrude_region_shrink_fatten(TRANSFORM_OT_shrink_fatten={{""value"":{0}}})
+",v[0]);
+			                    });
+		}else   if (arg.KeyCode == Keys.M) {
 			ClipboardShare.SetText("bpy.ops.object.modifier_add(type='MIRROR')");
 		} else if (arg.KeyCode == Keys.B) {
 			ClipboardShare.SetText(@"bpy.ops.object.modifier_add(type='BEVEL')
@@ -90,6 +101,9 @@ bpy.ops.object.shade_smooth()
 		}
 		if (arg.Control) {
 			if (arg.KeyCode == Keys.C) {
+				if(textBox.SelectedText.Length>0){
+					return;
+				}
 				var start = textBox.SelectionStart;
 				var end = start;
 				while (start - 1 > -1 ) {
@@ -193,17 +207,8 @@ bpy.ops.object.shade_smooth()
 //			ColorPicker();
 //		} else if (arg.KeyCode == Keys.F7) {
 //			ReplaceString(textBox);
-//		} else if (arg.KeyCode == Keys.F10) {
-//			var bitmap =	Screenshot.GetScreenshot();
-//			var i = 0;
-//			var f = Screenshot.GetDesktopPath(i.ToString().PadLeft(3, '0') + ".png");
-//			while (File.Exists(f)) {
-//				i++;
-//				f = Screenshot.GetDesktopPath(i.ToString().PadLeft(3, '0') + ".png");
-//			}
-//			bitmap.Save(f, System.Drawing.Imaging.ImageFormat.Png);
-//			
-//		}
+//		} 
+		
 		 
 	}
 	[DllImport("user32.dll")]

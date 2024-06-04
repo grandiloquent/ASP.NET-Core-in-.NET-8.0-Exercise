@@ -49,9 +49,9 @@
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.替换内容ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.导出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.删除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.comboBox1 = new System.Windows.Forms.ComboBox();
 			this.textBox1 = new System.Windows.Forms.TextBox();
-			this.删除ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
@@ -101,47 +101,54 @@
 			this.导出ToolStripMenuItem,
 			this.删除ToolStripMenuItem});
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
-			this.contextMenuStrip1.Size = new System.Drawing.Size(153, 164);
+			this.contextMenuStrip1.Size = new System.Drawing.Size(125, 142);
 			// 
 			// 新建ToolStripMenuItem
 			// 
 			this.新建ToolStripMenuItem.Name = "新建ToolStripMenuItem";
-			this.新建ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.新建ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
 			this.新建ToolStripMenuItem.Text = "新建";
 			this.新建ToolStripMenuItem.Click += new System.EventHandler(this.新建ToolStripMenuItemClick);
 			// 
 			// 替换ToolStripMenuItem
 			// 
 			this.替换ToolStripMenuItem.Name = "替换ToolStripMenuItem";
-			this.替换ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.替换ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
 			this.替换ToolStripMenuItem.Text = "替换";
 			this.替换ToolStripMenuItem.Click += new System.EventHandler(this.替换ToolStripMenuItemClick);
 			// 
 			// 添加ToolStripMenuItem
 			// 
 			this.添加ToolStripMenuItem.Name = "添加ToolStripMenuItem";
-			this.添加ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.添加ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
 			this.添加ToolStripMenuItem.Text = "添加";
 			this.添加ToolStripMenuItem.Click += new System.EventHandler(this.添加ToolStripMenuItemClick);
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(121, 6);
 			// 
 			// 替换内容ToolStripMenuItem
 			// 
 			this.替换内容ToolStripMenuItem.Name = "替换内容ToolStripMenuItem";
-			this.替换内容ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.替换内容ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
 			this.替换内容ToolStripMenuItem.Text = "替换内容";
 			this.替换内容ToolStripMenuItem.Click += new System.EventHandler(this.替换内容ToolStripMenuItemClick);
 			// 
 			// 导出ToolStripMenuItem
 			// 
 			this.导出ToolStripMenuItem.Name = "导出ToolStripMenuItem";
-			this.导出ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.导出ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
 			this.导出ToolStripMenuItem.Text = "导出";
 			this.导出ToolStripMenuItem.Click += new System.EventHandler(this.导出ToolStripMenuItemClick);
+			// 
+			// 删除ToolStripMenuItem
+			// 
+			this.删除ToolStripMenuItem.Name = "删除ToolStripMenuItem";
+			this.删除ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+			this.删除ToolStripMenuItem.Text = "删除";
+			this.删除ToolStripMenuItem.Click += new System.EventHandler(this.删除ToolStripMenuItemClick);
 			// 
 			// comboBox1
 			// 
@@ -165,13 +172,6 @@
 			this.textBox1.Size = new System.Drawing.Size(428, 242);
 			this.textBox1.TabIndex = 1;
 			// 
-			// 删除ToolStripMenuItem
-			// 
-			this.删除ToolStripMenuItem.Name = "删除ToolStripMenuItem";
-			this.删除ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.删除ToolStripMenuItem.Text = "删除";
-			this.删除ToolStripMenuItem.Click += new System.EventHandler(this.删除ToolStripMenuItemClick);
-			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -179,9 +179,11 @@
 			this.ClientSize = new System.Drawing.Size(605, 242);
 			this.Controls.Add(this.splitContainer1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+			this.KeyPreview = true;
 			this.Name = "MainForm";
 			this.Text = "Simple";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormFormClosing);
+			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainFormKeyUp);
 			this.splitContainer1.Panel1.ResumeLayout(false);
 			this.splitContainer1.Panel2.ResumeLayout(false);
 			this.splitContainer1.Panel2.PerformLayout();

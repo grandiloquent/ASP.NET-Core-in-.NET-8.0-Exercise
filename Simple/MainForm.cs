@@ -82,7 +82,7 @@ public partial class MainForm : Form
 		*/
 		var dir = @"C:\Users\Administrator\Desktop\视频\Net\WebApp\Python";
 		dir.CreateDirectoryIfNotExists();
-		var fn=Path.Combine(dir,"loopcut.py");
+		var fn = Path.Combine(dir, "loopcut.py");
 		if (!File.Exists(fn)) {
 			File.Create(fn).Dispose();
 		}
@@ -213,7 +213,7 @@ public partial class MainForm : Form
 //				}
 //			}
 //		}
-		if(comboBox1.Text.Length>0){
+		if (comboBox1.Text.Length > 0) {
 			listBox1.Items.Clear();
 			using (var cmd = (SQLiteCommand)conn.CreateCommand()) {
 				cmd.CommandText = @"select Title,Content from Notes Order By Views DESC";
@@ -325,20 +325,20 @@ public partial class MainForm : Form
 		
 		var s = Clipboard.GetText().Trim();
 		if (s.Length > 0 && listBox1.SelectedIndex != -1) {
-			var text=string.Empty;
+			var text = string.Empty;
 			using (var cmd = (SQLiteCommand)conn.CreateCommand()) {
 				cmd.CommandText = @"select Content from Notes where Title = @Title";
 				cmd.Parameters.Add("Title", DbType.String).Value = listBox1.SelectedItem.ToString();
 				using (var reader = cmd.ExecuteReader()) {
 					if (reader.Read())
-						text=reader.GetString(0);
+						text = reader.GetString(0);
 				}
 			}
 		
 			using (var cmd = (SQLiteCommand)conn.CreateCommand()) {
 				cmd.CommandText = @"update Notes set Content = @Content,Views = Views + 1,UpdateAt = (datetime('now','localtime')) where Title = @Title";
 				cmd.Parameters.Add("Title", DbType.String).Value = listBox1.SelectedItem.ToString();
-				cmd.Parameters.Add("Content", DbType.String).Value = text+Environment.NewLine+Environment.NewLine+s.Trim();
+				cmd.Parameters.Add("Content", DbType.String).Value = text + Environment.NewLine + Environment.NewLine + s.Trim();
 				cmd.ExecuteNonQuery();
 			}
 			//LoadData();
@@ -425,6 +425,22 @@ public partial class MainForm : Form
 			}
 			LoadData();
 		}
+	}
+	void MainFormKeyUp(object sender, KeyEventArgs e)
+	{
+		if (e.KeyCode == Keys.F8) {
+		Android.	ColorPicker();
+		} else if (e.KeyCode == Keys.F10) {
+			var bitmap =	Screenshot.GetScreenshot();
+			var i = 0;
+			var f = Screenshot.GetDesktopPath(i.ToString().PadLeft(3, '0') + ".png");
+			while (File.Exists(f)) {
+				i++;
+				f = Screenshot.GetDesktopPath(i.ToString().PadLeft(3, '0') + ".png");
+			}
+			bitmap.Save(f, System.Drawing.Imaging.ImageFormat.Png);
+			
+		} 
 	}
 	 
 }
