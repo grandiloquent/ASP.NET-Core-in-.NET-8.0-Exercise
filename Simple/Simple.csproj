@@ -55,9 +55,16 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="TencentCloudCommon">
+      <HintPath>TencentCloudCommon.dll</HintPath>
+    </Reference>
+    <Reference Include="TencentCloudOcr">
+      <HintPath>TencentCloudOcr.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Android.cs" />
+    <Compile Include="Keys.cs" />
     <Compile Include="MainForm.cs" />
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>

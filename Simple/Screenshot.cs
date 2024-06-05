@@ -9,7 +9,7 @@ using System.Text;
 
 public static  class Screenshot
 {
-	struct POINT
+	public	struct POINT
 	{
 		public int X;
 		public int Y;
@@ -156,7 +156,7 @@ public static  class Screenshot
 	public static extern IntPtr SelectObject(IntPtr hdc, IntPtr hgdiobj);
 	[DllImport("user32.dll")]
 	[return: MarshalAs(UnmanagedType.Bool)]
-	static extern bool GetCursorPos(out POINT lpPoint);
+	public	static extern bool GetCursorPos(out POINT lpPoint);
 	[DllImport("user32.dll")]
 	static extern IntPtr WindowFromPoint(POINT p);
 	private static Bitmap CaptureRectangleNative(Rectangle rect, bool captureCursor = false)
@@ -253,9 +253,9 @@ public static  class Screenshot
 	}
 	public static string GetDesktopPath(string f)
 	{
-		var dir=Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-		dir=Path.Combine(dir,"图片");
-		if(!Directory.Exists(dir)){
+		var dir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+		dir = Path.Combine(dir, "图片");
+		if (!Directory.Exists(dir)) {
 			Directory.CreateDirectory(dir);
 		}
 		return Path.Combine(dir, f);
