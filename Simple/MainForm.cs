@@ -86,7 +86,7 @@ public partial class MainForm : Form
 		*/
 		var dir = @"C:\Users\Administrator\Desktop\视频\Net\WebApp\Blender";
 		dir.CreateDirectoryIfNotExists();
-		var fn = Path.Combine(dir, "对齐.md");
+		var fn = Path.Combine(dir, "曲线.md");
 		if (!File.Exists(fn)) {
 			File.Create(fn).Dispose();
 		}
@@ -524,5 +524,13 @@ public partial class MainForm : Form
 	string ProcessValue(string s)
 	{
 		return s;
+	}
+	void TextBox1MouseUp(object sender, MouseEventArgs e)
+	{
+		// MouseBouttons
+		if(e.Button==MouseButtons.Middle){
+			textBox1.SelectedText="-.";
+			
+		}
 	}
 }

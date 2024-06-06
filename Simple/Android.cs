@@ -15,7 +15,7 @@ public static class Android
 		);
 	}
 
-	private static void FormatBlenderScript(TextBox textBox, Func<float[],string> fun)
+	private static void FormatBlenderScript(TextBox textBox, Func<float[],string> fun, string defaultValue = "-.")
 	{
 		int i = textBox.SelectionStart;
 		int jv = i;
@@ -40,9 +40,17 @@ public static class Android
 			} 
 			ClipboardShare.SetText(s);
 			textBox.Text = textBox.Text.Substring(0, i) + s + Environment.NewLine + textBox.Text.Substring(i + value.Length);
-			textBox.SelectionStart=i;
+			textBox.SelectionStart = i;
 		} catch (Exception e) {
-			textBox.Text = e.Message + e.StackTrace + Environment.NewLine + textBox.Text;
+			if (textBox.SelectionStart == 0) {
+				textBox.SelectedText = Environment.NewLine + Environment.NewLine + defaultValue; // e.Message + e.StackTrace + Environment.NewLine + textBox.Text;
+				//textBox.SelectionStart += defaultValue.Length;
+	
+			} else {
+				textBox.SelectedText = defaultValue; // e.Message + e.StackTrace + Environment.NewLine + textBox.Text;
+				//textBox.SelectionStart += defaultValue.Length;
+	
+			}
 		}
 	}
 	public static void HandleKeyDown(TextBox textBox, KeyEventArgs arg)
@@ -54,9 +62,9 @@ public static class Android
 			// \r\nbpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
 		} else if (arg.KeyCode == Keys.F2) {
 			FormatBlenderScript(textBox, v =>
-				                    string.Format("bpy.ops.mesh.extrude_region_move()\r\nbpy.ops.transform.translate(value=({0}, {1}, {2}))", v[0], v[1], v[2]));
+				                    string.Format("bpy.ops.mesh.extrude_region_move()\r\nbpy.ops.transform.translate(value=({0}, {1}, {2}))", v[0], v[1], v[2]), ".");
 		} else if (arg.KeyCode == Keys.F3) {
-			FormatBlenderScript(textBox, v => string.Format("bpy.ops.transform.translate(value=({0}, {1}, {2}))", v[0], v[1], v[2]));
+			FormatBlenderScript(textBox, v => string.Format("bpy.ops.transform.translate(value=({0}, {1}, {2}))", v[0], v[1], v[2]), "1.");
 		} else if (arg.KeyCode == Keys.F4) {
 			FormatBlenderScript(textBox, v => {
 				return string.Format("bpy.ops.mesh.inset(thickness={0}, depth=0)", v[0], v[1], v[2]);
@@ -67,18 +75,12 @@ public static class Android
 			});
 			
 			
-		}else if(arg.KeyCode==Keys.F6){
-			FormatBlenderScript(textBox,v=>{
-			                    	return string.Format(@"
-bpy.ops.object.mode_set(mode='OBJECT')
-bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
-bpy.ops.object.mode_set(mode='EDIT')
-bpy.ops.mesh.select_all(action='SELECT')
-bpy.ops.mesh.normals_make_consistent(inside=False)
-bpy.ops.mesh.extrude_region_shrink_fatten(TRANSFORM_OT_shrink_fatten={{""value"":{0},""use_even_offset"":True}})
-",v[0]);
-			                    });
-		}else   if (arg.KeyCode == Keys.M) {
+		} else if (arg.KeyCode == Keys.F6) {
+			FormatBlenderScript(textBox, v => {
+				return string.Format(@"bpy.ops.mesh.extrude_region_shrink_fatten(TRANSFORM_OT_shrink_fatten={{""value"":{0},""use_even_offset"":True}})
+", v[0]);
+			});
+		} else if (arg.KeyCode == Keys.M) {
 			//ClipboardShare.SetText("bpy.ops.object.modifier_add(type='MIRROR')");
 		} else if (arg.KeyCode == Keys.B) {
 //			ClipboardShare.SetText(@"bpy.ops.object.modifier_add(type='BEVEL')
@@ -101,19 +103,19 @@ bpy.ops.mesh.extrude_region_shrink_fatten(TRANSFORM_OT_shrink_fatten={{""value""
 		}
 		if (arg.Control) {
 			if (arg.KeyCode == Keys.C) {
-				if(textBox.SelectedText.Length>0){
+				if (textBox.SelectedText.Length > 0) {
 					return;
 				}
 				var start = textBox.SelectionStart;
 				var end = start;
-				while (start - 1 > -1 ) {
-					var founded=false;
+				while (start - 1 > -1) {
+					var founded = false;
 					if (textBox.Text[start] == '\n') {
-						var p=start-1;
-						while(p-1>-1){
-							if(textBox.Text[p]=='\n'){
-								if(string.IsNullOrWhiteSpace(textBox.Text.Substring(p,start-p))){
-									founded=true;
+						var p = start - 1;
+						while (p - 1 > -1) {
+							if (textBox.Text[p] == '\n') {
+								if (string.IsNullOrWhiteSpace(textBox.Text.Substring(p, start - p))) {
+									founded = true;
 									start++;
 									break;
 								}
@@ -121,17 +123,18 @@ bpy.ops.mesh.extrude_region_shrink_fatten(TRANSFORM_OT_shrink_fatten={{""value""
 							p--;
 						}
 					}
-					if(founded)break;
+					if (founded)
+						break;
 					start--;
 				}
-				while (end + 1 <textBox.Text.Length) {
-					var founded=false;
+				while (end + 1 < textBox.Text.Length) {
+					var founded = false;
 					if (textBox.Text[end] == '\n') {
-						var p=end+1;
-						while(p+1<textBox.Text.Length){
-							if(textBox.Text[p]=='\n'){
-								if(string.IsNullOrWhiteSpace(textBox.Text.Substring(end,p-end))){
-									founded=true;
+						var p = end + 1;
+						while (p + 1 < textBox.Text.Length) {
+							if (textBox.Text[p] == '\n') {
+								if (string.IsNullOrWhiteSpace(textBox.Text.Substring(end, p - end))) {
+									founded = true;
 									end++;
 									break;
 								}
@@ -139,10 +142,11 @@ bpy.ops.mesh.extrude_region_shrink_fatten(TRANSFORM_OT_shrink_fatten={{""value""
 							p++;
 						}
 					}
-					if(founded)break;
+					if (founded)
+						break;
 					end++;
 				}
-				ClipboardShare.SetText(textBox.Text.Substring(start, end - start));
+				ClipboardShare.SetText(textBox.Text.Substring(start, end - start + 1).Trim());
 			}
 		}
 		return;
