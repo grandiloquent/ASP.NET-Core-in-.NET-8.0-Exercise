@@ -84,9 +84,9 @@ public partial class MainForm : Form
 		Path.Combine(jx,"书籍").CreateDirectoryIfNotExists();
 		Path.Combine(jx,"程序").CreateDirectoryIfNotExists();
 		*/
-		var dir = @"C:\Users\Administrator\Desktop\视频\Net\WebApp\Python";
+		var dir = @"C:\Users\Administrator\Desktop\视频\Net\WebApp\Blender";
 		dir.CreateDirectoryIfNotExists();
-		var fn = Path.Combine(dir, "loopcut.py");
+		var fn = Path.Combine(dir, "对齐.md");
 		if (!File.Exists(fn)) {
 			File.Create(fn).Dispose();
 		}
@@ -444,7 +444,7 @@ public partial class MainForm : Form
 			}
 			bitmap.Save(f, System.Drawing.Imaging.ImageFormat.Png);
 			
-		} else if (e.KeyCode == Keys.F11) {
+		} else if (e.KeyCode == Keys.F9) {
 
 			Screenshot.POINT p = new Screenshot.POINT();
 			Screenshot.GetCursorPos(out p);
@@ -453,11 +453,6 @@ public partial class MainForm : Form
 	}
 	public  void Ocr(Point p1, Point p2)
 	{
-//			var sv=Screenshot.GetScreenshot();
-//			MemoryStream ss=new MemoryStream();
-//			sv.Save(ss,ImageFormat.Png);
-//			sv.Dispose();ss.ToArray(); //
-			
 		var buf = ScreenShoot(p1, p2);
 		if (buf == null)
 			return;
@@ -499,7 +494,7 @@ public partial class MainForm : Form
 			Text = s;
 			Clipboard.SetText(ProcessValue(s));
 		} catch (Exception e) {
-			Text = e.Message;
+			textBox1.Text=e.StackTrace+Environment.NewLine+textBox1.Text;
 		}
 	}
 	Point _p1;

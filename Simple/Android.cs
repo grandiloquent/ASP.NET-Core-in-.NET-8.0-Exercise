@@ -38,7 +38,7 @@ public static class Android
 			} else {
 				s = fun(new float[]{ n[0], n[0], n[0] });
 			} 
-			 
+			ClipboardShare.SetText(s);
 			textBox.Text = textBox.Text.Substring(0, i) + s + Environment.NewLine + textBox.Text.Substring(i + value.Length);
 			textBox.SelectionStart=i;
 		} catch (Exception e) {
@@ -75,7 +75,7 @@ bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
 bpy.ops.object.mode_set(mode='EDIT')
 bpy.ops.mesh.select_all(action='SELECT')
 bpy.ops.mesh.normals_make_consistent(inside=False)
-bpy.ops.mesh.extrude_region_shrink_fatten(TRANSFORM_OT_shrink_fatten={{""value"":{0}}})
+bpy.ops.mesh.extrude_region_shrink_fatten(TRANSFORM_OT_shrink_fatten={{""value"":{0},""use_even_offset"":True}})
 ",v[0]);
 			                    });
 		}else   if (arg.KeyCode == Keys.M) {
