@@ -84,9 +84,9 @@ public partial class MainForm : Form
 		Path.Combine(jx,"书籍").CreateDirectoryIfNotExists();
 		Path.Combine(jx,"程序").CreateDirectoryIfNotExists();
 		*/
-		var dir = @"C:\Users\Administrator\Desktop\视频\Net\WebApp\Blender";
+		var dir = @"C:\Users\psycho\Desktop\视频\Net\WebApp\Blender";
 		dir.CreateDirectoryIfNotExists();
-		var fn = Path.Combine(dir, "曲线.md");
+		var fn = Path.Combine(dir, "插件.md");
 		if (!File.Exists(fn)) {
 			File.Create(fn).Dispose();
 		}
@@ -109,10 +109,10 @@ public partial class MainForm : Form
 			cmd.CommandText = @"create table if not exists Notes(Id integer not null primary key autoincrement, Title text not null unique, Content text not null,Views integer DEFAULT 0,CreateAt datetime default (datetime('now','localtime')),UpdateAt datetime default (datetime('now','localtime')));";
 			cmd.ExecuteNonQuery();
 		}
-		var f = @"C:\Users\Administrator\Desktop\Documents\Codes\App\Simple\Utils.cs";
-		if (!File.Exists(f)) {
-			File.WriteAllText(f, string.Empty);
-		}
+//		var f = @"C:\Users\Administrator\Desktop\Documents\Codes\App\Simple\Utils.cs";
+//		if (!File.Exists(f)) {
+//			File.WriteAllText(f, string.Empty);
+//		}
 		_fileName = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "contents.txt");
 		if (File.Exists(_fileName)) {
 			textBox1.Text = File.ReadAllText(_fileName);

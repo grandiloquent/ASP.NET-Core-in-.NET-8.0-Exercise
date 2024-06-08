@@ -1,7 +1,7 @@
 const pathSeperator = "\\";
 const baseUri = window.location.host === "127.0.0.1:5500" ? "http://192.168.8.55:8500" : "";
 const searchParams = new URL(window.location).searchParams;
-const DEFAULT_PATH = 'C:\\Users\\Administrator\\Desktop';
+const DEFAULT_PATH = 'C:\\Users\\psycho\\Desktop';
 
 ////////////////////////////////////////////////////////////////
 
