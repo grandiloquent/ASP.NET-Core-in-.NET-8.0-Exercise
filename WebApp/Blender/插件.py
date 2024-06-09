@@ -22,11 +22,10 @@ def align(value):
     o = bpy.context.object
     center = o.matrix_world @ (0.125 * sum((Vector(b) for b in o.bound_box), Vector()))
     corners = [ bpy.context.object.matrix_world @ Vector(corner) for corner in  bpy.context.object.bound_box] 
-    parent = o.parent
-    if parent is None:
-        parent=o
-    elif parent.parent is not None:
+    parent = o
+    while parent.parent is not None:
         parent=parent.parent
+
     o.select_set(False)
     parent.select_set(True)
     bpy.context.view_layer.objects.active = parent
@@ -231,7 +230,99 @@ class _modifier_solidify(Operator):
     def execute(self, context):
         bpy.ops.object.modifier_add(type='SOLIDIFY')
         return {'FINISHED'}
-      
+
+
+def align_vert(mode):
+    l = bpy.context.scene.cursor.location
+    s = bpy.context.object.matrix_world @ [e for e in bmesh.from_edit_mesh(bpy.context.object.data).verts if e.select][0].co
+    x = l.x-s.x
+    y=l.y-s.y
+    z=l.z-s.z
+    bpy.ops.object.mode_set(mode='OBJECT')
+    o = bpy.context.object
+    parent = o
+    while parent.parent is not None:
+        parent=parent.parent
+
+    o.select_set(False)
+    parent.select_set(True)
+    bpy.context.view_layer.objects.active = parent
+    if mode==1:
+        bpy.ops.transform.translate(value=(x,0,0))
+    elif mode==2:
+        bpy.ops.transform.translate(value=(0,y,0))
+    elif mode==3:
+        bpy.ops.transform.translate(value=(0,0,z))
+    return None
+
+class _align_v_x(Operator):
+    """ Align a object by select vert """
+    bl_idname = "align.vx"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "EDIT_MESH"
+
+    def execute(self, context):
+        align_vert(1)
+        return {'FINISHED'}
+
+class _align_v_y(Operator):
+    """ Align a object by select vert """
+    bl_idname = "align.vy"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "EDIT_MESH"
+
+    def execute(self, context):
+        align_vert(2)
+        return {'FINISHED'}
+
+class _align_v_z(Operator):
+    """ Align a object by select vert """
+    bl_idname = "align.vz"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "EDIT_MESH"
+
+    def execute(self, context):
+        align_vert(3)
+        return {'FINISHED'}
+
+def select_group():
+    o = bpy.context.active_object
+    p = o
+    while p.parent is not None:
+        p = p.parent
+
+    for o in p.children_recursive:
+        o.select_set(True)
+
+    p.select_set(True)
+    return None
+
+class _select_group(Operator):
+    """ Selection group """
+    bl_idname = "select.group"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT"
+
+    def execute(self, context):
+        select_group()
+        return {'FINISHED'}
+
 class _align(Panel):
     """将所选对象和其所在的组与光标对齐"""
     bl_label = "对齐"
@@ -253,9 +344,16 @@ class _align(Panel):
         row.operator(_align_z.bl_idname, text="Z")
         row.operator(_align_p_z.bl_idname, text="+Z")
         row = self.layout.row(align=True)
+        row.operator(_align_v_x.bl_idname, text="VX")
+        row.operator(_align_v_y.bl_idname, text="VY")
+        row.operator(_align_v_z.bl_idname, text="VZ")
+        row = self.layout.row(align=True)
         row.operator(_modifier_mirror.bl_idname, text="Mirror")
         row.operator(_modifier_bevel.bl_idname, text="Bevel")
         row.operator(_modifier_solidify.bl_idname, text="Solidify")
+        row = self.layout.row(align=True)
+        row.operator(_select_group.bl_idname, text="选择组")
+
 
 classes = [
     _align_n_x,
@@ -267,9 +365,13 @@ classes = [
     _align_n_z,
     _align_z,
     _align_p_z,
+    _align_v_x,
+    _align_v_y,
+    _align_v_z,
     _modifier_mirror,
     _modifier_bevel,
     _modifier_solidify,
+    _select_group,
     _align,
 ]
 
