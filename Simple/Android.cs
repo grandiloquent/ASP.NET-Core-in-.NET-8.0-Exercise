@@ -80,7 +80,21 @@ public static class Android
 				return string.Format(@"bpy.ops.mesh.extrude_region_shrink_fatten(TRANSFORM_OT_shrink_fatten={{""value"":{0},""use_even_offset"":True}})
 ", v[0]);
 			});
-		} else if (arg.KeyCode == Keys.M) {
+		} else if (arg.KeyCode == Keys.F7) {
+			var str=File.ReadAllText("2.txt".GetEntryPath());
+			var ss=ClipboardShare.GetText().Trim().Split(new char[]{' '},StringSplitOptions.RemoveEmptyEntries);
+			var s1="_"+string.Join("_",ss);
+			var s2=string.Join(".",ss);
+			var s3=string.Join("_",ss);
+			str=Regex.Replace(str,"\\{1}",s1);
+			str=Regex.Replace(str,"\\{2}",s2);
+			str=Regex.Replace(str,"\\{3}",s3);
+			
+			ClipboardShare.SetText(str);
+			
+		}
+
+		else if (arg.KeyCode == Keys.M) {
 			//ClipboardShare.SetText("bpy.ops.object.modifier_add(type='MIRROR')");
 		} else if (arg.KeyCode == Keys.B) {
 //			ClipboardShare.SetText(@"bpy.ops.object.modifier_add(type='BEVEL')

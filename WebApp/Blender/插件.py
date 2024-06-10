@@ -323,6 +323,61 @@ class _select_group(Operator):
         select_group()
         return {'FINISHED'}
 
+def edge_loops(edge):
+    def walk(edge):
+        yield edge
+        edge.tag = True
+        for l in edge.link_loops:
+            loop = l.link_loop_radial_next.link_loop_next.link_loop_next
+            if not (len(loop.face.verts) != 4 or loop.edge.tag):
+                yield from walk(loop.edge)
+    for e in bm.edges:
+        e.tag = False
+    return list(walk(edge))
+
+def loopcut(cuts):
+    context = bpy.context
+    ob = context.object
+    me = ob.data
+
+    bm = bmesh.from_edit_mesh(me)
+    edge = bm.select_history.active
+
+    if isinstance(edge, bmesh.types.BMEdge): 
+        ''' 
+        bmesh.ops.subdivide_edges(
+            bm,
+            edges=edge_loops(edge),
+            cuts=cuts,
+            smooth_falloff='INVERSE_SQUARE',
+            use_grid_fill=True,
+            )
+        '''
+        bmesh.ops.subdivide_edgering(
+            bm,
+            edges=edge_loops(edge),
+            cuts=cuts,
+            profile_shape='INVERSE_SQUARE',
+            profile_shape_factor=0.0,
+            )    
+        bmesh.update_edit_mesh(me)
+    return None
+
+class _loopcut_one(Operator):
+    """ Selection group """
+    bl_idname = "loopcut.one"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT"
+
+    def execute(self, context):
+        loopcut(1);
+        return {'FINISHED'}
+
+
 class _align(Panel):
     """将所选对象和其所在的组与光标对齐"""
     bl_label = "对齐"
@@ -353,7 +408,8 @@ class _align(Panel):
         row.operator(_modifier_solidify.bl_idname, text="Solidify")
         row = self.layout.row(align=True)
         row.operator(_select_group.bl_idname, text="选择组")
-
+        row = self.layout.row(align=True)
+        row.operator(_loopcut_one.bl_idname, text="分割1")
 
 classes = [
     _align_n_x,
@@ -372,6 +428,7 @@ classes = [
     _modifier_bevel,
     _modifier_solidify,
     _select_group,
+    _loopcut_one,
     _align,
 ]
 
