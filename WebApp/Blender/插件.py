@@ -323,7 +323,7 @@ class _select_group(Operator):
         select_group()
         return {'FINISHED'}
 
-def edge_loops(edge):
+def edge_loops(edge,bm):
     def walk(edge):
         yield edge
         edge.tag = True
@@ -355,7 +355,7 @@ def loopcut(cuts):
         '''
         bmesh.ops.subdivide_edgering(
             bm,
-            edges=edge_loops(edge),
+            edges=edge_loops(edge,bm),
             cuts=cuts,
             profile_shape='INVERSE_SQUARE',
             profile_shape_factor=0.0,
@@ -371,12 +371,225 @@ class _loopcut_one(Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.mode == "OBJECT"
+        return context.mode == "EDIT_MESH"
 
     def execute(self, context):
         loopcut(1);
         return {'FINISHED'}
 
+def duplicate_move_z(mode):
+    corners = [ Vector(corner) for corner in  bpy.context.object.bound_box] 
+    bpy.ops.object.duplicate_move()
+    if mode==1:
+        bpy.ops.transform.translate(value=(max([v.x for v in corners])*-2,0,0))
+    elif mode==3:
+        bpy.ops.transform.translate(value=(0,0,max([v.z for v in corners])*2))
+
+    return None
+
+class _duplicate_move_z(Operator):
+    """ Selection group """
+    bl_idname = "duplicate.movez"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT"
+
+    def execute(self, context):
+        duplicate_move_z(1)
+        return {'FINISHED'}
+
+class _duplicate_separate(Operator):
+    """ Selection group """
+    bl_idname = "duplicate.separate"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "EDIT_MESH"
+
+    def execute(self, context):
+        duplicate_separate(1)
+        return {'FINISHED'}
+
+def duplicate_separate(mode):
+
+    bpy.ops.mesh.duplicate_move()
+    bpy.ops.mesh.separate(type='SELECTED')
+    s = bpy.context.selected_objects[len(bpy.context.selected_objects)-1]
+    for obj in bpy.context.selected_objects:
+        obj.select_set(False)
+
+    s.select_set(True)
+    bpy.context.view_layer.objects.active=s
+    bpy.ops.object.mode_set(mode='EDIT')
+    mesh=bmesh.from_edit_mesh(bpy.context.object.data)
+    for f in mesh.faces:
+        f.select = True
+
+    for f in mesh.edges:
+        f.select = True
+
+    bmesh.update_edit_mesh(bpy.context.object.data)
+    bpy.ops.mesh.normals_make_consistent(inside=False)
+    bpy.ops.object.mode_set(mode='OBJECT')
+    bpy.ops.object.mode_set(mode='EDIT')
+    return None
+
+class _loopcut_three(Operator):
+    """ Selection group """
+    bl_idname = "loopcut.three"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "EDIT_MESH"
+
+    def execute(self, context):
+        loopcut(3)
+        return {'FINISHED'}
+
+class _loopcut_seven(Operator):
+    """ Selection group """
+    bl_idname = "loopcut.seven"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "EDIT_MESH"
+
+    def execute(self, context):
+        loopcut(7)
+        return {'FINISHED'}
+
+class _loopcut_two(Operator):
+    """ Selection group """
+    bl_idname = "loopcut.two"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "EDIT_MESH"
+
+    def execute(self, context):
+        loopcut(2)
+        return {'FINISHED'}
+
+def view_axis(mode):
+    win = bpy.context.window
+    scr = win.screen
+    areas3d  = [area for area in scr.areas if area.type == 'VIEW_3D']
+    region   = [region for region in areas3d[0].regions if region.type == 'WINDOW']
+
+
+    # Add cube in the other window.
+    with bpy.context.temp_override(window=win,area=areas3d[0],region=region[0]):
+        t="TOP"
+        if mode==1:
+            t="LEFT"
+        elif mode==2:
+            t="RIGHT"
+        elif mode==3:
+            t="BOTTOM"
+        elif mode==4:
+            t="TOP"
+        elif mode==5:
+            t="FRONT"
+        elif mode==6:
+            t="BACK"
+            
+        bpy.ops.view3d.view_axis(type=t, align_active=False) 
+        if areas3d[0].spaces.active.region_3d.is_perspective:
+            bpy.ops.view3d.view_persportho()
+            #bpy.ops.view3d.view_persportho()
+        else:
+            pass
+    return None
+
+class _view_axis_left(Operator):
+    """ Selection group """
+    bl_idname = "view.axisleft"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT"
+
+    def execute(self, context):
+        view_axis(1)
+        return {'FINISHED'}
+class _view_axis_right(Operator):
+    """ Selection group """
+    bl_idname = "view.axisright"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT"
+
+    def execute(self, context):
+        view_axis(2)
+        return {'FINISHED'}
+class _view_axis_bottom(Operator):
+    """ Selection group """
+    bl_idname = "view.axisbottom"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT"
+
+    def execute(self, context):
+        view_axis(3)
+        return {'FINISHED'}
+class _view_axis_top(Operator):
+    """ Selection group """
+    bl_idname = "view.axistop"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT"
+
+    def execute(self, context):
+        view_axis(4)
+        return {'FINISHED'}
+class _view_axis_front(Operator):
+    """ Selection group """
+    bl_idname = "view.axisfront"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT"
+
+    def execute(self, context):
+        view_axis(5)
+        return {'FINISHED'}
+class _view_axis_back(Operator):
+    """ Selection group """
+    bl_idname = "view.axisback"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT"
+
+    def execute(self, context):
+        view_axis(6)
+        return {'FINISHED'}
 
 class _align(Panel):
     """将所选对象和其所在的组与光标对齐"""
@@ -408,8 +621,22 @@ class _align(Panel):
         row.operator(_modifier_solidify.bl_idname, text="Solidify")
         row = self.layout.row(align=True)
         row.operator(_select_group.bl_idname, text="选择组")
+        row.operator(_duplicate_separate.bl_idname, text="复制分离")
+        row.operator(_duplicate_move_z.bl_idname, text="复制Z")
         row = self.layout.row(align=True)
-        row.operator(_loopcut_one.bl_idname, text="分割1")
+        row.operator(_loopcut_one.bl_idname, text="分割2")
+        row.operator(_loopcut_two.bl_idname, text="分割2")
+        row.operator(_loopcut_three.bl_idname, text="分割4")
+        row = self.layout.row(align=True)
+        row.operator(_loopcut_seven.bl_idname, text="分割8")
+        row = self.layout.row(align=True)
+        row.operator(_view_axis_left.bl_idname, text="左")
+        row.operator(_view_axis_right.bl_idname, text="右")
+        row.operator(_view_axis_bottom.bl_idname, text="下")
+        row = self.layout.row(align=True)
+        row.operator(_view_axis_top.bl_idname, text="上")
+        row.operator(_view_axis_front.bl_idname, text="前")
+        row.operator(_view_axis_back.bl_idname, text="后")
 
 classes = [
     _align_n_x,
@@ -429,6 +656,17 @@ classes = [
     _modifier_solidify,
     _select_group,
     _loopcut_one,
+    _duplicate_move_z,
+    _duplicate_separate,
+    _loopcut_three,
+    _loopcut_seven,
+    _loopcut_two,
+    _view_axis_left,
+    _view_axis_right,
+    _view_axis_bottom,
+    _view_axis_top,
+    _view_axis_front,
+    _view_axis_back,
     _align,
 ]
 
