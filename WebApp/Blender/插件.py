@@ -650,7 +650,26 @@ class _duplicate_rotate(Operator):
         duplicate_rotate(1)
         return {'FINISHED'}
 
+def add_plane(mode):
+    bpy.ops.object.mode_set(mode='OBJECT')
+    bpy.ops.mesh.primitive_plane_add()
+    bpy.ops.object.mode_set(mode='EDIT')
+    return None
 
+class _add_plane(Operator):
+    """ Selection group """
+    bl_idname = "add.plane"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT"
+
+    def execute(self, context):
+        add_plane(mode)
+        return {'FINISHED'}
+   
 class _align(Panel):
     """将所选对象和其所在的组与光标对齐"""
     bl_label = "对齐"
@@ -682,6 +701,7 @@ class _align(Panel):
         row = self.layout.row(align=True)
         row.operator(_select_group.bl_idname, text="选择组")
         row.operator(_duplicate_separate.bl_idname, text="复制分离")
+        row.operator(_add_plane.bl_idname, text="新建面")
         row = self.layout.row(align=True)
         row.operator(_duplicate_move_z.bl_idname, text="复制Z")
         row.operator(_duplicate_rotate.bl_idname, text="复制旋转Z")
@@ -730,6 +750,7 @@ classes = [
     _view_axis_front,
     _view_axis_back,
     _duplicate_rotate,
+    _add_plane,
     _align,
 ]
 
