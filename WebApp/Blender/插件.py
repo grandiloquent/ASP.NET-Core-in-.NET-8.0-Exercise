@@ -16,6 +16,8 @@ from bpy.types import Operator
 from bpy.types import Panel
 import bmesh
 from mathutils import Vector
+from math import radians
+from mathutils import Matrix
 
 def align(value):
     l = bpy.context.scene.cursor.location
@@ -378,8 +380,19 @@ class _loopcut_one(Operator):
         return {'FINISHED'}
 
 def duplicate_move_z(mode):
-    corners = [ Vector(corner) for corner in  bpy.context.object.bound_box] 
+    o = bpy.context.object
+    parent = o
+    while parent.parent is not None:
+        parent=parent.parent
+
+    o.select_set(False)
+    parent.select_set(True)
+    for o in parent.children_recursive:
+        o.select_set(True)
+
     bpy.ops.object.duplicate_move()
+    corners = [ Vector(corner) for corner in  bpy.context.object.bound_box] 
+
     if mode==1:
         bpy.ops.transform.translate(value=(max([v.x for v in corners])*-2,0,0))
     elif mode==3:
@@ -452,7 +465,6 @@ class _loopcut_three(Operator):
     def execute(self, context):
         loopcut(3)
         return {'FINISHED'}
-
 class _loopcut_seven(Operator):
     """ Selection group """
     bl_idname = "loopcut.seven"
@@ -507,7 +519,7 @@ def view_axis(mode):
         bpy.ops.view3d.view_axis(type=t, align_active=False) 
         if areas3d[0].spaces.active.region_3d.is_perspective:
             bpy.ops.view3d.view_persportho()
-            #bpy.ops.view3d.view_persportho()
+            bpy.ops.view3d.view_persportho()
         else:
             pass
     return None
@@ -520,7 +532,7 @@ class _view_axis_left(Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.mode == "OBJECT"
+        return True
 
     def execute(self, context):
         view_axis(1)
@@ -533,7 +545,7 @@ class _view_axis_right(Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.mode == "OBJECT"
+        return True
 
     def execute(self, context):
         view_axis(2)
@@ -546,7 +558,7 @@ class _view_axis_bottom(Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.mode == "OBJECT"
+        return True
 
     def execute(self, context):
         view_axis(3)
@@ -559,7 +571,7 @@ class _view_axis_top(Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.mode == "OBJECT"
+        return True
 
     def execute(self, context):
         view_axis(4)
@@ -572,7 +584,7 @@ class _view_axis_front(Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.mode == "OBJECT"
+        return True
 
     def execute(self, context):
         view_axis(5)
@@ -585,11 +597,59 @@ class _view_axis_back(Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.mode == "OBJECT"
+        return True
 
     def execute(self, context):
         view_axis(6)
         return {'FINISHED'}
+
+def duplicate_rotate(mode):
+    # https://blender.stackexchange.com/questions/44760/rotate-objects-around-their-origin-along-a-global-axis-scripted-without-bpy-op
+    o = bpy.context.object
+    parent = o
+    while parent.parent is not None:
+        parent=parent.parent
+
+    o.select_set(False)
+    parent.select_set(True)
+    for o in parent.children_recursive:
+        o.select_set(True)
+
+    bpy.ops.object.duplicate_move()
+    for o in parent.children_recursive:
+        o.select_set(False)
+
+    # example on an active object
+    obj = bpy.context.active_object
+
+    # define some rotation
+    angle_in_degrees = 90
+    rot_mat = Matrix.Rotation(radians(angle_in_degrees), 4, 'Z')   # you can also use as axis Y,Z or a custom vector like (x,y,z)
+
+    # decompose world_matrix's components, and from them assemble 4x4 matrices
+    orig_loc, orig_rot, orig_scale = obj.matrix_world.decompose()
+    orig_loc_mat = Matrix.Translation(orig_loc)
+    orig_rot_mat = orig_rot.to_matrix().to_4x4()
+    orig_scale_mat = Matrix.Scale(orig_scale[0],4,(1,0,0)) * Matrix.Scale(orig_scale[1],4,(0,1,0)) @ Matrix.Scale(orig_scale[2],4,(0,0,1))
+
+    # assemble the new matrix
+    obj.matrix_world = orig_loc_mat @ rot_mat @ orig_rot_mat @ orig_scale_mat 
+    return None
+
+class _duplicate_rotate(Operator):
+    """ Selection group """
+    bl_idname = "duplicate.rotate"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT"
+
+    def execute(self, context):
+        duplicate_rotate(1)
+        return {'FINISHED'}
+
 
 class _align(Panel):
     """将所选对象和其所在的组与光标对齐"""
@@ -622,7 +682,9 @@ class _align(Panel):
         row = self.layout.row(align=True)
         row.operator(_select_group.bl_idname, text="选择组")
         row.operator(_duplicate_separate.bl_idname, text="复制分离")
+        row = self.layout.row(align=True)
         row.operator(_duplicate_move_z.bl_idname, text="复制Z")
+        row.operator(_duplicate_rotate.bl_idname, text="复制旋转Z")
         row = self.layout.row(align=True)
         row.operator(_loopcut_one.bl_idname, text="分割2")
         row.operator(_loopcut_two.bl_idname, text="分割2")
@@ -667,6 +729,7 @@ classes = [
     _view_axis_top,
     _view_axis_front,
     _view_axis_back,
+    _duplicate_rotate,
     _align,
 ]
 
