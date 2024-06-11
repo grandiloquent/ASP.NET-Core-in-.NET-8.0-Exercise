@@ -667,7 +667,7 @@ class _add_plane(Operator):
         return context.mode == "OBJECT"
 
     def execute(self, context):
-        add_plane(mode)
+        add_plane(1)
         return {'FINISHED'}
    
 class _align(Panel):
