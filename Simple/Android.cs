@@ -92,6 +92,33 @@ public static class Android
 			
 			ClipboardShare.SetText(str);
 			
+		}else if(arg.KeyCode==Keys.F11){
+		ClipboardShare.SetText(ClipboardShare.GetText().FormatString());
+		}else if(arg.KeyCode==Keys.Oem3){
+			
+			var s=ClipboardShare.GetText().Trim().Split(new char[]{' '},StringSplitOptions.RemoveEmptyEntries)
+				.Select((x,i)=>{
+				        return string.Format(@"        elif mode=={0}:
+            t=""{1}""",i+1,x);
+				        });
+			
+			ClipboardShare.SetText(string.Join(Environment.NewLine,s));
+			/*
+			 string.Format(@"class _view_axis_{0}(Operator):
+    """""" Selection group """"""
+    bl_idname = ""view.axis{0}""
+    bl_label = """"
+    bl_options = {{""REGISTER"", ""UNDO""}}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == ""OBJECT""
+
+    def execute(self, context):
+        view_axis({1})
+        return {{'FINISHED'}}",x.ToLower(),i+1);
+			 */
+			
 		}
 
 		else if (arg.KeyCode == Keys.M) {

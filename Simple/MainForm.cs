@@ -86,7 +86,7 @@ public partial class MainForm : Form
 		*/
 		var dir = @"C:\Users\Administrator\Desktop\视频\Net\WebApp\Blender";
 		dir.CreateDirectoryIfNotExists();
-		var fn = Path.Combine(dir, "loopcut.py");
+		var fn = Path.Combine(dir, "复制旋转.py");
 		if (!File.Exists(fn)) {
 			File.Create(fn).Dispose();
 		}
@@ -492,7 +492,7 @@ public partial class MainForm : Form
 			GeneralBasicOCRResponse resp = client.GeneralBasicOCRSync(req);
 			var s = String.Join(Environment.NewLine + Environment.NewLine, resp.TextDetections.Select(x => x.DetectedText));
 			Text = s;
-			Clipboard.SetText(ProcessValue(s));
+			textBox1.Text=ProcessValue(s)+"\r\n\r\n"+textBox1.Text;
 		} catch (Exception e) {
 			textBox1.Text=e.StackTrace+Environment.NewLine+textBox1.Text;
 		}

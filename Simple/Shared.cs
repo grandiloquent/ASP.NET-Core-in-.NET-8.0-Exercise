@@ -623,6 +623,17 @@ public static class Strings
 		return Regex.Replace(s, "[ -]+", m => "_")
 			.TrimStart('_');
 	}
+	public static string FormatString(this string s)
+	{
+		s = s.Replace("\"", "\"\"")
+			.Replace("{", "{{")
+			.Replace("}", "}}");
+		// ClipboardShare.SetText()
+		s = string.Format("string.Format(@\"{0}\")", s);
+		//s = string.Format("{0}", s);
+		//s = string.Format("string.Format(@\"{0}\")", s);
+		return string.Format("{0}", s);
+	}
 }
 public static class Files
 {
