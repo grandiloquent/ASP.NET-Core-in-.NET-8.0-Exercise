@@ -669,7 +669,214 @@ class _add_plane(Operator):
     def execute(self, context):
         add_plane(1)
         return {'FINISHED'}
-   
+
+def quick_resize(mode):
+   #if bpy.context.window_manager.clipboard.isnumeric() is False:
+      #return None
+   v = float(bpy.context.window_manager.clipboard)
+   if mode==0:
+      bpy.ops.transform.resize(value=(v, 1, 1))
+   elif mode==1:
+      bpy.ops.transform.resize(value=( 1,v, 1))
+   elif mode==2:
+      bpy.ops.transform.resize(value=( 1, 1,v))
+   elif mode==3:   
+      bpy.ops.transform.resize(value=( v, v,v))
+   return None
+
+class _quick_resize_x(Operator):
+    """ Selection group """
+    bl_idname = "quick.resizex"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT" or context.mode == "EDIT_MESH"
+
+    def execute(self, context):
+        quick_resize(0)
+        return {'FINISHED'}
+class _quick_resize_y(Operator):
+    """ Selection group """
+    bl_idname = "quick.resizey"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT" or context.mode == "EDIT_MESH"
+
+    def execute(self, context):
+        quick_resize(1)
+        return {'FINISHED'}
+class _quick_resize_z(Operator):
+    """ Selection group """
+    bl_idname = "quick.resizez"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT" or context.mode == "EDIT_MESH"
+
+    def execute(self, context):
+        quick_resize(2)
+        return {'FINISHED'}
+class _quick_resize_xyz(Operator):
+    """ Selection group """
+    bl_idname = "quick.resizexyz"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT" or context.mode == "EDIT_MESH"
+
+    def execute(self, context):
+        quick_resize(3)
+        return {'FINISHED'}
+
+def quick_translate(mode):
+   #if bpy.context.window_manager.clipboard.isnumeric() is False:
+      #return None
+   v = float(bpy.context.window_manager.clipboard)
+   if mode==0:
+      bpy.ops.transform.translate(value=(v, 1, 1))
+   elif mode==1:
+      bpy.ops.transform.translate(value=( 1,v, 1))
+   elif mode==2:
+      bpy.ops.transform.translate(value=( 1, 1,v))
+   elif mode==3:   
+      bpy.ops.transform.translate(value=( v, v,v))
+   return None
+
+
+class _quick_translate_x(Operator):
+    """ Selection group """
+    bl_idname = "quick.translatex"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT" or context.mode == "EDIT_MESH"
+
+    def execute(self, context):
+        quick_translate(0)
+        return {'FINISHED'}
+class _quick_translate_y(Operator):
+    """ Selection group """
+    bl_idname = "quick.translatey"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT" or context.mode == "EDIT_MESH"
+
+    def execute(self, context):
+        quick_translate(1)
+        return {'FINISHED'}
+class _quick_translate_z(Operator):
+    """ Selection group """
+    bl_idname = "quick.translatez"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT" or context.mode == "EDIT_MESH"
+
+    def execute(self, context):
+        quick_translate(2)
+        return {'FINISHED'}
+class _quick_translate_xyz(Operator):
+    """ Selection group """
+    bl_idname = "quick.translatexyz"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT" or context.mode == "EDIT_MESH"
+
+    def execute(self, context):
+        quick_translate(3)
+        return {'FINISHED'}
+def quick_extrude(mode):
+   #if bpy.context.window_manager.clipboard.isnumeric() is False:
+      #return None
+   v = float(bpy.context.window_manager.clipboard)
+   if mode==0:
+      bpy.ops.mesh.extrude_region_move()
+      bpy.ops.transform.translate(value=(v, 1, 1))
+   elif mode==1:
+      bpy.ops.mesh.extrude_region_move()
+      bpy.ops.transform.translate(value=( 1,v, 1))
+   elif mode==2:
+      bpy.ops.mesh.extrude_region_move()
+      bpy.ops.transform.translate(value=( 1, 1,v))
+   elif mode==3:   
+      bpy.ops.mesh.extrude_region_move()
+      bpy.ops.transform.translate(value=( v, v,v))
+   return None
+
+
+class _quick_extrude_x(Operator):
+    """ Selection group """
+    bl_idname = "quick.extrudex"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT" or context.mode == "EDIT_MESH"
+
+    def execute(self, context):
+        quick_extrude(0)
+        return {'FINISHED'}
+class _quick_extrude_y(Operator):
+    """ Selection group """
+    bl_idname = "quick.extrudey"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT" or context.mode == "EDIT_MESH"
+
+    def execute(self, context):
+        quick_extrude(1)
+        return {'FINISHED'}
+class _quick_extrude_z(Operator):
+    """ Selection group """
+    bl_idname = "quick.extrudez"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT" or context.mode == "EDIT_MESH"
+
+    def execute(self, context):
+        quick_extrude(2)
+        return {'FINISHED'}
+class _quick_extrude_xyz(Operator):
+    """ Selection group """
+    bl_idname = "quick.extrudexyz"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT" or context.mode == "EDIT_MESH"
+
+    def execute(self, context):
+        quick_extrude(3)
+        return {'FINISHED'}
+
+
 class _align(Panel):
     """将所选对象和其所在的组与光标对齐"""
     bl_label = "对齐"
@@ -707,10 +914,25 @@ class _align(Panel):
         row.operator(_duplicate_rotate.bl_idname, text="复制旋转Z")
         row = self.layout.row(align=True)
         row.operator(_loopcut_one.bl_idname, text="分割2")
-        row.operator(_loopcut_two.bl_idname, text="分割2")
+        row.operator(_loopcut_two.bl_idname, text="分割3")
         row.operator(_loopcut_three.bl_idname, text="分割4")
         row = self.layout.row(align=True)
         row.operator(_loopcut_seven.bl_idname, text="分割8")
+        row = self.layout.row(align=True)
+        row.operator(_quick_resize_x.bl_idname, text="X")
+        row.operator(_quick_resize_y.bl_idname, text="Y")
+        row.operator(_quick_resize_z.bl_idname, text="Z")
+        row.operator(_quick_resize_xyz.bl_idname, text="XYZ")
+        row = self.layout.row(align=True)
+        row.operator(_quick_translate_x.bl_idname, text="X")
+        row.operator(_quick_translate_y.bl_idname, text="Y")
+        row.operator(_quick_translate_z.bl_idname, text="Z")
+        row.operator(_quick_translate_xyz.bl_idname, text="XYZ")
+        row = self.layout.row(align=True)
+        row.operator(_quick_extrude_x.bl_idname, text="X")
+        row.operator(_quick_extrude_y.bl_idname, text="Y")
+        row.operator(_quick_extrude_z.bl_idname, text="Z")
+        row.operator(_quick_extrude_xyz.bl_idname, text="XYZ")
         row = self.layout.row(align=True)
         row.operator(_view_axis_left.bl_idname, text="左")
         row.operator(_view_axis_right.bl_idname, text="右")
@@ -719,6 +941,7 @@ class _align(Panel):
         row.operator(_view_axis_top.bl_idname, text="上")
         row.operator(_view_axis_front.bl_idname, text="前")
         row.operator(_view_axis_back.bl_idname, text="后")
+
 
 classes = [
     _align_n_x,
@@ -751,6 +974,18 @@ classes = [
     _view_axis_back,
     _duplicate_rotate,
     _add_plane,
+    _quick_resize_x,
+    _quick_resize_y,
+    _quick_resize_z,
+    _quick_resize_xyz,
+    _quick_translate_x,
+    _quick_translate_y,
+    _quick_translate_z,
+    _quick_translate_xyz,
+    _quick_extrude_x,
+    _quick_extrude_y,
+    _quick_extrude_z,
+    _quick_extrude_xyz,
     _align,
 ]
 
