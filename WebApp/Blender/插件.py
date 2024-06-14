@@ -396,6 +396,8 @@ def duplicate_move_z(mode):
     if mode==1:
         bpy.ops.transform.translate(value=(max([v.x for v in corners])*-2,0,0))
     elif mode==3:
+        bpy.ops.transform.translate(value=(0,(max([v.y for v in corners])*2)+.4,0))
+    elif mode==3:
         bpy.ops.transform.translate(value=(0,0,max([v.z for v in corners])*2))
 
     return None
@@ -411,7 +413,7 @@ class _duplicate_move_z(Operator):
         return context.mode == "OBJECT"
 
     def execute(self, context):
-        duplicate_move_z(1)
+        duplicate_move_z(3)
         return {'FINISHED'}
 
 class _duplicate_separate(Operator):
@@ -877,6 +879,68 @@ class _quick_inset(Operator):
         bpy.ops.mesh.inset(use_even_offset=True, thickness=float(bpy.context.window_manager.clipboard), depth=0)
         return {'FINISHED'}
 
+def quick_rotate(mode):
+   if mode==0:
+      bpy.ops.transform.rotate(value=1.5708, orient_axis='X', orient_type='GLOBAL')
+   elif mode==1:
+      bpy.ops.transform.rotate(value=1.5708, orient_axis='Y', orient_type='GLOBAL')
+   elif mode==2:    
+      bpy.ops.transform.rotate(value=1.5708, orient_axis='Z', orient_type='GLOBAL')
+   return None
+
+class _quick_rotate_x(Operator):
+    """ Selection group """
+    bl_idname = "quick.rotatex"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT" or context.mode == "EDIT_MESH"
+
+    def execute(self, context):
+        quick_rotate(0)
+        return {'FINISHED'}
+class _quick_rotate_y(Operator):
+    """ Selection group """
+    bl_idname = "quick.rotatey"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT" or context.mode == "EDIT_MESH"
+
+    def execute(self, context):
+        quick_rotate(1)
+        return {'FINISHED'}
+class _quick_rotate_z(Operator):
+    """ Selection group """
+    bl_idname = "quick.rotatez"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT" or context.mode == "EDIT_MESH"
+
+    def execute(self, context):
+        quick_rotate(2)
+        return {'FINISHED'}
+class _quick_extrude_normals(Operator):
+    """ Quick extrude_normals """
+    bl_idname = "quick.extrude_normals"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "EDIT_MESH"
+
+    def execute(self, context):
+        value = float(bpy.context.window_manager.clipboard)
+        bpy.ops.mesh.extrude_region_shrink_fatten(TRANSFORM_OT_shrink_fatten={"value":value,"use_even_offset":True})
+        return {'FINISHED'}
 
 class _align(Panel):
     """将所选对象和其所在的组与光标对齐"""
@@ -919,6 +983,7 @@ class _align(Panel):
         row.operator(_loopcut_three.bl_idname, text="分割4")
         row = self.layout.row(align=True)
         row.operator(_loopcut_seven.bl_idname, text="分割")
+        row.operator(_quick_extrude_normals.bl_idname, text="拉伸")
         row = self.layout.row(align=True)
         row.operator(_quick_resize_x.bl_idname, text="X")
         row.operator(_quick_resize_y.bl_idname, text="Y")
@@ -934,6 +999,10 @@ class _align(Panel):
         row.operator(_quick_extrude_y.bl_idname, text="Y")
         row.operator(_quick_extrude_z.bl_idname, text="Z")
         row.operator(_quick_inset.bl_idname, text="Inset")
+        row = self.layout.row(align=True)
+        row.operator(_quick_rotate_x.bl_idname, text="X90")
+        row.operator(_quick_rotate_y.bl_idname, text="Y90")
+        row.operator(_quick_rotate_z.bl_idname, text="Z90")
         row = self.layout.row(align=True)
         row.operator(_view_axis_left.bl_idname, text="左")
         row.operator(_view_axis_right.bl_idname, text="右")
@@ -987,6 +1056,10 @@ classes = [
     _quick_extrude_y,
     _quick_extrude_z,
     _quick_inset,
+    _quick_rotate_x,
+    _quick_rotate_y,
+    _quick_rotate_z,
+    _quick_extrude_normals,
     _align,
 ]
 

@@ -382,12 +382,12 @@ window.addEventListener('keydown', async evt => {
     } else if (evt.key === 'j') {
         evt.preventDefault();
         if (!seeking) {
-            video.currentTime -= 5 / fps;
+            video.currentTime -= 10 / fps;
         }
     } else if (evt.key === 'l') {
         evt.preventDefault();
         if (!seeking) {
-            video.currentTime += 5 / fps;
+            video.currentTime += 10/ fps;
         }
     } else if (evt.key === 'i') {
         evt.preventDefault();

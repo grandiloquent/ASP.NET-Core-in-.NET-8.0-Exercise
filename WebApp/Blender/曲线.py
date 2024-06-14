@@ -23,3 +23,5 @@ bpy.context.object.location[1] = 0
 bpy.context.object.location[2] = 0
 bpy.context.object.data.bevel_depth = 0.02
 bpy.context.object.data.bevel_depth = 0.03
+
+
