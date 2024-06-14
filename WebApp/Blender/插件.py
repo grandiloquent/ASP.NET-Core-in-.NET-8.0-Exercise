@@ -476,7 +476,7 @@ class _loopcut_seven(Operator):
         return context.mode == "EDIT_MESH"
 
     def execute(self, context):
-        loopcut(7)
+        loopcut(int(bpy.context.window_manager.clipboard))
         return {'FINISHED'}
 
 class _loopcut_two(Operator):
@@ -742,11 +742,11 @@ def quick_translate(mode):
       #return None
    v = float(bpy.context.window_manager.clipboard)
    if mode==0:
-      bpy.ops.transform.translate(value=(v, 1, 1))
+      bpy.ops.transform.translate(value=(v, 0, 0))
    elif mode==1:
-      bpy.ops.transform.translate(value=( 1,v, 1))
+      bpy.ops.transform.translate(value=( 0,v, 0))
    elif mode==2:
-      bpy.ops.transform.translate(value=( 1, 1,v))
+      bpy.ops.transform.translate(value=( 0, 0,v))
    elif mode==3:   
       bpy.ops.transform.translate(value=( v, v,v))
    return None
@@ -810,13 +810,13 @@ def quick_extrude(mode):
    v = float(bpy.context.window_manager.clipboard)
    if mode==0:
       bpy.ops.mesh.extrude_region_move()
-      bpy.ops.transform.translate(value=(v, 1, 1))
+      bpy.ops.transform.translate(value=(v, 0, 0))
    elif mode==1:
       bpy.ops.mesh.extrude_region_move()
-      bpy.ops.transform.translate(value=( 1,v, 1))
+      bpy.ops.transform.translate(value=( 0,v, 0))
    elif mode==2:
       bpy.ops.mesh.extrude_region_move()
-      bpy.ops.transform.translate(value=( 1, 1,v))
+      bpy.ops.transform.translate(value=( 0, 0,v))
    elif mode==3:   
       bpy.ops.mesh.extrude_region_move()
       bpy.ops.transform.translate(value=( v, v,v))
@@ -862,18 +862,19 @@ class _quick_extrude_z(Operator):
     def execute(self, context):
         quick_extrude(2)
         return {'FINISHED'}
-class _quick_extrude_xyz(Operator):
+
+class _quick_inset(Operator):
     """ Selection group """
-    bl_idname = "quick.extrudexyz"
+    bl_idname = "quick.inset"
     bl_label = ""
     bl_options = {"REGISTER", "UNDO"}
 
     @classmethod
     def poll(cls, context):
-        return context.mode == "OBJECT" or context.mode == "EDIT_MESH"
+        return context.mode == "EDIT_MESH"
 
     def execute(self, context):
-        quick_extrude(3)
+        bpy.ops.mesh.inset(use_even_offset=True, thickness=float(bpy.context.window_manager.clipboard), depth=0)
         return {'FINISHED'}
 
 
@@ -917,7 +918,7 @@ class _align(Panel):
         row.operator(_loopcut_two.bl_idname, text="分割3")
         row.operator(_loopcut_three.bl_idname, text="分割4")
         row = self.layout.row(align=True)
-        row.operator(_loopcut_seven.bl_idname, text="分割8")
+        row.operator(_loopcut_seven.bl_idname, text="分割")
         row = self.layout.row(align=True)
         row.operator(_quick_resize_x.bl_idname, text="X")
         row.operator(_quick_resize_y.bl_idname, text="Y")
@@ -932,7 +933,7 @@ class _align(Panel):
         row.operator(_quick_extrude_x.bl_idname, text="X")
         row.operator(_quick_extrude_y.bl_idname, text="Y")
         row.operator(_quick_extrude_z.bl_idname, text="Z")
-        row.operator(_quick_extrude_xyz.bl_idname, text="XYZ")
+        row.operator(_quick_inset.bl_idname, text="Inset")
         row = self.layout.row(align=True)
         row.operator(_view_axis_left.bl_idname, text="左")
         row.operator(_view_axis_right.bl_idname, text="右")
@@ -985,7 +986,7 @@ classes = [
     _quick_extrude_x,
     _quick_extrude_y,
     _quick_extrude_z,
-    _quick_extrude_xyz,
+    _quick_inset,
     _align,
 ]
 
