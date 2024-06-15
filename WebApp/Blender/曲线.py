@@ -3,7 +3,7 @@ import bpy
 bpy.ops.curve.primitive_bezier_curve_add()
 curve = bpy.context.active_object
 bez_points = curve.data.splines[0].bezier_points
-    
+
 control_points = [[[0,0,0],[0,0,0],[0,0,0]],[[0,0,1],[0,0,1],[0,0,1]]]
 # note: a created bezier curve has already 2 control points
 bez_points.add(len(control_points) - 2)

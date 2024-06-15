@@ -941,6 +941,19 @@ class _quick_extrude_normals(Operator):
         value = float(bpy.context.window_manager.clipboard)
         bpy.ops.mesh.extrude_region_shrink_fatten(TRANSFORM_OT_shrink_fatten={"value":value,"use_even_offset":True})
         return {'FINISHED'}
+class _quick_parent(Operator):
+    """ Quick parent """
+    bl_idname = "quick.parent"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT"
+
+    def execute(self, context):
+        bpy.ops.object.parent_set(type='OBJECT', keep_transform=False)
+        return {'FINISHED'}
 
 class _align(Panel):
     """将所选对象和其所在的组与光标对齐"""
@@ -984,6 +997,7 @@ class _align(Panel):
         row = self.layout.row(align=True)
         row.operator(_loopcut_seven.bl_idname, text="分割")
         row.operator(_quick_extrude_normals.bl_idname, text="拉伸")
+        row.operator(_quick_parent.bl_idname, text="编组")
         row = self.layout.row(align=True)
         row.operator(_quick_resize_x.bl_idname, text="X")
         row.operator(_quick_resize_y.bl_idname, text="Y")
@@ -1060,6 +1074,7 @@ classes = [
     _quick_rotate_y,
     _quick_rotate_z,
     _quick_extrude_normals,
+    _quick_parent,
     _align,
 ]
 
