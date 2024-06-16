@@ -955,6 +955,74 @@ class _quick_parent(Operator):
         bpy.ops.object.parent_set(type='OBJECT', keep_transform=False)
         return {'FINISHED'}
 
+class _quick_render(Operator):
+    """ Quick render """
+    bl_idname = "quick.render"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "OBJECT"
+
+    def execute(self, context):
+        o = bpy.data.collections.new("MyCollection")
+        bpy.context.scene.collection.children.link(o)
+        bpy.context.view_layer.active_layer_collection = bpy.context.view_layer.layer_collection.children[o.name]
+        cam1 = bpy.data.cameras.new("Camera")
+        obj = bpy.data.objects.new("Camera", cam1)
+        o.objects.link(obj)
+        bpy.context.scene.camera = obj
+
+        bpy.context.scene.render.engine = 'CYCLES'
+        bpy.context.scene.cycles.device = 'GPU'
+        bpy.context.scene.cycles.preview_samples = 64
+        bpy.context.scene.cycles.samples = 256
+        bpy.context.scene.cycles.use_preview_denoising = True
+        bpy.context.scene.cycles.shading_system = True
+        bpy.context.scene.render.resolution_x = 1080
+        bpy.context.scene.render.image_settings.file_format = 'PNG'
+        bpy.context.scene.render.image_settings.color_depth = '16'
+        bpy.context.scene.render.image_settings.file_format = 'FFMPEG'
+        bpy.context.scene.render.ffmpeg.constant_rate_factor = 'LOSSLESS'
+        bpy.context.scene.view_settings.look = 'AgX - Medium High Contrast'
+
+        bpy.ops.mesh.primitive_plane_add()
+        bpy.ops.transform.resize(value=(20,20,20))
+        bpy.ops.object.editmode_toggle()
+        bpy.ops.mesh.select_mode(use_extend=False, use_expand=False, type='EDGE')
+        bpy.ops.mesh.select_all(action='DESELECT')
+        bm = bmesh.from_edit_mesh(bpy.context.object.data)
+        bm.edges.ensure_lookup_table()
+        bm.edges[0].select = True
+        bmesh.update_edit_mesh(bpy.context.object.data)
+        bpy.ops.mesh.extrude_region_move(TRANSFORM_OT_translate={"value":(0,0,20)})
+        bpy.ops.mesh.select_all(action='DESELECT')
+        bm.edges.ensure_lookup_table()
+        bm.edges[0].select = True
+        bmesh.update_edit_mesh(bpy.context.object.data)
+        bpy.ops.mesh.bevel(offset=0.4, segments=15, affect='EDGES')
+        bpy.ops.object.editmode_toggle()
+        bpy.ops.object.subdivision_set(level=2, relative=False)
+        bpy.ops.object.shade_smooth()
+        mat = bpy.data.materials.new(name="Material")
+        bpy.context.object.data.materials.append(mat)
+        mat.use_nodes = True
+        mat.node_tree.nodes["Principled BSDF"].inputs[0].default_value = (0.0722839, 0.109457, 0.109454, 1)
+        mat.node_tree.nodes["Principled BSDF"].inputs[2].default_value = 0.897
+
+        win = bpy.context.window
+        scr = win.screen
+        areas3d  = [area for area in scr.areas if area.type == 'VIEW_3D']
+        region   = [region for region in areas3d[0].regions if region.type == 'WINDOW']
+
+        # Add cube in the other window.
+        with bpy.context.temp_override(window=win,area=areas3d[0],region=region[0]):
+            bpy.ops.view3d.camera_to_view()
+
+        return {'FINISHED'}
+		
+        
 class _align(Panel):
     """将所选对象和其所在的组与光标对齐"""
     bl_label = "对齐"
@@ -999,6 +1067,8 @@ class _align(Panel):
         row.operator(_quick_extrude_normals.bl_idname, text="拉伸")
         row.operator(_quick_parent.bl_idname, text="编组")
         row = self.layout.row(align=True)
+        row.operator(_quick_render.bl_idname, text="渲染")
+        row = self.layout.row(align=True)
         row.operator(_quick_resize_x.bl_idname, text="X")
         row.operator(_quick_resize_y.bl_idname, text="Y")
         row.operator(_quick_resize_z.bl_idname, text="Z")
@@ -1028,6 +1098,7 @@ class _align(Panel):
 
 
 classes = [
+    _quick_render,
     _align_n_x,
     _align_x,
     _align_p_x,
