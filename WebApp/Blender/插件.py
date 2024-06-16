@@ -973,7 +973,18 @@ class _quick_render(Operator):
         obj = bpy.data.objects.new("Camera", cam1)
         o.objects.link(obj)
         bpy.context.scene.camera = obj
+        obj.select_set(True)
+        bpy.context.view_layer.objects.active = obj
 
+        win = bpy.context.window
+        scr = win.screen
+        areas3d  = [area for area in scr.areas if area.type == 'VIEW_3D']
+        region   = [region for region in areas3d[0].regions if region.type == 'WINDOW']
+
+        # Add cube in the other window.
+        with bpy.context.temp_override(window=win,area=areas3d[0],region=region[0]):
+                bpy.ops.view3d.camera_to_view()
+                
         bpy.context.scene.render.engine = 'CYCLES'
         bpy.context.scene.cycles.device = 'GPU'
         bpy.context.scene.cycles.preview_samples = 64
@@ -1011,14 +1022,8 @@ class _quick_render(Operator):
         mat.node_tree.nodes["Principled BSDF"].inputs[0].default_value = (0.0722839, 0.109457, 0.109454, 1)
         mat.node_tree.nodes["Principled BSDF"].inputs[2].default_value = 0.897
 
-        win = bpy.context.window
-        scr = win.screen
-        areas3d  = [area for area in scr.areas if area.type == 'VIEW_3D']
-        region   = [region for region in areas3d[0].regions if region.type == 'WINDOW']
 
-        # Add cube in the other window.
-        with bpy.context.temp_override(window=win,area=areas3d[0],region=region[0]):
-            bpy.ops.view3d.camera_to_view()
+
 
         return {'FINISHED'}
 		
