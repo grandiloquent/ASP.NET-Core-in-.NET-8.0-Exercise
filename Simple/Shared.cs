@@ -629,9 +629,11 @@ public static class Strings
 			.Replace("{", "{{")
 			.Replace("}", "}}");
 		// ClipboardShare.SetText()
-		s = string.Format("string.Format(@\"{0}\")", s);
+		//s = string.Format("var s1 = string.Format(@\"{0}\")", s);
 		//s = string.Format("{0}", s);
 		//s = string.Format("string.Format(@\"{0}\")", s);
+		s = string.Format("var s1 = string.Join(Environment.NewLine,array.Select((x,i)=>string.Format(@\"{0}\")));", s);
+		
 		return string.Format("{0}", s);
 	}
 }

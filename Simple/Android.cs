@@ -81,7 +81,7 @@ public static class Android
 ", v[0]);
 			});
 		} else if (arg.KeyCode == Keys.F7) {
-			var str=File.ReadAllText("2.txt".GetEntryPath());
+			/*var str=File.ReadAllText("2.txt".GetEntryPath());
 			var ss=ClipboardShare.GetText().Trim().Split(new char[]{' '},StringSplitOptions.RemoveEmptyEntries);
 			var s1="_"+string.Join("_",ss);
 			var s2=string.Join(".",ss);
@@ -90,8 +90,26 @@ public static class Android
 			str=Regex.Replace(str,"\\{2}",s2);
 			str=Regex.Replace(str,"\\{3}",s3);
 			
-			ClipboardShare.SetText(str);
+			ClipboardShare.SetText(str);*/
+			var array=new []{"X","Y","Z"};
+			var s1 = array.Select((x,i)=>string.Format(@"class _quick_rotate_{0}(Operator):
+    """""" Selection group """"""
+    bl_idname = ""quick.rotate{0}""
+    bl_label = """"
+    bl_options = {{""REGISTER"", ""UNDO""}}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == ""OBJECT"" or context.mode == ""EDIT_MESH""
+
+    def execute(self, context):
+        quick_rotate({1})
+        return {{'FINISHED'}}",x.ToLower(),i));
 			
+			var s2 = array.Select((x,i)=>string.Format(@"   elif mode=={0}:",i));
+			var s3 = array.Select((x,i)=>string.Format(@"        row.operator(_quick_rotate_{0}.bl_idname, text=""{1}"")",x.ToLower(),x));
+			var s4 = string.Join(Environment.NewLine,array.Select((x,i)=>string.Format(@"    _quick_rotate_{0},",x.ToLower())));
+			ClipboardShare.SetText("def quick_rotate(mode):\r\n"+string.Join(Environment.NewLine,s2)+"    return None\r\n\r\n"+string.Join(Environment.NewLine,s1)+"\r\n"+string.Join(Environment.NewLine,s3)+"\r\n"+s4);
 		}else if(arg.KeyCode==Keys.F11){
 		ClipboardShare.SetText(ClipboardShare.GetText().FormatString());
 		}else if(arg.KeyCode==Keys.Oem3){
@@ -188,8 +206,38 @@ public static class Android
 					end++;
 				}
 				ClipboardShare.SetText(textBox.Text.Substring(start, end - start + 1).Trim());
-			}
+			}else if(arg.KeyCode==Keys.F){
+				var s=Clipboard.GetText().Trim();
+				var s1 = string.Format(@"class _quick_{0}(Operator):
+    """""" Quick {0} """"""
+    bl_idname = ""quick.{0}""
+    bl_label = """"
+    bl_options = {{""REGISTER"", ""UNDO""}}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == ""EDIT_MESH""
+
+    def execute(self, context):
+        value = int(bpy.context.window_manager.clipboard)
+        return {{'FINISHED'}}
+		
+        row.operator(_quick_{0}.bl_idname, text=""{1}"")
+		
+    _quick_{0},",s,s.Capitalize());
+				Clipboard.SetText(s1);
+			}else if(arg.KeyCode==Keys.G){
+			
+				textBox.SelectedText=Utils.Translate(ClipboardShare.GetText());
+			} else if (arg.KeyCode == Keys.L) {
+			FormatBlenderScript(textBox, v => {
+				var o1 = 1 - v[0];
+				var o2 = (1 - o1 / 2) / 2;
+				var o3 = o2 - o1 / 2;
+				return (o3 / o2 * -1).ToString();
+			});
 		}
+		} 
 		return;
 		if (arg.Alt) {
 			if (arg.KeyCode == Keys.Q) {

@@ -963,7 +963,11 @@ class _quick_render(Operator):
 
     @classmethod
     def poll(cls, context):
-        return context.mode == "OBJECT"
+        return (
+            context.space_data is not None and
+            context.space_data.type == 'VIEW_3D' and
+            context.space_data.region_3d.view_perspective != 'CAMERA'
+            )
 
     def execute(self, context):
         o = bpy.data.collections.new("MyCollection")
@@ -976,14 +980,17 @@ class _quick_render(Operator):
         obj.select_set(True)
         bpy.context.view_layer.objects.active = obj
 
-        win = bpy.context.window
-        scr = win.screen
-        areas3d  = [area for area in scr.areas if area.type == 'VIEW_3D']
-        region   = [region for region in areas3d[0].regions if region.type == 'WINDOW']
+        # win = bpy.context.window
+        # scr = win.screen
+        # areas3d  = [area for area in scr.areas if area.type == 'VIEW_3D']
+        # region   = [region for region in areas3d[0].regions if region.type == 'WINDOW']
 
-        # Add cube in the other window.
-        with bpy.context.temp_override(window=win,area=areas3d[0],region=region[0]):
-                bpy.ops.view3d.camera_to_view()
+        # # Add cube in the other window.
+        # with bpy.context.temp_override(window=win,area=areas3d[0],region=region[0]):
+        #         bpy.ops.view3d.camera_to_view()
+
+        
+        #bpy.ops.view3d.camera_to_view()
                 
         bpy.context.scene.render.engine = 'CYCLES'
         bpy.context.scene.cycles.device = 'GPU'
