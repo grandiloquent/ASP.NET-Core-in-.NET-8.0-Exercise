@@ -990,7 +990,7 @@ class _quick_render(Operator):
         #         bpy.ops.view3d.camera_to_view()
 
         
-        #bpy.ops.view3d.camera_to_view()
+        bpy.ops.view3d.camera_to_view()
                 
         bpy.context.scene.render.engine = 'CYCLES'
         bpy.context.scene.cycles.device = 'GPU'
