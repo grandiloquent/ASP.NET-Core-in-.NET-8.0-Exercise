@@ -83,7 +83,7 @@ function adjustSize(video) {
         const h = Math.min(window.outerHeight, window.innerHeight);
         let ratio = Math.min(w / video.videoWidth, h / video.videoHeight);
         let height = video.videoHeight * ratio
-        let width = video.videoWidth * ratio;
+        let width = video.videoWidth * ratio
         video.style.width = `${width}px`;
         video.style.height = `${height}px`;
         video.style.left = `${(w - width) / 2}px`;
@@ -382,12 +382,12 @@ window.addEventListener('keydown', async evt => {
     } else if (evt.key === 'j') {
         evt.preventDefault();
         if (!seeking) {
-            video.currentTime -= 10 / fps;
+            video.currentTime -= 5 / fps;
         }
     } else if (evt.key === 'l') {
         evt.preventDefault();
         if (!seeking) {
-            video.currentTime += 10/ fps;
+            video.currentTime += 5/ fps;
         }
     } else if (evt.key === 'i') {
         evt.preventDefault();

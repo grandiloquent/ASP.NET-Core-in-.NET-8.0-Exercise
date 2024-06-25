@@ -91,8 +91,8 @@ public static class Android
 			str=Regex.Replace(str,"\\{3}",s3);
 			
 			ClipboardShare.SetText(str);*/
-			var array=new []{"X","Y","Z"};
-			var s1 = array.Select((x,i)=>string.Format(@"class _quick_rotate_{0}(Operator):
+			var array = new []{ "X", "Y", "Z" };
+			var s1 = array.Select((x, i) => string.Format(@"class _quick_rotate_{0}(Operator):
     """""" Selection group """"""
     bl_idname = ""quick.rotate{0}""
     bl_label = """"
@@ -104,23 +104,23 @@ public static class Android
 
     def execute(self, context):
         quick_rotate({1})
-        return {{'FINISHED'}}",x.ToLower(),i));
+        return {{'FINISHED'}}", x.ToLower(), i));
 			
-			var s2 = array.Select((x,i)=>string.Format(@"   elif mode=={0}:",i));
-			var s3 = array.Select((x,i)=>string.Format(@"        row.operator(_quick_rotate_{0}.bl_idname, text=""{1}"")",x.ToLower(),x));
-			var s4 = string.Join(Environment.NewLine,array.Select((x,i)=>string.Format(@"    _quick_rotate_{0},",x.ToLower())));
-			ClipboardShare.SetText("def quick_rotate(mode):\r\n"+string.Join(Environment.NewLine,s2)+"    return None\r\n\r\n"+string.Join(Environment.NewLine,s1)+"\r\n"+string.Join(Environment.NewLine,s3)+"\r\n"+s4);
-		}else if(arg.KeyCode==Keys.F11){
-		ClipboardShare.SetText(ClipboardShare.GetText().FormatString());
-		}else if(arg.KeyCode==Keys.Oem3){
+			var s2 = array.Select((x, i) => string.Format(@"   elif mode=={0}:", i));
+			var s3 = array.Select((x, i) => string.Format(@"        row.operator(_quick_rotate_{0}.bl_idname, text=""{1}"")", x.ToLower(), x));
+			var s4 = string.Join(Environment.NewLine, array.Select((x, i) => string.Format(@"    _quick_rotate_{0},", x.ToLower())));
+			ClipboardShare.SetText("def quick_rotate(mode):\r\n" + string.Join(Environment.NewLine, s2) + "    return None\r\n\r\n" + string.Join(Environment.NewLine, s1) + "\r\n" + string.Join(Environment.NewLine, s3) + "\r\n" + s4);
+		} else if (arg.KeyCode == Keys.F11) {
+			ClipboardShare.SetText(ClipboardShare.GetText().FormatString());
+		} else if (arg.KeyCode == Keys.Oem3) {
 			
-			var s=ClipboardShare.GetText().Trim().Split(new char[]{' '},StringSplitOptions.RemoveEmptyEntries)
-				.Select((x,i)=>{
-				        return string.Format(@"        elif mode=={0}:
-            t=""{1}""",i+1,x);
-				        });
+			var s = ClipboardShare.GetText().Trim().Split(new char[]{ ' ' }, StringSplitOptions.RemoveEmptyEntries)
+				.Select((x, i) => {
+				return string.Format(@"        elif mode=={0}:
+            t=""{1}""", i + 1, x);
+			});
 			
-			ClipboardShare.SetText(string.Join(Environment.NewLine,s));
+			ClipboardShare.SetText(string.Join(Environment.NewLine, s));
 			/*
 			 string.Format(@"class _view_axis_{0}(Operator):
     """""" Selection group """"""
@@ -137,11 +137,10 @@ public static class Android
         return {{'FINISHED'}}",x.ToLower(),i+1);
 			 */
 			
-		}
-
-		else if (arg.KeyCode == Keys.M) {
+		} else if (arg.KeyCode == Keys.Q) {
+			
 			//ClipboardShare.SetText("bpy.ops.object.modifier_add(type='MIRROR')");
-		} else if (arg.KeyCode == Keys.B) {
+		} else if (arg.KeyCode == Keys.W) {
 //			ClipboardShare.SetText(@"bpy.ops.object.modifier_add(type='BEVEL')
 //bpy.context.object.modifiers[""Bevel""].angle_limit = 0.785398
 //bpy.context.object.modifiers[""Bevel""].segments = 2
@@ -150,6 +149,7 @@ public static class Android
 //bpy.ops.object.subdivision_set(level=2, relative=False)
 //bpy.ops.object.shade_smooth()
 //");
+		
 		} else if (arg.KeyCode == Keys.S) {
 			//ClipboardShare.SetText("bpy.ops.object.modifier_add(type='SOLIDIFY')");
 		} else if (arg.KeyCode == Keys.L) {
@@ -206,8 +206,8 @@ public static class Android
 					end++;
 				}
 				ClipboardShare.SetText(textBox.Text.Substring(start, end - start + 1).Trim());
-			}else if(arg.KeyCode==Keys.F){
-				var s=Clipboard.GetText().Trim();
+			} else if (arg.KeyCode == Keys.F) {
+				var s = Clipboard.GetText().Trim();
 				var s1 = string.Format(@"class _quick_{0}(Operator):
     """""" Quick {0} """"""
     bl_idname = ""quick.{0}""
@@ -224,19 +224,19 @@ public static class Android
 		
         row.operator(_quick_{0}.bl_idname, text=""{1}"")
 		
-    _quick_{0},",s,s.Capitalize());
+    _quick_{0},", s, s.Capitalize());
 				Clipboard.SetText(s1);
-			}else if(arg.KeyCode==Keys.G){
+			} else if (arg.KeyCode == Keys.G) {
 			
-				textBox.SelectedText=Utils.Translate(ClipboardShare.GetText());
+				textBox.SelectedText = Utils.Translate(ClipboardShare.GetText());
 			} else if (arg.KeyCode == Keys.L) {
-			FormatBlenderScript(textBox, v => {
-				var o1 = 1 - v[0];
-				var o2 = (1 - o1 / 2) / 2;
-				var o3 = o2 - o1 / 2;
-				return (o3 / o2 * -1).ToString();
-			});
-		}
+				FormatBlenderScript(textBox, v => {
+					var o1 = 1 - v[0];
+					var o2 = (1 - o1 / 2) / 2;
+					var o3 = o2 - o1 / 2;
+					return (o3 / o2 * -1).ToString();
+				});
+			}
 		} 
 		return;
 		if (arg.Alt) {

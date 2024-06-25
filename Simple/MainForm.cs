@@ -20,6 +20,7 @@ using TencentCloud.Common;
 using TencentCloud.Common.Profile;
 using TencentCloud.Ocr.V20181119;
 using TencentCloud.Ocr.V20181119.Models;
+using Tesseract;
 
 /// <summary>
 /// Description of MainForm.
@@ -55,11 +56,11 @@ public partial class MainForm : Form
 	{
 		return (ushort)lcid >> 10;
 	}
-        
+	
 	public MainForm()
 	{
 		
-		
+
 		/*
 		 
 		 var sss = typeof(Color).GetProperties().Where(prop =>
@@ -83,10 +84,12 @@ public partial class MainForm : Form
 		Path.Combine(jx,"素材").CreateDirectoryIfNotExists();
 		Path.Combine(jx,"书籍").CreateDirectoryIfNotExists();
 		Path.Combine(jx,"程序").CreateDirectoryIfNotExists();
-		*/
-		var dir = @"C:\Users\Administrator\Desktop\视频\Net\WebApp\Blender";
+		 */
+		File.WriteAllText("1.txt".GetDesktopPath(),JsonConvert.SerializeObject(Directory.GetFiles(@"C:\Users\Administrator\Desktop\WeiXin").Select(x=>Path.GetFileName(x))));
+		
+		var dir = @"C:\Users\Administrator\Desktop\视频\Net\Simple";
 		dir.CreateDirectoryIfNotExists();
-		var fn = Path.Combine(dir, "边角度.py");
+		var fn = Path.Combine(dir, "Images.cs");
 		if (!File.Exists(fn)) {
 			File.Create(fn).Dispose();
 		}
@@ -104,7 +107,7 @@ public partial class MainForm : Form
 			JournalMode = SQLiteJournalModeEnum.Truncate
 		}.ConnectionString);
 		conn.Open();
- 
+		
 		using (var cmd = (SQLiteCommand)conn.CreateCommand()) {
 			cmd.CommandText = @"create table if not exists Notes(Id integer not null primary key autoincrement, Title text not null unique, Content text not null,Views integer DEFAULT 0,CreateAt datetime default (datetime('now','localtime')),UpdateAt datetime default (datetime('now','localtime')));";
 			cmd.ExecuteNonQuery();
@@ -133,7 +136,67 @@ public partial class MainForm : Form
 			Android.HandleKeyDown(textBox1, args);
 			//Video.HandleKeyDown(textBox1,args);
 		};
-		
+		using (var eventHookFactory = new EventHook.EventHookFactory()) {
+			
+			var keyboardWatcher = eventHookFactory.GetKeyboardWatcher();
+			keyboardWatcher.Start();
+			keyboardWatcher.OnKeyInput += (s, e) => {
+				
+				if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F8") {
+					try {
+						Images.Ocr(this, textBox1,90);
+						
+					} catch {
+						
+					}
+				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F9") {
+					try {
+						Images.Ocr(this, textBox1);
+						
+					} catch {
+						
+					}
+				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F8") {
+					Android.ColorPicker();
+				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F10") {
+					var bitmap =	Screenshot.GetScreenshot();
+					var i = 0;
+					var f = Screenshot.GetDesktopPath(i.ToString().PadLeft(3, '0') + ".png");
+					while (File.Exists(f)) {
+						i++;
+						f = Screenshot.GetDesktopPath(i.ToString().PadLeft(3, '0') + ".png");
+					}
+					bitmap.Save(f, System.Drawing.Imaging.ImageFormat.Png);
+					
+					Invoke(new Action(() => {
+						textBox1.Text += "1";
+					}));
+				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "Q") {
+					var ss = ClipboardShare.GetText();
+					if (Regex.IsMatch(ss, "^[\\d.-]+$")) {
+						if (Regex.IsMatch(ss, "^\\d")) {
+							if (ss.StartsWith("0"))
+								ClipboardShare.SetText("-." + ss.Substring(1));
+							else
+								ClipboardShare.SetText("-" + ss.Substring(0, 1) + "." + ss.Substring(1));
+						} else
+							ClipboardShare.SetText("-." + Regex.Replace(ss, "^[0.-]", "").Trim('.'));
+					}
+				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "W") {
+					var ss = ClipboardShare.GetText();
+					if (Regex.IsMatch(ss, "^[\\d.-]+$")) {
+						if (Regex.IsMatch(ss, "^\\d")) {
+							if (ss.StartsWith("0"))
+								ClipboardShare.SetText("." + ss.Substring(1));
+							else
+								ClipboardShare.SetText(ss.Substring(0, 1) + "." + ss.Substring(1));
+						} else
+							ClipboardShare.SetText("." + Regex.Replace(ss, "^[0.-]", "").Trim('.'));
+					}
+				}
+				
+			};
+		}
 	}
 	
 	void ListBox1MouseDoubleClick(object sender, MouseEventArgs e)
@@ -191,7 +254,7 @@ public partial class MainForm : Form
 		}
 		//Clipboard.SetText(string.Format(@"{0}", TransAPI.Translate(Clipboard.GetText())));
 	}
-		
+	
 	void MainFormFormClosing(object sender, FormClosingEventArgs e)
 	{
 		File.WriteAllText(_fileName, textBox1.Text);
@@ -236,13 +299,13 @@ public partial class MainForm : Form
 		listBox1.Items.Clear();
 		using (var cmd = (SQLiteCommand)conn.CreateCommand()) {
 			cmd.CommandText = @"select Title from Notes Order By Views DESC";
-		
+			
 			using (var reader = cmd.ExecuteReader()) {
 				while (reader.Read())
 					listBox1.Items.Add(reader.GetString(0));
 			}
 		}
-		//			
+		//
 //			listBox1.Items.AddRange(_snippets.Keys.OrderBy(x => x).ToArray());
 	}
 	
@@ -261,7 +324,7 @@ public partial class MainForm : Form
 //				File.WriteAllText(_fileName1, JsonConvert.SerializeObject(_snippets));
 				using (var cmd = (SQLiteCommand)conn.CreateCommand()) {
 					cmd.CommandText = @"insert into Notes(Title,Content) values(@Title,@Content)";
-				
+					
 					cmd.Parameters.Add("Title", DbType.String).Value = pieces[0].Trim();
 					cmd.Parameters.Add("Content", DbType.String).Value = pieces[1].Trim();
 					cmd.ExecuteNonQuery();
@@ -276,9 +339,9 @@ public partial class MainForm : Form
 //		var s = Clipboard.GetText().Trim();
 //		if (s.Length > 0 && listBox1.SelectedIndex != -1) {
 //			_snippets.Remove(listBox1.SelectedItem.ToString());
-//			
+//
 //			var pieces = s.Split(new char[]{ '\n' }, 2);
-//			
+//
 //			if (pieces.Length > 1) {
 //				var key = pieces[0].Trim();
 //				if (_snippets.ContainsKey(key))
@@ -288,12 +351,12 @@ public partial class MainForm : Form
 //				File.WriteAllText(_fileName1, JsonConvert.SerializeObject(_snippets));
 //				LoadData();
 //			}
-//			
+//
 //		}
 		var s = Clipboard.GetText().Trim();
 		if (s.Length > 0 && listBox1.SelectedIndex != -1) {
 			var pieces = s.Split(new char[]{ '\n' }, 2);
-		
+			
 			using (var cmd = (SQLiteCommand)conn.CreateCommand()) {
 				cmd.CommandText = @"update Notes set Title = @NewTitle,Content = @Content,Views = Views + 1,UpdateAt = (datetime('now','localtime')) where Title = @Title";
 				cmd.Parameters.Add("Title", DbType.String).Value = listBox1.SelectedItem.ToString();
@@ -324,7 +387,7 @@ public partial class MainForm : Form
 //			var key = listBox1.SelectedItem.ToString();
 //			_snippets[key] = _snippets[key] + Environment.NewLine + Environment.NewLine + s;
 //			File.WriteAllText(_fileName1, JsonConvert.SerializeObject(_snippets));
-//			
+//
 //		}
 		
 		var s = Clipboard.GetText().Trim();
@@ -338,7 +401,7 @@ public partial class MainForm : Form
 						text = reader.GetString(0);
 				}
 			}
-		
+			
 			using (var cmd = (SQLiteCommand)conn.CreateCommand()) {
 				cmd.CommandText = @"update Notes set Content = @Content,Views = Views + 1,UpdateAt = (datetime('now','localtime')) where Title = @Title";
 				cmd.Parameters.Add("Title", DbType.String).Value = listBox1.SelectedItem.ToString();
@@ -356,12 +419,12 @@ public partial class MainForm : Form
 //			var key = listBox1.SelectedItem.ToString();
 //			_snippets[key] = s;
 //			File.WriteAllText(_fileName1, JsonConvert.SerializeObject(_snippets));
-//			
+//
 //		}
 		var s = Clipboard.GetText().Trim();
 		if (s.Length > 0 && listBox1.SelectedIndex != -1) {
 			//var pieces = s.Split(new char[]{ '\n' }, 2);
-		
+			
 			using (var cmd = (SQLiteCommand)conn.CreateCommand()) {
 				cmd.CommandText = @"update Notes set Content = @Content,Views = Views + 1,UpdateAt = (datetime('now','localtime')) where Title = @Title";
 				cmd.Parameters.Add("Title", DbType.String).Value = listBox1.SelectedItem.ToString();
@@ -395,7 +458,7 @@ public partial class MainForm : Form
 				        "contents.txt"
 			        );
 			File.WriteAllText(f, sb.ToString());
-		
+			
 		}
 	}
 	void ComboBox1KeyUp(object sender, KeyEventArgs e)
@@ -421,7 +484,7 @@ public partial class MainForm : Form
 
 		if (listBox1.SelectedIndex != -1) {
 			//var pieces = s.Split(new char[]{ '\n' }, 2);
-		
+			
 			using (var cmd = (SQLiteCommand)conn.CreateCommand()) {
 				cmd.CommandText = @"delete from Notes where Title = @Title";
 				cmd.Parameters.Add("Title", DbType.String).Value = listBox1.SelectedItem.ToString();
@@ -432,114 +495,37 @@ public partial class MainForm : Form
 	}
 	void MainFormKeyUp(object sender, KeyEventArgs e)
 	{
-		if (e.KeyCode == Keys.F8) {
-			Android.ColorPicker();
-		} else if (e.KeyCode == Keys.F10) {
-			var bitmap =	Screenshot.GetScreenshot();
-			var i = 0;
-			var f = Screenshot.GetDesktopPath(i.ToString().PadLeft(3, '0') + ".png");
-			while (File.Exists(f)) {
-				i++;
-				f = Screenshot.GetDesktopPath(i.ToString().PadLeft(3, '0') + ".png");
+		if (e.Control && e.KeyCode == Keys.D1) {
+			Screenshot.GetCursorPos(out _p3);
+		} else if (e.Control && e.KeyCode == Keys.D2) {
+			Screenshot.GetCursorPos(out _p4);
+			using (Bitmap bitmap = new Bitmap(_p4.X - _p3.X, _p4.Y - _p3.Y)) {
+				// Draw the screenshot into our bitmap.
+				using (Graphics g = Graphics.FromImage(bitmap)) {
+					g.CopyFromScreen(_p3.X, _p3.Y, 0, 0, bitmap.Size);
+				}
+				
+				var i = 1;
+				var f = (i + ".png").GetDesktopPath();
+				while (File.Exists(f)) {
+					i++;
+					f = (i + ".png").GetDesktopPath();
+				}
+				var ms = new FileStream(f, FileMode.OpenOrCreate);
+				bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+				bitmap.Dispose();
+				
 			}
-			bitmap.Save(f, System.Drawing.Imaging.ImageFormat.Png);
-			
-		} else if (e.KeyCode == Keys.F9) {
-
-			Screenshot.POINT p = new Screenshot.POINT();
-			Screenshot.GetCursorPos(out p);
-			Ocr(new Point(p.X, p.Y), new Point(p.X + 260, p.Y + 30));
-		}
-	}
-	public  void Ocr(Point p1, Point p2)
-	{
-		var buf = ScreenShoot(p1, p2);
-		if (buf == null)
-			return;
-		Console.WriteLine("Ocr");
-		const string AppId = KeyShare.AppId;
-		const string
-		SecretKey = KeyShare.SecretKey;
-		const string
-		SecretId = KeyShare.SecretId;
-		const string Bucket = "tencentyun";
-		const string Host = "recognition.image.myqcloud.com";
-		try {
-			// 实例化一个认证对象，入参需要传入腾讯云账户 SecretId 和 SecretKey，此处还需注意密钥对的保密
-			// 代码泄露可能会导致 SecretId 和 SecretKey 泄露，并威胁账号下所有资源的安全性。以下代码示例仅供参考，建议采用更安全的方式来使用密钥，请参见：https://cloud.tencent.com/document/product/1278/85305
-			// 密钥可前往官网控制台 https://console.cloud.tencent.com/cam/capi 进行获取
-			Credential cred = new Credential {
-				SecretId = SecretId,
-				SecretKey = SecretKey
-			};
-			// 实例化一个client选项，可选的，没有特殊需求可以跳过
-			ClientProfile clientProfile = new ClientProfile();
-			// 实例化一个http选项，可选的，没有特殊需求可以跳过
-			HttpProfile httpProfile = new HttpProfile();
-			httpProfile.Endpoint = ("ocr.tencentcloudapi.com");
-			clientProfile.HttpProfile = httpProfile;
-			// 实例化要请求产品的client对象,clientProfile是可选的
-			OcrClient client = new OcrClient(cred, "ap-guangzhou", clientProfile);
-			// 实例化一个请求对象,每个接口都会对应一个request对象
-			GeneralBasicOCRRequest req = new GeneralBasicOCRRequest() {
-				/*
-        	 File.ReadAllBytes(ClipboardShare.GetFileNames()
-        	                                                       .First(File.Exists))
-					 */
-				ImageBase64 = Convert.ToBase64String(buf.ToArray())
-			};
-			// 返回的resp是一个EnglishOCRResponse的实例，与请求对象对应
-			GeneralBasicOCRResponse resp = client.GeneralBasicOCRSync(req);
-			var s = String.Join(Environment.NewLine + Environment.NewLine, resp.TextDetections.Select(x => x.DetectedText));
-			Text = s;
-			textBox1.SelectedText=ProcessValue(s)+"\r\n\r\n";
-		} catch (Exception e) {
-			textBox1.Text=e.StackTrace+Environment.NewLine+textBox1.Text;
-		}
-	}
-	Point _p1;
-	Point _p2;
-	byte[] ScreenShoot(Point p1, Point p2)
-	{
-//			int screenLeft = SystemInformation.VirtualScreen.Left;
-//			int screenTop = SystemInformation.VirtualScreen.Top;
-//			int screenWidth = SystemInformation.VirtualScreen.Width;
-//			int screenHeight = SystemInformation.VirtualScreen.Height;
-		
-			
-// Create a bitmap of the appropriate size to receive the full-screen screenshot.
-		using (Bitmap bitmap = new Bitmap(p2.X - p1.X, p2.Y - p1.Y)) {
-			// Draw the screenshot into our bitmap.
-			using (Graphics g = Graphics.FromImage(bitmap)) {
-				g.CopyFromScreen(p1.X, p1.Y, 0, 0, bitmap.Size);
-			}
-
-			var ms = new MemoryStream();
-			bitmap.Save(ms, ImageFormat.Jpeg);
-			bitmap.Dispose();
-			return ms.ToArray();
 		}
 	}
 	
-	string ProcessValue(string s)
-	{
-		var number=Regex.Match(s,"[.\\d-]+");
-		if(number.Success){
-			try {
-				Clipboard.SetText(float.Parse(number.Value).ToString());
-			}  catch {
-				ClipboardShare.SetText(number.Value);
-			 
-			}
-		}
-		return s;
-	}
-	void TextBox1MouseUp(object sender, MouseEventArgs e)
-	{
-		// MouseBouttons
-		if(e.Button==MouseButtons.Middle){
-			textBox1.SelectedText="-.";
-			
-		}
-	}
+	Screenshot.POINT _p3 = new Screenshot.POINT();
+	Screenshot.POINT _p4 = new Screenshot.POINT();
+	
+	Point _p1;
+	Point _p2;
+	
+	
+	
+	
 }

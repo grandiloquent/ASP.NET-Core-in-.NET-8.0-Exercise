@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Debug">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Simple/bin/Debug/Debug.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
