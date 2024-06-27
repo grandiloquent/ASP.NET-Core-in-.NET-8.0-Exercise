@@ -85,7 +85,7 @@ public partial class MainForm : Form
 		Path.Combine(jx,"书籍").CreateDirectoryIfNotExists();
 		Path.Combine(jx,"程序").CreateDirectoryIfNotExists();
 		 */
-		File.WriteAllText("1.txt".GetDesktopPath(),JsonConvert.SerializeObject(Directory.GetFiles(@"C:\Users\Administrator\Desktop\WeiXin").Select(x=>Path.GetFileName(x))));
+		File.WriteAllText("1.txt".GetDesktopPath(), JsonConvert.SerializeObject(Directory.GetFiles(@"C:\Users\Administrator\Desktop\WeiXin").Select(x => Path.GetFileName(x))));
 		
 		var dir = @"C:\Users\Administrator\Desktop\视频\Net\Simple";
 		dir.CreateDirectoryIfNotExists();
@@ -144,7 +144,7 @@ public partial class MainForm : Form
 				
 				if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F8") {
 					try {
-						Images.Ocr(this, textBox1,90);
+						Images.Ocr(this, textBox1, 90);
 						
 					} catch {
 						
@@ -193,6 +193,25 @@ public partial class MainForm : Form
 						} else
 							ClipboardShare.SetText("." + Regex.Replace(ss, "^[0.-]", "").Trim('.'));
 					}
+				} else if (KeyboardShare.isKeyPressed(18)) {
+					if (e.KeyData.EventType == EventHook.KeyEvent.up) {
+						if (e.KeyData.Keyname == "D") {
+							var arg = string.Format("--proxy http://127.0.0.1:10809  -f 137 " + ClipboardShare.GetText());
+							Process.Start(new ProcessStartInfo {
+								FileName = "yt-dlp_x86.exe",
+								Arguments = arg,
+								WorkingDirectory = @"C:\Users\Administrator\Desktop\视频"
+							});
+						}
+					} else if (e.KeyData.Keyname == "Q") {
+						try {
+							Images.Ocr(this, textBox1, 0, 300, 20, false);
+						
+						} catch {
+						
+						}
+					}
+					
 				}
 				
 			};

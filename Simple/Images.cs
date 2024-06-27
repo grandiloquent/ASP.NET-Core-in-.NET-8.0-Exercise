@@ -448,7 +448,7 @@ public static class Images
 
 		return 0;
 	}
-	public static byte[] ScreenShoot(Point p1, Point p2,int threshold=128)
+	public static byte[] ScreenShoot(Point p1, Point p2, int threshold = 128)
 	{
 //			int screenLeft = SystemInformation.VirtualScreen.Left;
 //			int screenTop = SystemInformation.VirtualScreen.Top;
@@ -466,6 +466,11 @@ public static class Images
 			var ms = new MemoryStream();
 			var b = bitmap;
 			//var b = bitmap.Despeckle(maxSpotSize: 1);
+			if (threshold == 0) {
+				b.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+				b.Dispose();
+				return ms.ToArray();
+			}
 			PixelUtil pixelUtil = new PixelUtil(b);
 			pixelUtil.LockBits();
 			
@@ -473,8 +478,8 @@ public static class Images
 				for (int j = 0; j < b.Height; j++) {
 					Color firstPixel = pixelUtil.GetPixel(i, j);
 
-					if(firstPixel.R>threshold)
-					pixelUtil.SetPixel(i, j, Color.Black);
+					if (firstPixel.R > threshold)
+						pixelUtil.SetPixel(i, j, Color.Black);
 					else
 						pixelUtil.SetPixel(i, j, Color.White);
 				}
@@ -548,14 +553,14 @@ public static class Images
 			textBox1.Text = e.StackTrace + Environment.NewLine + textBox1.Text;
 		}
 	}
-	public static void Ocr(MainForm fv, TextBox textBox1,int threshold=128)
+	public static void Ocr(MainForm fv, TextBox textBox1, int threshold = 128, int xOffset = 90, int yOffset = 20, bool isNumber = true)
 	{
 		Screenshot.POINT p = new Screenshot.POINT();
 		Screenshot.GetCursorPos(out p);
 		//Ocr(new Point(p.X, p.Y), new Point(p.X + 260, p.Y + 30));
 			
 		using (var engine = new TesseractEngine("./traineddata".GetEntryPath(), "eng", EngineMode.Default)) {
-			var buf = Images.ScreenShoot(new Point(p.X, p.Y), new Point(p.X + 80, p.Y + 20), threshold);
+			var buf = Images.ScreenShoot(new Point(p.X, p.Y), new Point(p.X + xOffset, p.Y + yOffset), threshold);
 			//var f = new FileStream("3.png".GetDesktopPath(), FileMode.OpenOrCreate);
 			//f.Write(buf, 0, buf.Length);
 			//f.Dispose();
@@ -572,7 +577,13 @@ public static class Images
 					fv.Invoke(new Action(() => {
 						textBox1.SelectedText = Environment.NewLine + Environment.NewLine + text + Environment.NewLine;
 							
-						fv.Text = ProcessValue(text);
+						
+						if (isNumber) {
+							fv.Text = ProcessValue(text);
+						} else {
+							ClipboardShare.SetText(text);
+						}
+					
 					}));
 				}
 			}
