@@ -14,13 +14,13 @@ public class Utils
 {
 	public static void FormatStyle(string text)
 	{
-		var f=@"D:\Documents\Files\CSharp\Uploader\blazor-web\Shared\TopBar.razor";
-		var f1=f+".css";
+		var f = @"D:\Documents\Files\CSharp\Uploader\blazor-web\Shared\TopBar.razor";
+		var f1 = f + ".css";
 		var pieces = text.Trim().Split(new char[]{ '\n' }, 2);
 		
-		var s=File.ReadAllText(f);
-		File.WriteAllText(f,string.Format("{1}\n<div class=\"{0}\">\n</div>",pieces[0].Trim(),s));
-		File.AppendAllText(f1,string.Format(".{0}{{\n{1}}}",pieces[0],FormatStyleLines(pieces[1])));
+		var s = File.ReadAllText(f);
+		File.WriteAllText(f, string.Format("{1}\n<div class=\"{0}\">\n</div>", pieces[0].Trim(), s));
+		File.AppendAllText(f1, string.Format(".{0}{{\n{1}}}", pieces[0], FormatStyleLines(pieces[1])));
 	}
 
 	
@@ -100,7 +100,7 @@ public class Utils
 	static extern uint GetCurrentThreadId();
 	[DllImport("user32.dll")]
 	static extern bool AttachThreadInput(uint idAttach, uint idAttachTo,
-	                                     bool fAttach);
+		bool fAttach);
 	[DllImport("user32.dll", SetLastError = true)]
 	static extern bool BringWindowToTop(IntPtr hWnd);
 	[DllImport("user32.dll")]
@@ -133,10 +133,10 @@ public class Utils
 		try {
 			var vf = Clipboard.GetFileDropList()[0];
 			Process.Start(new ProcessStartInfo {
-			              	FileName = "ffmpeg",
-			              	Arguments = string.Format("-i \"{0}\" -q:v 2 img_%07d.png", vf),
-			              	WorkingDirectory = @"C:\Users\Administrator\Desktop\Documents\Video Frames"
-			              });
+				FileName = "ffmpeg",
+				Arguments = string.Format("-i \"{0}\" -q:v 2 img_%07d.png", vf),
+				WorkingDirectory = @"C:\Users\Administrator\Desktop\Documents\Video Frames"
+			});
 		} catch {
 			
 		}
@@ -155,26 +155,26 @@ public class Utils
 		var line = s.Substring(i, j - i).Trim().Trim("()".ToArray());
 		
 		Process.Start(new ProcessStartInfo {
-		              	FileName = "chrome",
-		              	Arguments = line
-		              });
+			FileName = "chrome",
+			Arguments = line
+		});
 	}
-	public static string Translate(string s="")
+	public static string Translate(string s = "")
 	{
 		//string q
 		// http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=%s&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=
 		// en
 		// http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=
-		var l="en";
-		s=s==""?  ClipboardShare.GetText():s;
+		var l = "en";
+		s = s == "" ? ClipboardShare.GetText() : s;
 		
-		var isChinese=Regex.IsMatch(s,"[\u4e00-\u9fa5]");
-		if(!isChinese){
-			l="zh";
+		var isChinese = Regex.IsMatch(s, "[\u4e00-\u9fa5]");
+		if (!isChinese) {
+			l = "zh";
 		}
 		var req = WebRequest.Create(
-			"http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl="+l+"&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q="  +
-			s);
+			          "http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=" + l + "&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=" +
+			          s);
 		//req.Proxy = new WebProxy("127.0.0.1", 10809);
 		var res = req.GetResponse();
 		using (var reader = new StreamReader(res.GetResponseStream())) {
@@ -193,7 +193,7 @@ public class Utils
 			 sb.ToString().Trim();
 			 .Trim().Camel().Capitalize()
 			 */
-			return isChinese? sb.ToString():sb.ToString();
+			return isChinese ? sb.ToString() : sb.ToString();
 		}
 		//Clipboard.SetText(string.Format(@"{0}", TransAPI.Translate(Clipboard.GetText())));
 	}
@@ -211,7 +211,7 @@ bpy.context.object.rotation_euler[0] = 1.5708", Translate());
 		var s = str.ToBlocks();
 		Clipboard.SetText(string.Join("\n\n", s.OrderBy(x => x.SubstringAfter("\"").SubstringBefore("\""))
 		                              .Select(x => x.Trim().Trim(';') + ";")).RemoveWhiteSpaceLines()
-		                 );
+		);
 	}
 	public static void FormatGetCode(string s)
 	{
@@ -250,18 +250,18 @@ bpy.context.object.rotation_euler[0] = 1.5708", Translate());
 			var m = Regex.Match(item, "(?!var\\()--[^)]+\\)*?(?=\\))");
 			if (m.Success) {
 				ls.Add(Regex.Replace(item, "var\\((--[^)]+\\)*?)\\)", vvv => {
-				                     	var v1 = das.FirstOrDefault(i => i.SubstringBefore(':') == vvv.Groups[1].Value.SubstringBefore(','));
-				                     	var value = (v1 ?? m.Groups[1].Value.SubstringAfter(',')).SubstringAfter(':')
+					var v1 = das.FirstOrDefault(i => i.SubstringBefore(':') == vvv.Groups[1].Value.SubstringBefore(','));
+					var value = (v1 ?? m.Groups[1].Value.SubstringAfter(',')).SubstringAfter(':')
 				                     		.TrimEnd(';') ?? m.Groups[1].Value.SubstringAfter(',');
-				                     	while (Regex.IsMatch(value, "(?!var\\()--[^)]+\\)*?(?=\\))")) {
-				                     		Console.WriteLine(value);
-				                     		value = Regex.Replace(value, "var\\((--[^)]+)\\)+",
-				                     		                      vv => das.First(i => i.SubstringBefore(':') == vv.Groups[1].Value.SubstringBefore(',')).SubstringAfter(':')
+					while (Regex.IsMatch(value, "(?!var\\()--[^)]+\\)*?(?=\\))")) {
+						Console.WriteLine(value);
+						value = Regex.Replace(value, "var\\((--[^)]+)\\)+",
+							vv => das.First(i => i.SubstringBefore(':') == vv.Groups[1].Value.SubstringBefore(',')).SubstringAfter(':')
 				                     		                      .TrimEnd(';'));
-				                     	}
+					}
 				                     	
-				                     	return value;
-				                     }));
+					return value;
+				}));
 			} else {
 				ls.Add(item);
 			}
@@ -301,16 +301,16 @@ bpy.context.object.rotation_euler[0] = 1.5708", Translate());
 //		}
 
 
-		var dir=@"D:\Documents\Files\CSharp\Uploader\WebApplication\static\editor";
+		var dir = @"D:\Documents\Files\CSharp\Uploader\WebApplication\static\editor";
 		dir.CreateDirectoryIfNotExists();
-		var f=Path.Combine(dir,s+".js");
-		if(!File.Exists(f)){
-			File.WriteAllText(f,string.Empty);
+		var f = Path.Combine(dir, s + ".js");
+		if (!File.Exists(f)) {
+			File.WriteAllText(f, string.Empty);
 		}
 	}
 	public static void TranslateBlenderPythonClass()
 	{
-		var ss=Clipboard.GetText().Trim();
+		var ss = Clipboard.GetText().Trim();
 		var s = Translate(ss);
 		ClipboardShare.SetText(string.Format(@"class {0}(Operator):
     """""" tooltip goes here """"""
@@ -326,6 +326,106 @@ bpy.context.object.rotation_euler[0] = 1.5708", Translate());
         return {{'FINISHED'}}
 
 #prop = col.operator({0}.bl_idname, text=""{2}"")
-", s.Snake(), s.Snake().Replace("_", "."),ss));
+", s.Snake(), s.Snake().Replace("_", "."), ss));
 	}
+	[DllImport("user32.dll", SetLastError = true)]
+	public extern static void SendInput(int nInputs, Input[] pInputs, int cbsize);
+
+	[DllImport("user32.dll", EntryPoint = "MapVirtualKeyA")]
+	public extern static int MapVirtualKey(int wCode, int wMapType);
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct POINT
+	{
+		public int x;
+		public int y;
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct MouseInput
+	{
+		public int X;
+		public int Y;
+		public int Data;
+		public int Flags;
+		public int Time;
+		public IntPtr ExtraInfo;
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct KeyboardInput
+	{
+		public short VirtualKey;
+		public short ScanCode;
+		public int Flags;
+		public int Time;
+		public IntPtr ExtraInfo;
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct HardwareInput
+	{
+		public int uMsg;
+		public short wParamL;
+		public short wParamH;
+	}
+
+	[StructLayout(LayoutKind.Sequential)]
+	public struct Input
+	{
+		public int Type;
+		public InputUnion ui;
+	}
+
+	[StructLayout(LayoutKind.Explicit)]
+	public struct InputUnion
+	{
+		[FieldOffset(0)]
+		public MouseInput Mouse;
+		[FieldOffset(0)]
+		public KeyboardInput Keyboard;
+		[FieldOffset(0)]
+		public HardwareInput Hardware;
+	}
+
+	public const int INPUT_MOUSE = 0;
+
+	public const int INPUT_KEYBOARD = 1;
+
+	public const int INPUT_HARDWARE = 2;
+
+	public const int KEYEVENTF_KEYDOWN = 0x0;
+
+	public const int KEYEVENTF_KEYUP = 0x2;
+
+	public const int KEYEVENTF_EXTENDEDKEY = 0x1;
+
+	public const int VK_SNAPSHOT = 0x2C;
+
+	public const int VK_LWIN = 0x5B;
+
+	public static void Press(short key)
+	{
+		Utils.Input[] inputs = new Utils.Input[4];
+		inputs[0] = new Input();
+		inputs[0].Type = 1;
+		inputs[0].ui.Keyboard.VirtualKey = key;
+		inputs[0].ui.Keyboard.ScanCode = (short)MapVirtualKey(key, 0);
+		inputs[0].ui.Keyboard.Flags = KEYEVENTF_KEYDOWN;
+		inputs[0].ui.Keyboard.Time = 0;
+		inputs[0].ui.Keyboard.ExtraInfo = IntPtr.Zero;
+
+		inputs[1] = new Input();
+		inputs[1].Type = 1;
+		inputs[1].ui.Keyboard.VirtualKey = key;
+		inputs[1].ui.Keyboard.ScanCode = (short)MapVirtualKey(key, 0);
+		inputs[1].ui.Keyboard.Flags = KEYEVENTF_KEYUP;
+		inputs[1].ui.Keyboard.Time = 0;
+		inputs[1].ui.Keyboard.ExtraInfo = IntPtr.Zero;
+            
+		Utils.SendInput(inputs.Length, inputs, Marshal.SizeOf(inputs[0]));
+	}
+[DllImport("user32.dll", CharSet = CharSet.Auto)]
+   public static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, IntPtr lParam);
 }
+

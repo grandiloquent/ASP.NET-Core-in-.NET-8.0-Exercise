@@ -57,8 +57,41 @@ public partial class MainForm : Form
 		return (ushort)lcid >> 10;
 	}
 	
+	
+	[DllImport("user32.dll", SetLastError = true)]
+	private static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc);
+
+	[DllImport("user32.dll", SetLastError = true)]
+	private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+	protected override void WndProc(ref Message m)
+	{
+		if (m.Msg == 0x0312) {
+			/*
+				  ushort id = (ushort)m.WParam;
+        Keys key = (Keys)( ( (int)m.LParam >> 16 ) & 0xFFFF );
+        Modifiers mods = (Modifiers)( (int)m.LParam & 0xFFFF );*/
+			ushort id = (ushort)m.WParam;
+			if (id == 78) {
+				//System.Threading.Thread.Sleep(100);
+				//Utils.Press(0x45);
+				//System.Threading.Thread.Sleep(100);
+				//Utils.Press(0x59);
+						 
+				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_G);
+				//System.Threading.Thread.Sleep(200);
+				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Z);
+				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Z);
+						
+						
+			}
+				
+		}
+		base.WndProc(ref m);
+	}
 	public MainForm()
 	{
+		
+		RegisterHotKey(this.Handle, 78, 0, 78);
 		
 
 		/*
@@ -171,7 +204,7 @@ public partial class MainForm : Form
 					Invoke(new Action(() => {
 						textBox1.Text += "1";
 					}));
-				}  else if (e.KeyData.EventType == EventHook.KeyEvent.up) {
+				} else if (e.KeyData.EventType == EventHook.KeyEvent.up) {
 					if (KeyboardShare.isKeyPressed(18)) {
 						if (e.KeyData.Keyname == "D") {
 							var arg = string.Format("--proxy http://127.0.0.1:10809  -f 137 " + ClipboardShare.GetText());
@@ -193,9 +226,9 @@ public partial class MainForm : Form
 							// en
 							// http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=
 						
-							var ss=ClipboardShare.GetText().Trim();
+							var ss = ClipboardShare.GetText().Trim();
 							var req = WebRequest.Create(
-								         "http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=" + ss);
+								          "http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=" + ss);
 							//req.Proxy = new WebProxy("127.0.0.1", 10809);
 							var res = req.GetResponse();
 							using (var reader = new StreamReader(res.GetResponseStream())) {
@@ -221,8 +254,7 @@ public partial class MainForm : Form
 						}
 					} 
 					
-				}
-				else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "Q") {
+				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "Q") {
 					var ss = ClipboardShare.GetText();
 					if (Regex.IsMatch(ss, "^[\\d.-]+$")) {
 						if (Regex.IsMatch(ss, "^\\d")) {

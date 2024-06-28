@@ -69,6 +69,9 @@
     <Reference Include="Tesseract, Version=4.1.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\Tesseract.4.1.1\lib\net45\Tesseract.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsInput">
+      <HintPath>..\WindowsInput.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Android.cs" />
