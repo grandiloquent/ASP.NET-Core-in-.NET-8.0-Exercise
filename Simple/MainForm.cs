@@ -71,7 +71,12 @@ public partial class MainForm : Form
         Keys key = (Keys)( ( (int)m.LParam >> 16 ) & 0xFFFF );
         Modifiers mods = (Modifiers)( (int)m.LParam & 0xFFFF );*/
 			ushort id = (ushort)m.WParam;
-			if (id == 78) {
+			if (id == 81) {
+				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_E);
+				//System.Threading.Thread.Sleep(200);
+				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Z);
+				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Z);
+			} else if (id == 87) {
 				//System.Threading.Thread.Sleep(100);
 				//Utils.Press(0x45);
 				//System.Threading.Thread.Sleep(100);
@@ -81,18 +86,21 @@ public partial class MainForm : Form
 				//System.Threading.Thread.Sleep(200);
 				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Z);
 				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Z);
-						
-						
+			}else if (id == 65) {
+				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_G);
+				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Y);
+				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Y);
 			}
+				
 				
 		}
 		base.WndProc(ref m);
 	}
 	public MainForm()
 	{
-		
-		RegisterHotKey(this.Handle, 78, 0, 78);
-		
+		RegisterHotKey(this.Handle, 81, 0, 81);
+		RegisterHotKey(this.Handle, 87, 0, 87);
+		RegisterHotKey(this.Handle, 65, 0, 65);
 
 		/*
 		 
