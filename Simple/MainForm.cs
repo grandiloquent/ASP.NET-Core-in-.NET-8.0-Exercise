@@ -171,7 +171,58 @@ public partial class MainForm : Form
 					Invoke(new Action(() => {
 						textBox1.Text += "1";
 					}));
-				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "Q") {
+				}  else if (e.KeyData.EventType == EventHook.KeyEvent.up) {
+					if (KeyboardShare.isKeyPressed(18)) {
+						if (e.KeyData.Keyname == "D") {
+							var arg = string.Format("--proxy http://127.0.0.1:10809  -f 137 " + ClipboardShare.GetText());
+							Process.Start(new ProcessStartInfo {
+								FileName = "yt-dlp_x86.exe",
+								Arguments = arg,
+								WorkingDirectory = @"C:\Users\Administrator\Desktop\视频"
+							});
+						} else if (e.KeyData.Keyname == "Q") {
+							try {
+								Images.Ocr(this, textBox1, 0, 300, 20, false);
+							
+							} catch {
+							
+							}
+						} else if (e.KeyData.Keyname == "E") {
+							//string q
+							// http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=%s&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=
+							// en
+							// http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=
+						
+							var ss=ClipboardShare.GetText().Trim();
+							var req = WebRequest.Create(
+								         "http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=" + ss);
+							//req.Proxy = new WebProxy("127.0.0.1", 10809);
+							var res = req.GetResponse();
+							using (var reader = new StreamReader(res.GetResponseStream())) {
+								//var obj =
+								//  (JsonElement)JsonSerializer.Deserialize<Dictionary<String, dynamic>>(reader.ReadToEnd())["sentences"];
+								 
+								var obj = JsonConvert.DeserializeObject<JObject>(reader.ReadToEnd())["sentences"].ToObject<JArray>();
+								var sb = new StringBuilder();
+								for (int i = 0; i < obj.Count; i++) {
+									sb.Append(obj[i]["trans"]).Append(' ');
+								}
+								// Regex.Replace(sb.ToString().Trim(), "[ ](?=[a-zA-Z0-9])", m => "_").ToLower();
+								// std::string {0}(){{\n}}
+								//return string.Format("{0}", Regex.Replace(sb.ToString().Trim(), " ([a-zA-Z0-9])", m => m.Groups[1].Value.ToUpper()).Decapitalize());
+								//return  sb.ToString().Trim();
+								/*
+			 sb.ToString().Trim();
+							 */
+								ClipboardShare.SetText(sb.ToString().Trim().Camel().Capitalize());
+							
+							}
+							//Clipboard.SetText(string.Format(@"{0}", TransAPI.Translate(Clipboard.GetText())));
+						}
+					} 
+					
+				}
+				else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "Q") {
 					var ss = ClipboardShare.GetText();
 					if (Regex.IsMatch(ss, "^[\\d.-]+$")) {
 						if (Regex.IsMatch(ss, "^\\d")) {
@@ -193,27 +244,7 @@ public partial class MainForm : Form
 						} else
 							ClipboardShare.SetText("." + Regex.Replace(ss, "^[0.-]", "").Trim('.'));
 					}
-				} else if (KeyboardShare.isKeyPressed(18)) {
-					if (e.KeyData.EventType == EventHook.KeyEvent.up) {
-						if (e.KeyData.Keyname == "D") {
-							var arg = string.Format("--proxy http://127.0.0.1:10809  -f 137 " + ClipboardShare.GetText());
-							Process.Start(new ProcessStartInfo {
-								FileName = "yt-dlp_x86.exe",
-								Arguments = arg,
-								WorkingDirectory = @"C:\Users\Administrator\Desktop\视频"
-							});
-						}
-					} else if (e.KeyData.Keyname == "Q") {
-						try {
-							Images.Ocr(this, textBox1, 0, 300, 20, false);
-						
-						} catch {
-						
-						}
-					}
-					
 				}
-				
 			};
 		}
 	}
