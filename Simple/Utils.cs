@@ -425,7 +425,17 @@ bpy.context.object.rotation_euler[0] = 1.5708", Translate());
             
 		Utils.SendInput(inputs.Length, inputs, Marshal.SizeOf(inputs[0]));
 	}
-[DllImport("user32.dll", CharSet = CharSet.Auto)]
-   public static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, IntPtr lParam);
+	[DllImport("user32.dll", CharSet = CharSet.Auto)]
+	public static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, IntPtr lParam);
+	
+	public static void CreateDirectories()
+	{
+		"D:\\素材\\Photoshop\\纹理".CreateDirectoryIfNotExists();
+		"D:\\素材\\Photoshop\\设计".CreateDirectoryIfNotExists();
+		"D:\\素材\\Photoshop\\元素".CreateDirectoryIfNotExists();
+		"D:\\素材\\Blender\\设计".CreateDirectoryIfNotExists();
+		"D:\\素材\\Blender\\插件".CreateDirectoryIfNotExists();
+		"D:\\素材\\Blender\\资源".CreateDirectoryIfNotExists();
+	}
 }
 

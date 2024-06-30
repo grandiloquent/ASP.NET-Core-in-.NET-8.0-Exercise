@@ -4,8 +4,6 @@ using System.Data;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Imaging;
-using System.Drawing.Text;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -16,11 +14,6 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using TencentCloud.Common;
-using TencentCloud.Common.Profile;
-using TencentCloud.Ocr.V20181119;
-using TencentCloud.Ocr.V20181119.Models;
-using Tesseract;
 
 /// <summary>
 /// Description of MainForm.
@@ -65,7 +58,7 @@ public partial class MainForm : Form
 	private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 	protected override void WndProc(ref Message m)
 	{
-		if (m.Msg == 0x0312) {
+		if (m.Msg == 0x0312 && textBox1.Text == "xyz") {
 			/*
 				  ushort id = (ushort)m.WParam;
         Keys key = (Keys)( ( (int)m.LParam >> 16 ) & 0xFFFF );
@@ -86,10 +79,23 @@ public partial class MainForm : Form
 				//System.Threading.Thread.Sleep(200);
 				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Z);
 				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Z);
-			}else if (id == 65) {
+			} else if (id == 65) {
 				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_G);
 				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Y);
 				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Y);
+			} else if (id == 68) {
+				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_S);
+				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Y);
+				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Y);
+		
+				//new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.SHIFT);
+				//new WindowsInput.InputSimulator().Keyboard.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.SHIFT,WindowsInput.Native.VirtualKeyCode.VK_X);
+				
+			} else if (id == 70) {
+				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_S);
+				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Z);
+				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Z);
+				
 			}
 				
 				
@@ -98,10 +104,11 @@ public partial class MainForm : Form
 	}
 	public MainForm()
 	{
-		RegisterHotKey(this.Handle, 81, 0, 81);
-		RegisterHotKey(this.Handle, 87, 0, 87);
-		RegisterHotKey(this.Handle, 65, 0, 65);
-
+//		RegisterHotKey(this.Handle, 81, 0, 81);
+//		RegisterHotKey(this.Handle, 87, 0, 87);
+//		RegisterHotKey(this.Handle, 65, 0, 65);
+//		RegisterHotKey(this.Handle, 68, 0, 68);
+//		RegisterHotKey(this.Handle, 70, 0, 70);
 		/*
 		 
 		 var sss = typeof(Color).GetProperties().Where(prop =>
@@ -126,6 +133,8 @@ public partial class MainForm : Form
 		Path.Combine(jx,"书籍").CreateDirectoryIfNotExists();
 		Path.Combine(jx,"程序").CreateDirectoryIfNotExists();
 		 */
+		
+		
 		File.WriteAllText("1.txt".GetDesktopPath(), JsonConvert.SerializeObject(Directory.GetFiles(@"C:\Users\Administrator\Desktop\WeiXin").Select(x => Path.GetFileName(x))));
 		
 		var dir = @"C:\Users\Administrator\Desktop\视频\Net\Simple";
