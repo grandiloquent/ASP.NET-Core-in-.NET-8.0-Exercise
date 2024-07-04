@@ -343,26 +343,29 @@ def loopcut(cuts):
     me = ob.data
 
     bm = bmesh.from_edit_mesh(me)
-    edge = bm.select_history.active
+    edges = [e for e in bmesh.from_edit_mesh(bpy.context.object.data).edges if e.select];
+    #edge = bm.select_history.active
 
-    if isinstance(edge, bmesh.types.BMEdge): 
-        ''' 
-        bmesh.ops.subdivide_edges(
-            bm,
-            edges=edge_loops(edge),
-            cuts=cuts,
-            smooth_falloff='INVERSE_SQUARE',
-            use_grid_fill=True,
-            )
-        '''
-        bmesh.ops.subdivide_edgering(
-            bm,
-            edges=edge_loops(edge,bm),
-            cuts=cuts,
-            profile_shape='INVERSE_SQUARE',
-            profile_shape_factor=0.0,
-            )    
-        bmesh.update_edit_mesh(me)
+    for edge in edges:
+        if isinstance(edge, bmesh.types.BMEdge): 
+            ''' 
+            bmesh.ops.subdivide_edges(
+                bm,
+                edges=edge_loops(edge),
+                cuts=cuts,
+                smooth_falloff='INVERSE_SQUARE',
+                use_grid_fill=True,
+                )
+            '''
+            bmesh.ops.subdivide_edgering(
+                bm,
+                edges=edge_loops(edge,bm),
+                cuts=cuts,
+                profile_shape='INVERSE_SQUARE',
+                profile_shape_factor=0.0,
+                )  
+         
+    bmesh.update_edit_mesh(me)
     return None
 
 class _loopcut_one(Operator):

@@ -194,7 +194,7 @@ public partial class MainForm : Form
 				
 				if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F8") {
 					try {
-						Images.Ocr(this, textBox1, 90);
+						Images.Ocr(this, textBox1,0,120,120);
 						
 					} catch {
 						
@@ -221,8 +221,8 @@ public partial class MainForm : Form
 					Invoke(new Action(() => {
 						textBox1.Text += "1";
 					}));
-				} else if (e.KeyData.EventType == EventHook.KeyEvent.up) {
-					if (KeyboardShare.isKeyPressed(18)) {
+				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && KeyboardShare.isKeyPressed(18)) {
+
 						if (e.KeyData.Keyname == "D") {
 							var arg = string.Format("--proxy http://127.0.0.1:10809  -f 137 " + ClipboardShare.GetText());
 							Process.Start(new ProcessStartInfo {
@@ -269,16 +269,18 @@ public partial class MainForm : Form
 							}
 							//Clipboard.SetText(string.Format(@"{0}", TransAPI.Translate(Clipboard.GetText())));
 						}
-					} 
 					
-				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "Q") {
+				}
+					
+					
+				if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "Q") {
 					var ss = ClipboardShare.GetText();
 					if (Regex.IsMatch(ss, "^[\\d.-]+$")) {
 						if (Regex.IsMatch(ss, "^\\d")) {
 							if (ss.StartsWith("0"))
-								ClipboardShare.SetText("-." + ss.Substring(1));
+								ClipboardShare.SetText("-." +  ss.Substring( 1).TrimStart(new []{'.'}));
 							else
-								ClipboardShare.SetText("-" + ss.Substring(0, 1) + "." + ss.Substring(1));
+								ClipboardShare.SetText("-" + ss.Substring(0, 1) + "." + ss.Substring(1).TrimStart(new []{'.'}));
 						} else
 							ClipboardShare.SetText("-." + Regex.Replace(ss, "^[0.-]", "").Trim('.'));
 					}
@@ -293,6 +295,12 @@ public partial class MainForm : Form
 						} else
 							ClipboardShare.SetText("." + Regex.Replace(ss, "^[0.-]", "").Trim('.'));
 					}
+				}else if(e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "S") {
+					
+					
+					Invoke(new Action(()=>{
+					               //   Android.ColorPicker();
+					                  }));
 				}
 			};
 		}
