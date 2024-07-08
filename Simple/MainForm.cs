@@ -104,6 +104,8 @@ public partial class MainForm : Form
 	}
 	public MainForm()
 	{
+		Utils.CreateDirectories();
+		
 //		RegisterHotKey(this.Handle, 81, 0, 81);
 //		RegisterHotKey(this.Handle, 87, 0, 87);
 //		RegisterHotKey(this.Handle, 65, 0, 65);
@@ -135,14 +137,14 @@ public partial class MainForm : Form
 		 */
 		
 		
-		File.WriteAllText("1.txt".GetDesktopPath(), JsonConvert.SerializeObject(Directory.GetFiles(@"C:\Users\Administrator\Desktop\WeiXin").Select(x => Path.GetFileName(x))));
+		//File.WriteAllText("1.txt".GetDesktopPath(), JsonConvert.SerializeObject(Directory.GetFiles(@"C:\Users\Administrator\Desktop\WeiXin").Select(x => Path.GetFileName(x))));
 		
-		var dir = @"C:\Users\Administrator\Desktop\视频\Net\Simple";
-		dir.CreateDirectoryIfNotExists();
-		var fn = Path.Combine(dir, "Images.cs");
-		if (!File.Exists(fn)) {
-			File.Create(fn).Dispose();
-		}
+//		var dir = @"C:\Users\Administrator\Desktop\视频\Net\Simple";
+//		dir.CreateDirectoryIfNotExists();
+//		var fn = Path.Combine(dir, "Images.cs");
+//		if (!File.Exists(fn)) {
+//			File.Create(fn).Dispose();
+//		}
 		
 		TopMost = true;
 		TopLevel = true;
@@ -299,7 +301,7 @@ public partial class MainForm : Form
 					
 					
 					Invoke(new Action(()=>{
-					               //   Android.ColorPicker();
+					              //Android.ColorPicker();
 					                  }));
 				}
 			};

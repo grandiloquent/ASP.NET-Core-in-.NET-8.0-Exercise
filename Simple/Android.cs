@@ -153,12 +153,12 @@ public static class Android
 		} else if (arg.KeyCode == Keys.S) {
 			//ClipboardShare.SetText("bpy.ops.object.modifier_add(type='SOLIDIFY')");
 		} else if (arg.KeyCode == Keys.L) {
-//			FormatBlenderScript(textBox, v => {
-//				var o1 = 1 - v[0];
-//				var o2 = (1 - o1 / 2) / 2;
-//				var o3 = o2 - o1 / 2;
-//				ClipboardShare.SetText((o3 / o2 * -1).ToString());
-//			});
+			FormatBlenderScript(textBox, v => {
+				var o1 = 1 - v[0];
+				var o2 = (1 - o1 / 2) / 2;
+				var o3 = o2 - o1 / 2;
+				return (o3 / o2 * -1).ToString();
+			});
 		}
 		if (arg.Control) {
 			if (arg.KeyCode == Keys.C) {
@@ -216,7 +216,7 @@ public static class Android
 
     @classmethod
     def poll(cls, context):
-        return context.mode == ""EDIT_MESH""
+        return context.mode == ""EDIT_MESH"" or context.mode == ""OBJECT""
 
     def execute(self, context):
         value = int(bpy.context.window_manager.clipboard)

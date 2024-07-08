@@ -430,12 +430,10 @@ bpy.context.object.rotation_euler[0] = 1.5708", Translate());
 	
 	public static void CreateDirectories()
 	{
-		"D:\\素材\\Photoshop\\纹理".CreateDirectoryIfNotExists();
-		"D:\\素材\\Photoshop\\设计".CreateDirectoryIfNotExists();
-		"D:\\素材\\Photoshop\\元素".CreateDirectoryIfNotExists();
-		"D:\\素材\\Blender\\设计".CreateDirectoryIfNotExists();
-		"D:\\素材\\Blender\\插件".CreateDirectoryIfNotExists();
-		"D:\\素材\\Blender\\资源".CreateDirectoryIfNotExists();
+		new []{"软件","书籍","Unity\\书籍","Blender\\书籍"}.ToList().ForEach(x=>{
+		                                   	(@"D:\素材\"+x).CreateDirectoryIfNotExists();
+		                                   });
+		
 	}
 }
 
