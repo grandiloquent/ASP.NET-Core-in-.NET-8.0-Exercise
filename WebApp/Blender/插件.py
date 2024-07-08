@@ -1037,7 +1037,26 @@ class _quick_render(Operator):
 
         return {'FINISHED'}
 		
-        
+class _quick_vert(Operator):
+    """ Quick vert """
+    bl_idname = "quick.vert"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return context.mode == "EDIT_MESH" or context.mode == "OBJECT"
+
+    def execute(self, context):
+        location = bpy.context.scene.cursor.location
+        bm = bmesh.new()
+        bm.verts.new(location)
+        me = bpy.data.meshes.new(name='Vert')
+        ob = bpy.data.objects.new(name='Vert', object_data=me)
+        bm.to_mesh(ob.data)
+        bpy.context.collection.objects.link(ob)
+        return {'FINISHED'}
+
 class _align(Panel):
     """将所选对象和其所在的组与光标对齐"""
     bl_label = "对齐"
@@ -1073,6 +1092,7 @@ class _align(Panel):
         row = self.layout.row(align=True)
         row.operator(_duplicate_move_z.bl_idname, text="复制Z")
         row.operator(_duplicate_rotate.bl_idname, text="复制旋转Z")
+        row.operator(_quick_vert.bl_idname, text="新建点")
         row = self.layout.row(align=True)
         row.operator(_loopcut_one.bl_idname, text="分割2")
         row.operator(_loopcut_two.bl_idname, text="分割3")
@@ -1162,6 +1182,7 @@ classes = [
     _quick_extrude_normals,
     _quick_parent,
     _align,
+    _quick_vert,
 ]
 
 def register():
