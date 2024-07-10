@@ -215,8 +215,8 @@ class _modifier_bevel(Operator):
         bpy.ops.object.modifier_add(type='BEVEL')
         bpy.context.object.modifiers["Bevel"].width = 0.018
         bpy.context.object.modifiers["Bevel"].segments = 2
-        bpy.context.object.modifiers["Bevel"].miter_outer = 'MITER_ARC'
-        bpy.context.object.modifiers["Bevel"].harden_normals = True
+        #bpy.context.object.modifiers["Bevel"].miter_outer = 'MITER_ARC'
+        #bpy.context.object.modifiers["Bevel"].harden_normals = True
         return {'FINISHED'}
 
 class _modifier_solidify(Operator):

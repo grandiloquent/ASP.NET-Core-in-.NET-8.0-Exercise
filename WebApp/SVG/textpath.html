@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h3>The SVG:</h3>
+    <svg id="Capa_1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="width:200px;height:200px">
+        <!-- to hide the path, it is usually wrapped in a <defs> element -->
+        <!-- <defs> -->
+        <path id="MyPath" fill="none" stroke="red" d="M0,50a 50 50 0 0 0 100 0" />
+        <!-- </defs> -->
+
+        <text>
+            <textPath href="#MyPath" dominant-baseline="hanging" text-anchor="middle" startOffset="50%">值得信赖</textPath>
+        </text>
+    </svg>
+    <hr>
+    <canvas id="canvas"></canvas>
+    <div>
+        <img id="img01" />
+    </div>
+
+
+    <script>
+        let svg01 = document.getElementById('Capa_1');
+        let canvas = document.getElementById('canvas');
+        let ctx = canvas.getContext('2d');
+        let img01 = document.getElementById('img01');
+
+        let BCR = svg01.getBoundingClientRect();
+        svg01.setAttribute('width', BCR.width);
+        svg01.setAttribute('height', BCR.height);
+
+        var xmlSerializer = new XMLSerializer();
+        var svgString = xmlSerializer.serializeToString(svg01);
+
+        var svg = new Blob([svgString], {
+            type: "image/svg+xml;charset=utf-8"
+        });
+        var url = URL.createObjectURL(svg);
+
+        let img = new Image();
+
+        img.addEventListener('load', e => {
+            URL.revokeObjectURL(e.target.src);
+            canvas.width = e.target.width;
+            canvas.height = e.target.height;
+            ctx.drawImage(e.target, 0, 0);
+            img01.src = canvas.toDataURL('image/png');
+        });
+        img.src = url;
+    </script>
+</body>
+</html>
