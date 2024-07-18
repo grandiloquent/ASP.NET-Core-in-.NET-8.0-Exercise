@@ -12,6 +12,37 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 public class Utils
 {
+	public static void FormatNumber(bool b)
+	{
+		var ss = ClipboardShare.GetText();
+		if (b && Regex.IsMatch(ss, "^[\\d.-]+$")) {
+			
+			if (Regex.IsMatch(ss, "^\\d")) {
+				if (ss.StartsWith("0"))
+					ss = "." + ss.Substring(1);
+				else
+					ss = ss.Substring(0, 1) + "." + ss.Substring(1);
+			} else
+				ss = "." + Regex.Replace(ss, "^[0.-]", "").Trim('.');
+			
+			ClipboardShare.SetText((float.Parse(ss) ).ToString());
+		} else {
+		
+			if (Regex.IsMatch(ss, "^[\\d.-]+$")) {
+				if (Regex.IsMatch(ss, "^\\d")) {
+					if (ss.StartsWith("0"))
+						ss = "-." + ss.Substring(1).TrimStart(new []{ '.' });
+					else
+						ss = "-" + ss.Substring(0, 1) + "." + ss.Substring(1).TrimStart(new []{ '.' });
+				} else
+					ss = "-." + Regex.Replace(ss, "^[0.-]", "").Trim('.');
+				//  / 1000f
+				ClipboardShare.SetText((float.Parse(ss)).ToString());
+			}
+			
+		}
+	}
+
 	public static void FormatStyle(string text)
 	{
 		var f = @"D:\Documents\Files\CSharp\Uploader\blazor-web\Shared\TopBar.razor";
@@ -430,9 +461,9 @@ bpy.context.object.rotation_euler[0] = 1.5708", Translate());
 	
 	public static void CreateDirectories()
 	{
-		new []{"软件","书籍","Unity\\书籍","Blender\\书籍"}.ToList().ForEach(x=>{
-		                                   	(@"D:\素材\"+x).CreateDirectoryIfNotExists();
-		                                   });
+		new []{ "软件", "书籍", "Unity\\书籍", "Blender\\书籍" }.ToList().ForEach(x => {
+			(@"D:\素材\" + x).CreateDirectoryIfNotExists();
+		});
 		
 	}
 }

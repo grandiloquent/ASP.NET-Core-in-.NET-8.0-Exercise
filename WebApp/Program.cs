@@ -36,7 +36,7 @@ app.MapGet("/files", ([FromQuery(Name = "path")] string path, int? isSize = 0) =
                 IsDir = ((fsi.Attributes & FileAttributes.Directory) == FileAttributes.Directory),
                 Name = fsi.Name,
                 Parent = fsi.DirectoryName,
-                LastModified = new DateTimeOffset(fsi.LastWriteTimeUtc).ToUnixTimeSeconds(),
+                LastModified = new DateTimeOffset(fsi.CreationTime).ToUnixTimeSeconds(),
                 Length = ((fsi.Attributes & FileAttributes.Directory) == FileAttributes.Directory)
                     ? (isSize == 0
                         ? 0

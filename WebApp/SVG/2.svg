@@ -1,0 +1,23 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,0L0 96L43 0" fill="red"></path>
+    <path d="M43,0L0 96L89 0" fill="blue"></path>
+    <path d="M89,0L0 96L143 96" fill="red"></path>
+    <path d="M143,96L0 96L177 0" fill="blue"></path>
+    <path d="M177,0L0 96L218 96" fill="red"></path>
+    <path d="M218,96L0 96L272 0" fill="blue"></path>
+    <path d="M272,0L0 96L319 96" fill="red"></path>
+    <path d="M319,96L0 96L360 0" fill="blue"></path>
+    <path d="M360,0L0 96L406 96" fill="red"></path>
+    <path d="M406,96L0 96L441 0" fill="blue"></path>
+    <path d="M441,0L0 96L471 96" fill="red"></path>
+    <path d="M471,96L0 96L517 0" fill="blue"></path>
+    <path d="M517,0L0 96L568 96" fill="red"></path>
+    <path d="M568,96L0 96L616 0" fill="blue"></path>
+    <path d="M616,0L0 96L671 96" fill="red"></path>
+    <path d="M671,96L0 96L710 0" fill="blue"></path>
+    <path d="M710,0L0 96L742 96" fill="red"></path>
+    <path d="M742,96L0 96L798 0" fill="blue"></path>
+    <path d="M798,0L0 96L831 96" fill="red"></path>
+    <path d="M831,96L0 96L881 0" fill="blue"></path>
+    
+</svg>

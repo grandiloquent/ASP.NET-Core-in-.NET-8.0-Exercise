@@ -561,9 +561,9 @@ public static class Images
 			
 		using (var engine = new TesseractEngine("./traineddata".GetEntryPath(), "eng", EngineMode.Default)) {
 			var buf = Images.ScreenShoot(new Point(p.X, p.Y), new Point(p.X + xOffset, p.Y + yOffset), threshold);
-			var f = new FileStream("3.png".GetDesktopPath(), FileMode.OpenOrCreate);
-			f.Write(buf, 0, buf.Length);
-			f.Dispose();
+			//var f = new FileStream("3.png".GetDesktopPath(), FileMode.OpenOrCreate);
+			//f.Write(buf, 0, buf.Length);
+			//f.Dispose();
 			using (var img = Pix.LoadFromMemory(buf)) {
 				using (var page = engine.Process(img)) {
 					var text = page.GetText();

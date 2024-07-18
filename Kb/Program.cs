@@ -96,9 +96,9 @@ namespace Kb
 		static extern UInt32 SendInput(UInt32 numberOfInputs, INPUT[] inputs, Int32 sizeOfInputStructure);
 		enum VK
 		{
-			ENTER =0x0D,
+			ENTER = 0x0D,
 			SHIFT = 0x10,
-			CTRL=0x11,
+			CTRL = 0x11,
 			MENU = 0x12,
 			NUMPAD0 = 0x60,
 			NUMPAD1 = 0x61,
@@ -135,10 +135,10 @@ namespace Kb
 					ushort id = (ushort)msg.wParam;
 					Console.WriteLine(id);
 					if (id == 81) {
-								keybd_event((int)VK.G, (byte)MapVirtualKey((uint)VK.G, 0), 0, 0); // N1 Press  
+						keybd_event((int)VK.G, (byte)MapVirtualKey((uint)VK.G, 0), 0, 0); // N1 Press  
 						keybd_event((int)VK.G, (byte)MapVirtualKey((uint)VK.G, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
 					
-							keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press  
+						keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press  
 						keybd_event((int)VK.Z, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
 						keybd_event((int)VK.Z, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
 						keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release 
@@ -150,7 +150,7 @@ namespace Kb
 						//new WindowsInput.InputSimulator().Keyboard.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.SHIFT, WindowsInput.Native.VirtualKeyCode.VK_D);
 						//	new WindowsInput.InputSimulator().Keyboard.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.SHIFT, WindowsInput.Native.VirtualKeyCode.VK_D);
 						//	new WindowsInput.InputSimulator().Keyboard.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.SHIFT, WindowsInput.Native.VirtualKeyCode.VK_D);
-						} else if (id == 87) {
+					} else if (id == 87) {
 					
 						keybd_event((int)VK.G, (byte)MapVirtualKey((uint)VK.G, 0), 0, 0); // N1 Press  
 						keybd_event((int)VK.G, (byte)MapVirtualKey((uint)VK.G, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
@@ -184,8 +184,8 @@ namespace Kb
 						new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Z);
 						new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Z);
 				*/
-					}else if (id == 65) {
-					keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press  
+					} else if (id == 65) {
+						keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press  
 						keybd_event((int)VK.D, (byte)MapVirtualKey((uint)VK.D, 0), 0, 0); // N1 Press  
 						keybd_event((int)VK.D, (byte)MapVirtualKey((uint)VK.D, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
 						keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release    	
@@ -195,8 +195,8 @@ namespace Kb
 //						keybd_event((int)VK.Z, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
 //						keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release 
 					
-						keybd_event((int)VK.Y, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
-						keybd_event((int)VK.Y, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+						keybd_event((int)VK.Z, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+						keybd_event((int)VK.Z, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
 						
 						keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press  
 						keybd_event((int)VK.V, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
@@ -207,7 +207,7 @@ namespace Kb
 						keybd_event((int)VK.ENTER, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
 						
 						
-						}
+					}
 				} else {
 					
 					TranslateMessage(ref msg);

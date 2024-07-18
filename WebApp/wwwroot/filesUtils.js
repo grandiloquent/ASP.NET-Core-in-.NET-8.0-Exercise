@@ -6,7 +6,7 @@ const DEFAULT_PATH = 'C:\\Users\\Administrator\\Desktop';
 ////////////////////////////////////////////////////////////////
 
 async function loadData(path, size) {
-    const res = await fetch(`${baseUri}/files?path=${encodeURIComponent(path || '')}${(size && "&isSize=1")||''}`);
+    const res = await fetch(`${baseUri}/files?path=${encodeURIComponent(path || '')}${(size && "&isSize=1") || ''}`);
     return res.json();
 }
 
@@ -39,7 +39,15 @@ function sortFileList(res) {
                 }
             }
         } else {
-            return x.name.localeCompare(y.name)
+            const dif = y.lastModified-x.lastModified;//y.length - x.length;
+            if (dif > 0) {
+                return 1;
+            } else if (dif < 0) {
+                return -1;
+            } else {
+                return 0;
+            }
+            //return x.name.localeCompare(y.name)
         }
     })
 }

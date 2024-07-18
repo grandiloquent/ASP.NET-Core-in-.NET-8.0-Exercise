@@ -137,7 +137,7 @@ public partial class MainForm : Form
 		 */
 		
 		
-		//File.WriteAllText("1.txt".GetDesktopPath(), JsonConvert.SerializeObject(Directory.GetFiles(@"C:\Users\Administrator\Desktop\WeiXin").Select(x => Path.GetFileName(x))));
+		File.WriteAllText("1.txt".GetDesktopPath(), JsonConvert.SerializeObject(Directory.GetFiles(@"C:\Users\Administrator\Desktop\WeiXin").Select(x => Path.GetFileName(x))));
 		
 //		var dir = @"C:\Users\Administrator\Desktop\视频\Net\Simple";
 //		dir.CreateDirectoryIfNotExists();
@@ -203,7 +203,7 @@ public partial class MainForm : Form
 					}
 				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F9") {
 					try {
-						Images.Ocr(this, textBox1);
+						Images.Ocr(this, textBox1,106);
 						
 					} catch {
 						
@@ -276,27 +276,10 @@ public partial class MainForm : Form
 					
 					
 				if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "Q") {
-					var ss = ClipboardShare.GetText();
-					if (Regex.IsMatch(ss, "^[\\d.-]+$")) {
-						if (Regex.IsMatch(ss, "^\\d")) {
-							if (ss.StartsWith("0"))
-								ClipboardShare.SetText("-." +  ss.Substring( 1).TrimStart(new []{'.'}));
-							else
-								ClipboardShare.SetText("-" + ss.Substring(0, 1) + "." + ss.Substring(1).TrimStart(new []{'.'}));
-						} else
-							ClipboardShare.SetText("-." + Regex.Replace(ss, "^[0.-]", "").Trim('.'));
-					}
+					
+					Utils.FormatNumber(false);
 				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "W") {
-					var ss = ClipboardShare.GetText();
-					if (Regex.IsMatch(ss, "^[\\d.-]+$")) {
-						if (Regex.IsMatch(ss, "^\\d")) {
-							if (ss.StartsWith("0"))
-								ClipboardShare.SetText("." + ss.Substring(1));
-							else
-								ClipboardShare.SetText(ss.Substring(0, 1) + "." + ss.Substring(1));
-						} else
-							ClipboardShare.SetText("." + Regex.Replace(ss, "^[0.-]", "").Trim('.'));
-					}
+					Utils.FormatNumber(true);
 				}else if(e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "S") {
 					
 					
