@@ -61,6 +61,19 @@ app.MapGet("/file", ([FromQuery(Name = "path")] string path) =>
 
     return Results.NotFound();
 });
+app.MapGet("/open", ([FromQuery(Name = "path")] string path) =>
+{
+    if (File.Exists(path))
+    {
+      System.Diagnostics. Process.Start(new System.Diagnostics. ProcessStartInfo(){
+		FileName="explorer.exe",
+		Arguments=$"\"{path}\""
+		});
+        return Results.Ok();
+    }
+
+    return Results.NotFound();
+});
 app.MapPost("/file/delete", async (HttpRequest request) =>
 {
     var body = "";

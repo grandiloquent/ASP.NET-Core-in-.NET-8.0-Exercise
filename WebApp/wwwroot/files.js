@@ -4,6 +4,7 @@ const audioRe = new RegExp(/\.(?:mp3|wav|m4a)$/);
 const videoRe = new RegExp(/\.(?:mp4)$/, 'i');
 const zipRe = new RegExp(/\.(?:zip|gzip|epub)$/);
 const txtRe = new RegExp(/\.(?:txt|java|js|css)$/);
+const runRe=new RegExp(/\.(?:blend|exe)$/);
 
 
 const toast = document.querySelector('.toast');
@@ -41,6 +42,10 @@ function onItemClick(evt) {
     if (path.endsWith(".srt")) {
         window.location = `/subtitle.html?path=${encodeURIComponent(substringBeforeLast(path, ".") + ".mp4")}`
 
+    }
+    if (runRe.test(path)) {
+        fetch(`/open?path=${encodeURIComponent(path)}`)
+        return;
     }
     // else if (evt.detail.path.endsWith(".md")) {
     //     window.location = `/markdown?path=${encodeURIComponent(evt.detail.path)}`
