@@ -64,9 +64,15 @@ function newFile() {
     dialog.appendChild(input);
     dialog.addEventListener('submit', async () => {
         let path = new URL(window.location).searchParams.get("path")
-            || '/storage/emulated/0';
-        const res = await fetch(`${baseUri}/file/new_file?path=${encodeURIComponent(path + "/" + input.value.trim())}`);
-        window.location.reload();
+            || 'C:/Users/Administrator/Desktop';
+        let value = input.value.trim();
+        if(value.startsWith("http://") || value.startsWith("https://")){
+            const res = await fetch(`${baseUri}/file/new_file?path=${encodeURIComponent(path )}&uri=${encodeURIComponent(value)}`);
+        }else{
+            const res = await fetch(`${baseUri}/file/new_file?path=${encodeURIComponent(path + "/" + value)}`);
+            window.location.reload();
+        }
+      
     });
     document.body.appendChild(dialog);
 }

@@ -649,4 +649,10 @@ public static class Files
 			return;
 		Directory.CreateDirectory(path);
 	}
+	public static void CreateFileIfNotExists(this string path)
+	{
+		if (File.Exists(path))
+			return;
+		File.Create(path).Dispose();
+	}
 }

@@ -15,10 +15,11 @@
 // // 27.6142374900001/10
 
 
-var pathItem = app.activeDocument.pathItems[1];
+var pathItem = app.activeDocument.pathItems[0];
 var length = pathItem.pathPoints.length;
 for (var i = 0; i < length; i++) {
     var pathPoint = pathItem.pathPoints[i];
     $.writeln(pathPoint.anchor + "," + pathPoint.leftDirection + "," + pathPoint.rightDirection);
+
 }
 // 27.6142374900001/10

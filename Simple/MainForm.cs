@@ -137,8 +137,8 @@ public partial class MainForm : Form
 		 */
 		
 		
-		File.WriteAllText("1.txt".GetDesktopPath(), JsonConvert.SerializeObject(Directory.GetFiles(@"C:\Users\Administrator\Desktop\WeiXin").Select(x => Path.GetFileName(x))));
-		
+		//File.WriteAllText("1.txt".GetDesktopPath(), JsonConvert.SerializeObject(Directory.GetFiles(@"C:\Users\Administrator\Desktop\WeiXin").Select(x => Path.GetFileName(x))));
+		@"C:\Users\Administrator\Desktop\视频\Net\WebApp\Python\将对象均匀分布到曲线[改进].py".CreateFileIfNotExists();
 //		var dir = @"C:\Users\Administrator\Desktop\视频\Net\Simple";
 //		dir.CreateDirectoryIfNotExists();
 //		var fn = Path.Combine(dir, "Images.cs");

@@ -14,6 +14,9 @@ public class Utils
 {
 	public static void FormatNumber(bool b)
 	{
+		
+		
+		
 		var ss = ClipboardShare.GetText();
 		if (b && Regex.IsMatch(ss, "^[\\d.-]+$")) {
 			

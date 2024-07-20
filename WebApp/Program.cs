@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
 using WebApp;
+using System.Diagnostics;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -65,7 +67,7 @@ app.MapGet("/open", ([FromQuery(Name = "path")] string path) =>
 {
     if (File.Exists(path))
     {
-      System.Diagnostics. Process.Start(new System.Diagnostics. ProcessStartInfo(){
+       Process.Start(new System.Diagnostics. ProcessStartInfo(){
 		FileName="explorer.exe",
 		Arguments=$"\"{path}\""
 		});
@@ -128,6 +130,21 @@ app.MapGet("/file/new_dir", (string path) =>
         Directory.CreateDirectory(path);
     return Directory.Exists(path) ? Results.Ok() : Results.NotFound();
 });
+app.MapGet("/file/new_file", (string path,string? uri) =>
+{
+    if(uri!=null){
+         Process.Start(new System.Diagnostics. ProcessStartInfo(){
+		FileName="aria2c.exe",
+		Arguments=$"-c \"{uri}\"",WorkingDirectory=path
+		});
+        return Results.Ok();
+    }
+    if (!File.Exists(path))
+        File.Create(path).Dispose();
+    return File.Exists(path) ? Results.Ok() : Results.NotFound();
+});
+
+
 app.MapGet("/tidy", (string path) =>
 {
     if (!Directory.Exists(path))
