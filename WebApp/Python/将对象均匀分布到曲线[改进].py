@@ -1,3 +1,11 @@
+"""
+以曲线为中心，均匀分布对象，并依据“切线”旋转
+
+用法：
+1. 选择一条曲线
+2. 将一个3D对象重命名为“1”
+3. 粘贴代码执行    
+"""
 import bpy
 from mathutils import Vector
 import numpy as np
@@ -77,10 +85,8 @@ def resample_curve(obj, count=40):
             b.co.xyz,
         ])
     control_points = [obj.matrix_world @ p for p in control_points]
-    # Convert control points to a numpy array
     control_points = np.array(control_points)
     equidistant_points_np = cubic_bezier_points_equdistant(control_points, count=count)
-    print(equidistant_points_np)
     equidistant_points = [Vector(p) for p in equidistant_points_np]
     return equidistant_points
 

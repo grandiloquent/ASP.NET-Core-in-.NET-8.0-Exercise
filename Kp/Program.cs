@@ -153,10 +153,12 @@ namespace Kb
 			//GeneratorTri();
 			//RegisterHotKey(IntPtr.Zero, 81, 0, 81);//Q
 			//RegisterHotKey(IntPtr.Zero, 87, 0, 87);//W 
-			//RegisterHotKey(IntPtr.Zero, 65, 0, 65);//A
+			
 			//RegisterHotKey(IntPtr.Zero, 68, 0, 68);//D
 			//RegisterHotKey(IntPtr.Zero, 70, 0, 70);//F
 			RegisterHotKey(IntPtr.Zero, 0x51, 0, 0x51);//Q
+			RegisterHotKey(IntPtr.Zero, 65, 0, 65);//A
+			RegisterHotKey(IntPtr.Zero, 0x53, 0, 0x53);//S
 			
 			MSG msg;
 			int ret;
@@ -166,18 +168,23 @@ namespace Kb
 					
 					if (id == 0x51) {
 						//BlenderGeometryNodes();
-						BlenderDuplicate();
+						PhotoshoBrush();
 						/*
-						keybd_event((int)VK.I, (byte)MapVirtualKey((uint)VK.G, 0), 0, 0); // N1 Press  
-						keybd_event((int)VK.I, (byte)MapVirtualKey((uint)VK.G, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
-						mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
-						Thread.Sleep(100);
-						mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
-						keybd_event((int)VK.B, (byte)MapVirtualKey((uint)VK.G, 0), 0, 0); // N1 Press  
-						keybd_event((int)VK.B, (byte)MapVirtualKey((uint)VK.G, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+						BlenderDuplicate();
 					*/
 				
-					} 
+					} else if (id == 65) {
+						
+						keybd_event(0x42, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+						keybd_event(0x42, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+						keybd_event(219, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+						keybd_event(219, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+					} else if (id == 0x53) {
+						keybd_event(0x42, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+						keybd_event(0x42, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+						keybd_event(221, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press
+						keybd_event(221, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+					}
 				} else {
 					
 					TranslateMessage(ref msg);
@@ -220,6 +227,16 @@ namespace Kb
 			keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release 
 			keybd_event((int)VK.ENTER, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
 			keybd_event((int)VK.ENTER, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+		}
+		static void PhotoshoBrush()
+		{
+			keybd_event((int)VK.I, (byte)MapVirtualKey((uint)VK.G, 0), 0, 0); // N1 Press  
+			keybd_event((int)VK.I, (byte)MapVirtualKey((uint)VK.G, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+			mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
+			Thread.Sleep(100);
+			mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
+			keybd_event((int)VK.B, (byte)MapVirtualKey((uint)VK.G, 0), 0, 0); // N1 Press  
+			keybd_event((int)VK.B, (byte)MapVirtualKey((uint)VK.G, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
 		}
 		static void GeneratorTri()
 		{

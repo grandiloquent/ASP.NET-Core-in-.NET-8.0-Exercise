@@ -138,7 +138,8 @@ public partial class MainForm : Form
 		
 		
 		//File.WriteAllText("1.txt".GetDesktopPath(), JsonConvert.SerializeObject(Directory.GetFiles(@"C:\Users\Administrator\Desktop\WeiXin").Select(x => Path.GetFileName(x))));
-		@"C:\Users\Administrator\Desktop\视频\Net\WebApp\Python\将对象均匀分布到曲线[改进].py".CreateFileIfNotExists();
+		@"C:\Users\Administrator\Desktop\视频\Net\WebApp\Photoshop".CreateDirectoryIfNotExists();
+		@"C:\Users\Administrator\Desktop\视频\Net\WebApp\Photoshop\SkinToner.jsx".CreateFileIfNotExists();
 //		var dir = @"C:\Users\Administrator\Desktop\视频\Net\Simple";
 //		dir.CreateDirectoryIfNotExists();
 //		var fn = Path.Combine(dir, "Images.cs");
@@ -193,17 +194,19 @@ public partial class MainForm : Form
 			var keyboardWatcher = eventHookFactory.GetKeyboardWatcher();
 			keyboardWatcher.Start();
 			keyboardWatcher.OnKeyInput += (s, e) => {
-				
+//				Invoke(new Action(() => {
+//				                  	textBox1.Text=e.KeyData.Keyname;
+//					}));
 				if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F8") {
 					try {
-						Images.Ocr(this, textBox1,0,120,120);
-						
+						Images.Ocr(this, textBox1, 0, 120, 120);
+					
 					} catch {
 						
 					}
 				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F9") {
 					try {
-						Images.Ocr(this, textBox1,106);
+						Images.Ocr(this, textBox1, 106);
 						
 					} catch {
 						
@@ -225,67 +228,69 @@ public partial class MainForm : Form
 					}));
 				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && KeyboardShare.isKeyPressed(18)) {
 
-						if (e.KeyData.Keyname == "D") {
-							var arg = string.Format("--proxy http://127.0.0.1:10809  -f 137 " + ClipboardShare.GetText());
-							Process.Start(new ProcessStartInfo {
-								FileName = "yt-dlp_x86.exe",
-								Arguments = arg,
-								WorkingDirectory = @"C:\Users\Administrator\Desktop\视频"
-							});
-						} else if (e.KeyData.Keyname == "Q") {
-							try {
-								Images.Ocr(this, textBox1, 0, 300, 20, false);
+					if (e.KeyData.Keyname == "D") {
+						var arg = string.Format("--proxy http://127.0.0.1:10809  -f 137 " + ClipboardShare.GetText());
+						Process.Start(new ProcessStartInfo {
+							FileName = "yt-dlp_x86.exe",
+							Arguments = arg,
+							WorkingDirectory = @"C:\Users\Administrator\Desktop\视频"
+						});
+					} else if (e.KeyData.Keyname == "Q") {
+						try {
+							Images.Ocr(this, textBox1, 0, 300, 20, false);
 							
-							} catch {
+						} catch {
 							
-							}
-						} else if (e.KeyData.Keyname == "E") {
-							//string q
-							// http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=%s&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=
-							// en
-							// http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=
+						}
+					} else if (e.KeyData.Keyname == "E") {
+						//string q
+						// http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=%s&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=
+						// en
+						// http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=
 						
-							var ss = ClipboardShare.GetText().Trim();
-							var req = WebRequest.Create(
-								          "http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=" + ss);
-							//req.Proxy = new WebProxy("127.0.0.1", 10809);
-							var res = req.GetResponse();
-							using (var reader = new StreamReader(res.GetResponseStream())) {
-								//var obj =
-								//  (JsonElement)JsonSerializer.Deserialize<Dictionary<String, dynamic>>(reader.ReadToEnd())["sentences"];
+						var ss = ClipboardShare.GetText().Trim();
+						var req = WebRequest.Create(
+							           "http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=" + ss);
+						//req.Proxy = new WebProxy("127.0.0.1", 10809);
+						var res = req.GetResponse();
+						using (var reader = new StreamReader(res.GetResponseStream())) {
+							//var obj =
+							//  (JsonElement)JsonSerializer.Deserialize<Dictionary<String, dynamic>>(reader.ReadToEnd())["sentences"];
 								 
-								var obj = JsonConvert.DeserializeObject<JObject>(reader.ReadToEnd())["sentences"].ToObject<JArray>();
-								var sb = new StringBuilder();
-								for (int i = 0; i < obj.Count; i++) {
-									sb.Append(obj[i]["trans"]).Append(' ');
-								}
-								// Regex.Replace(sb.ToString().Trim(), "[ ](?=[a-zA-Z0-9])", m => "_").ToLower();
-								// std::string {0}(){{\n}}
-								//return string.Format("{0}", Regex.Replace(sb.ToString().Trim(), " ([a-zA-Z0-9])", m => m.Groups[1].Value.ToUpper()).Decapitalize());
-								//return  sb.ToString().Trim();
-								/*
+							var obj = JsonConvert.DeserializeObject<JObject>(reader.ReadToEnd())["sentences"].ToObject<JArray>();
+							var sb = new StringBuilder();
+							for (int i = 0; i < obj.Count; i++) {
+								sb.Append(obj[i]["trans"]).Append(' ');
+							}
+							// Regex.Replace(sb.ToString().Trim(), "[ ](?=[a-zA-Z0-9])", m => "_").ToLower();
+							// std::string {0}(){{\n}}
+							//return string.Format("{0}", Regex.Replace(sb.ToString().Trim(), " ([a-zA-Z0-9])", m => m.Groups[1].Value.ToUpper()).Decapitalize());
+							//return  sb.ToString().Trim();
+							/*
 			 sb.ToString().Trim();
 							 */
-								ClipboardShare.SetText(sb.ToString().Trim().Camel().Capitalize());
+							ClipboardShare.SetText(sb.ToString().Trim().Camel().Capitalize());
 							
-							}
-							//Clipboard.SetText(string.Format(@"{0}", TransAPI.Translate(Clipboard.GetText())));
 						}
+						//Clipboard.SetText(string.Format(@"{0}", TransAPI.Translate(Clipboard.GetText())));
+					}
 					
 				}
 					
 					
 				if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "Q") {
-					
-					Utils.FormatNumber(false);
+					Invoke(new Action(() => {
+						Android.ColorPicker(textBox1);
+					}));
+					//Utils.FormatNumber(false);
 				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "W") {
 					Utils.FormatNumber(true);
-				}else if(e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "S") {
+				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "S") {
 					
 					
-					Invoke(new Action(()=>{
-					              //Android.ColorPicker();
-					                  }));
+					Invoke(new Action(() => {
+						//Android.ColorPicker();
+					}));
 				}
 			};
 		}

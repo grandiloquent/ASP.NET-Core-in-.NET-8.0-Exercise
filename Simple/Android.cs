@@ -330,6 +330,20 @@ public static class Android
 		var s = ColorTranslator.ToHtml(sampleColor);
 		Clipboard.SetText(s.Substring(1));
 	}
+	public static void ColorPicker(TextBox textBox)
+	{
+		POINT p = new POINT();
+		GetCursorPos(out p);
+		int mouseX = p.X;
+		int mouseY = p.Y;
+		var screen = Screen.FromRectangle(new Rectangle(p.X, p.Y, 1, 1));
+		var	sampleBitmap = GetSampleRegion(screen, mouseX, mouseY);
+		Color sampleColor = sampleBitmap.GetPixel(sampleSize / 2, sampleSize / 2);
+		sampleBitmap.Dispose();
+		var s = ColorTranslator.ToHtml(sampleColor);
+		textBox.SelectedText=string.Format("{0}\r\n{1}\r\n{2}\r\n{3}",sampleColor.R,sampleColor.G,sampleColor.B,s);
+	}
+	
 	static	int sampleSize = 5;
 	private static Bitmap GetSampleRegion(Screen screen, int mouseX, int mouseY)
 	{
