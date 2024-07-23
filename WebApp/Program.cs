@@ -112,6 +112,16 @@ app.MapPost("/file/move", async (HttpRequest request, string dst) =>
     }
 });
 
+ 
+app.MapGet("/movevideo", (string path) =>
+{
+    var dst=Path.Combine("D:\\Blender",Path.GetFileName(path));
+    File.Copy(path,dst);
+    if(File.Exists(dst)){
+        File.Delete(path);
+    }
+    return File.Exists(dst) ? Results.Ok() : Results.NotFound();
+});
 app.MapGet("/file/rename", (string path, string dst) =>
 {
     if (File.Exists(path) && !File.Exists(dst))

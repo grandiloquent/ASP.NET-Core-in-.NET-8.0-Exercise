@@ -39,7 +39,7 @@ function sortFileList(res) {
                 }
             }
         } else {
-            const dif = y.lastModified-x.lastModified;//y.length - x.length;
+            const dif = y.lastModified - x.lastModified;//y.length - x.length;
             if (dif > 0) {
                 return 1;
             } else if (dif < 0) {
@@ -88,10 +88,12 @@ async function render(path) {
             //     buf.push(item.parentNode.dataset.path);
             // localStorage.setItem("paths", JSON.stringify(buf));
             if (new URL(window.location).searchParams.get("y") === "true") {
+
                 const res = await fetch(`${baseUri}/file/delete`, {
                     method: 'POST',
                     body: JSON.stringify([item.parentNode.dataset.path])
                 });
+
                 queryElementByPath(item.parentNode.dataset.path).remove();
             } else {
                 deleteFile(item.parentNode.dataset.path);
@@ -114,11 +116,14 @@ function deleteFile(path) {
     div.textContent = `您确定要删除 ${substringAfterLast(path, "/")} 吗？`;
     dialog.appendChild(div);
     dialog.addEventListener('submit', async () => {
-        const res = await fetch(`${baseUri}/file/delete`, {
-            method: 'POST',
-            body: JSON.stringify([path])
-        });
-        console.log(path)
+        if (/\.(?:blend)$/.test(path)) {
+            fetch(`/movevideo?path=${encodeURIComponent(path)}`);
+        } else {
+            const res = await fetch(`${baseUri}/file/delete`, {
+                method: 'POST',
+                body: JSON.stringify([path])
+            });
+        }
         queryElementByPath(path).forEach(x => x.remove())
     });
     document.body.appendChild(dialog);
@@ -249,6 +254,8 @@ async function onShowFavorites() {
     [
         "C:\\Users\\Administrator\\Downloads",
         "C:\\Users\\Administrator\\Desktop\\文档",
+        "C:\\Users\\Administrator\\Desktop\\视频",
+        "C:\\Users\\Administrator\\Desktop\\视频\\文件",
         "D:\\文档",
         "D:\\",
     ].forEach(p => {
@@ -256,6 +263,38 @@ async function onShowFavorites() {
     })
     document.body.appendChild(bottomSheet);
 }
-
+function initializeDropZone() {
+    document.addEventListener("DOMContentLoaded", evt => {
+        var dropZone = document.querySelector('body');
+        dropZone.addEventListener('dragover', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'copy'
+        });
+        dropZone.addEventListener('drop', function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            uploadFiles(e.dataTransfer.files)
+        });
+        async function uploadFiles(files) {
+            const length = files.length;
+            let i = 1;
+            for (let file of files) {
+                const formData = new FormData;
+                let path = new URL(location.href).searchParams.get('path') || "/storage/emulated/0";
+                formData.append('path', path + "/" + file.name);
+                formData.append('file', file, path + "/" + file.name);
+                try {
+                    await fetch(`${baseUri}/upload`, {
+                        method: "POST",
+                        body: formData
+                    }).then(res => console.log(res))
+                } catch (e) {
+                }
+            }
+        }
+    });
+}
+initializeDropZone();
 ////////////////////////////////////////////////////////////////
 render();

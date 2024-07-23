@@ -66,13 +66,13 @@ function newFile() {
         let path = new URL(window.location).searchParams.get("path")
             || 'C:/Users/Administrator/Desktop';
         let value = input.value.trim();
-        if(value.startsWith("http://") || value.startsWith("https://")){
-            const res = await fetch(`${baseUri}/file/new_file?path=${encodeURIComponent(path )}&uri=${encodeURIComponent(value)}`);
-        }else{
+        if (value.startsWith("http://") || value.startsWith("https://")) {
+            const res = await fetch(`${baseUri}/file/new_file?path=${encodeURIComponent(path)}&uri=${encodeURIComponent(value)}`);
+        } else {
             const res = await fetch(`${baseUri}/file/new_file?path=${encodeURIComponent(path + "/" + value)}`);
             window.location.reload();
         }
-      
+
     });
     document.body.appendChild(dialog);
 }
@@ -102,11 +102,13 @@ function onDelete() {
         });
     });
     dialog.addEventListener('submit', async () => {
+
         const res = await fetch(`${baseUri}/file/delete`, {
             method: 'POST',
             body: JSON.stringify(obj)
         });
         localStorage.setItem('paths', '');
+
         location.reload();
     });
     document.body.appendChild(dialog);
@@ -185,10 +187,11 @@ function showContextMenu(evt) {
                 bottomSheet.remove();
                 unCompressFile(path);
             });
-        } else if (videoRe.test(path)) {
+        } else if (/(?:blend|mp4)$/.test(path)) {
             addContextMenuItem(bottomSheet, '显示视频信息', () => {
                 bottomSheet.remove();
-                showVideoInformation(path);
+
+                //showVideoInformation(path);
             });
             addContextMenuItem(bottomSheet, '预览', () => {
                 bottomSheet.remove();
