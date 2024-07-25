@@ -190,7 +190,7 @@ public partial class MainForm : Form
 			//Video.HandleKeyDown(textBox1,args);
 		};
 		using (var eventHookFactory = new EventHook.EventHookFactory()) {
-			
+			var x= Keys.M;
 			var keyboardWatcher = eventHookFactory.GetKeyboardWatcher();
 			keyboardWatcher.Start();
 			keyboardWatcher.OnKeyInput += (s, e) => {
@@ -198,9 +198,15 @@ public partial class MainForm : Form
 //				                  	textBox1.Text=e.KeyData.Keyname;
 //					}));
 				if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F8") {
-					try {
-						Images.Ocr(this, textBox1, 0, 120, 120);
-					
+//					try {
+//						Images.Ocr(this, textBox1, 0, 120, 120);
+//					
+//					} catch {
+//						
+//					}
+try {
+						Images.Ocr(this, textBox1, 110);
+						
 					} catch {
 						
 					}
@@ -211,21 +217,14 @@ public partial class MainForm : Form
 					} catch {
 						
 					}
-				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F8") {
-					Android.ColorPicker();
 				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F10") {
-					var bitmap =	Screenshot.GetScreenshot();
-					var i = 0;
-					var f = Screenshot.GetDesktopPath(i.ToString().PadLeft(3, '0') + ".png");
-					while (File.Exists(f)) {
-						i++;
-						f = Screenshot.GetDesktopPath(i.ToString().PadLeft(3, '0') + ".png");
+					try {
+						Images.Ocr(this, textBox1,120);
+						
+					} catch {
+						
 					}
-					bitmap.Save(f, System.Drawing.Imaging.ImageFormat.Png);
-					
-					Invoke(new Action(() => {
-						textBox1.Text += "1";
-					}));
+
 				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && KeyboardShare.isKeyPressed(18)) {
 
 					if (e.KeyData.Keyname == "D") {
@@ -279,10 +278,10 @@ public partial class MainForm : Form
 					
 					
 				if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "Q") {
-					Invoke(new Action(() => {
-						Android.ColorPicker(textBox1);
-					}));
-					//Utils.FormatNumber(false);
+					//Invoke(new Action(() => {
+						//Android.ColorPicker(textBox1);
+					//}));
+					Utils.FormatNumber(false);
 				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "W") {
 					Utils.FormatNumber(true);
 				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "S") {
