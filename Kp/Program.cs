@@ -148,6 +148,7 @@ namespace Kb
 			NUMPAD8 = 0x68,
 			NUMPAD9 = 0x69,
 			PageUp = 33,
+			PageDown=34,
 			A = 65,
 			B = 66,
 			C = 67,
@@ -196,12 +197,12 @@ namespace Kb
 			//RegisterHotKey(IntPtr.Zero, 68, 0, 68);//D
 			//RegisterHotKey(IntPtr.Zero, 70, 0, 70);//F
 			RegisterHotKey(IntPtr.Zero, 0x51, 0, 0x51);//Q
-			RegisterHotKey(IntPtr.Zero, 220, 0, 220);//P
+			RegisterHotKey(IntPtr.Zero, 34, 0, 34);//P
 			RegisterHotKey(IntPtr.Zero, 33, 0, 33);// PageUp
 			// document.addEventListener('keydown',evt=>console.log(evt));
 			
-			//RegisterHotKey(IntPtr.Zero, 65, 0, 65);//A
-			//RegisterHotKey(IntPtr.Zero, 0x53, 0, 0x53);//S
+			RegisterHotKey(IntPtr.Zero, 65, 0, 65);//A
+			RegisterHotKey(IntPtr.Zero, 0x53, 0, 0x53);//S
 			
 			MSG msg;
 			int ret;
@@ -211,18 +212,18 @@ namespace Kb
 					
 					if (id == 0x51) { // Q
 						//BlenderGeometryNodes();
-						//PhotoshoBrush();
+						PhotoshoBrush();
 						/*
 						BlenderDuplicate();
 					*/
 						//BlenderDuplicateZ();
-						ColorPicker();
-					} else if (id == 22) {//P
+						//ColorPicker();
+					} else if (id == 34) {//P
 						TakeScreenShot();
 					} else if (id == 65) {//a
-						BlenderMoveXY();
+						//BlenderMoveXY();
 						
-						//PhotoshopBrushDecrease();
+						PhotoshopBrushDecrease();
 					} else if (id == 0x53) {
 						PhotoshopBrushIncrement();
 					} else if (id == 68) {
@@ -316,16 +317,16 @@ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
 		}
 		static void PhotoshopBrushDecrease()
 		{
-			keybd_event(0x42, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
-			keybd_event(0x42, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+			//keybd_event(0x42, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+			//keybd_event(0x42, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
 			keybd_event(219, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
 			keybd_event(219, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
 		}
 		
 		static void PhotoshopBrushIncrement()
 		{
-			keybd_event(0x42, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
-			keybd_event(0x42, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+			//keybd_event(0x42, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+			//keybd_event(0x42, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
 			keybd_event((byte)VK.OemCloseBrackets, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
 			keybd_event((byte)VK.OemCloseBrackets, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
 		}

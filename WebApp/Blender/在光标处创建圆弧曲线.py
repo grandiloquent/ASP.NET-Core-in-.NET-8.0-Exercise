@@ -3,7 +3,7 @@ curve = bpy.context.active_object
 bez_points = curve.data.splines[0].bezier_points
 
 f = 0.5521252155303955/2
-r = 2.75263  
+r = 1.24222 /2
 z = 1.47149 
 l = f*r*2
 
