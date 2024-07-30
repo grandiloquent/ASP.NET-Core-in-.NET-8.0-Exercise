@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <textarea style="width: 100%;min-height: 300px; resize: none;font-size: 14px;">
+
+    </textarea>
+    <script type="module">
+        import init, { format } from "./clang-format.js";
+
+        await init();
+
+
+
+        // JSON representation of Clang-Format Style Options
+        const config = JSON.stringify({
+            BasedOnStyle: "Chromium",
+            IndentWidth: 4,
+            ColumnLimit: 80,
+        });
+        const textarea = document.querySelector('textarea');
+        textarea.addEventListener('keydown', evt => {
+            console.log(evt);
+            if (evt.key === 'F1') {
+                evt.preventDefault();
+                const source = textarea.value;
+                const formatted = format(
+                    source,
+                    "main.cc",
+                    config,
+                );
+                textarea.value = formatted;
+            }
+        })
+
+
+    </script>
+</body>
+
+</html>
