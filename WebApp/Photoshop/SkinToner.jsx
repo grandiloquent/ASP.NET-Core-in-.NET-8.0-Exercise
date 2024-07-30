@@ -3,7 +3,6 @@
 //
 
 /* jshint ignore: start */
-#target photoshop
 app.bringToFront();
 /* jshint ignore: end */
 
