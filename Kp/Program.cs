@@ -212,12 +212,13 @@ namespace Kb
 					
 					if (id == 0x51) { // Q
 						//BlenderGeometryNodes();
-						PhotoshoBrush();
+						//PhotoshoBrush();
 						/*
 						BlenderDuplicate();
 					*/
 						//BlenderDuplicateZ();
 						//ColorPicker();
+						ShaderToy1();
 					} else if (id == 34) {//P
 						TakeScreenShot();
 					} else if (id == 65) {//a
@@ -522,6 +523,22 @@ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
 			ClipboardShare.SetText(string.Format("{0}{1}{2}", r_output, g_output, b_output));
 			//ClipboardShare.SetText(string.Format("{0}{1}{2}",color.R.ToString("X2"),color.G.ToString("X2"),color.B.ToString("X2")));
 						
+		}
+		
+		
+		public static void ShaderToy1(){
+			var n=Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location),"003.html");
+			
+			var str=File.ReadAllText(n);
+			var s=ClipboardShare.GetText();
+			var dir=@"C:\Users\Administrator\Desktop\视频\Net\WebApp\ShaderToy";
+			var d=Directory.GetFiles(dir,"*.html")
+				.Select(x=>{
+				        	var m=Regex.Match(Path.GetFileName(x),"[0-9]+");
+				        	return m.Success?int.Parse(m.Value):0;
+				        }).Max()+1;
+			var dd=Path.Combine(dir,d.ToString().PadLeft(3,'0')+".html");
+			File.WriteAllText(dd,Regex.Replace(str,"\\{\\{[0-9]+}}",s));
 		}
 	}
 	public static    class ClipboardShare

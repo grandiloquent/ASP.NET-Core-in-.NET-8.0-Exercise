@@ -27,14 +27,11 @@
     <script id="ba" type="x-shader/x-fragment">precision highp float;
 precision highp sampler3D;
 uniform vec3      iResolution;  
-uniform vec4 iDate;
-uniform float     iTime;      
-uniform vec4      iMouse;  
+uniform float     iTime;    
 uniform sampler3D iChannel0;
-uniform sampler2D iChannel1;
-uniform int iFrame;
 uniform vec3 iChannelResolution[1];
 
+// https://www.shadertoy.com/view/4f2yzR
 
 // ==================================
 // Common
@@ -202,39 +199,14 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     <script id="fs" type="x-shader/x-fragment">precision highp float;
 precision highp sampler3D;
 uniform vec3      iResolution;  
-uniform vec4 iDate;
-uniform float     iTime;      
-uniform vec4      iMouse;  
 uniform sampler2D iChannel0;
-uniform sampler2D iChannel1;
-uniform sampler2D iChannel2;
-uniform sampler2D iChannel3;
-uniform int iFrame;
-uniform vec3 iChannelResolution[1];
-    
 
-// ==================================
-// Common
-// ==================================
 #define RESOLUTION min(vec2(1280, 720), iResolution.xy)
 
-// ==================================
-// ==================================
-
-
-
-// ==================================
-// Image
-// ==================================
 void mainImage( out vec4 fragColor, in vec2 fragCoord )
 {
     fragColor = texture(iChannel0, fragCoord*RESOLUTION/(iResolution.xy*iResolution.xy));
 }
-
-// ==================================
-// ==================================
-
-
     void main() {
       mainImage(gl_FragColor, gl_FragCoord.xy);
     }
@@ -322,8 +294,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
             noise3DTexture.wrapS = THREE.RepeatWrapping;
             noise3DTexture.wrapT = THREE.RepeatWrapping;
             noise3DTexture.wrapR = THREE.RepeatWrapping;
-            noise3DTexture.needsUpdate = true;
-            console.log(THREE.RepeatWrapping,THREE.LinearFilter)
+            
             noise3DTexture.unpackAlignment = 1;
             noise3DTexture.needsUpdate = true;
             iChannel.value = noise3DTexture;
@@ -334,7 +305,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
             constructor() {
                 this.width = 512;
                 this.height = 288;
-                this.renderer = new THREE.WebGLRenderer();
+                this.renderer = new THREE.WebGLRenderer({
+                    alpha:true
+                });
                 this.loader = new THREE.TextureLoader();
                 this.clock = new THREE.Clock();
                 this.mousePosition = new THREE.Vector4();
@@ -364,6 +337,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
             }
             async start() {
                 const resolution = new THREE.Vector3(this.width, this.height, window.devicePixelRatio);
+               
                 this.bufferA = new BufferShader(getShaderSource('ba'), {
                     iTime: {
                         value: 0
