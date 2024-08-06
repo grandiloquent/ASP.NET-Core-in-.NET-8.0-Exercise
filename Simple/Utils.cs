@@ -467,6 +467,11 @@ bpy.context.object.rotation_euler[0] = 1.5708", Translate());
 		new []{ "Materials", "Scenes", "Shaders","Textures","Scripts","Models"}.ToList().ForEach(x => {
 			(@"C:\Users\Administrator\Desktop\Projects\Shaders\Assets\Chapter 4\" + x).CreateDirectoryIfNotExists();
 		});
+		var dir=".Folder".GetDesktopPath();
+		dir.CreateDirectoryIfNotExists();
+		for (int i = 1; i < 100; i++) {
+			Directory.CreateDirectory(Path.Combine(dir,i.ToString().PadLeft(3,'0')));
+		}
 		
 	}
 }

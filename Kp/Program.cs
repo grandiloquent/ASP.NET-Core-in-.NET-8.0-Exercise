@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
@@ -18,6 +19,8 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Kb
 {
@@ -148,7 +151,7 @@ namespace Kb
 			NUMPAD8 = 0x68,
 			NUMPAD9 = 0x69,
 			PageUp = 33,
-			PageDown=34,
+			PageDown = 34,
 			A = 65,
 			B = 66,
 			C = 67,
@@ -218,7 +221,8 @@ namespace Kb
 					*/
 						//BlenderDuplicateZ();
 						//ColorPicker();
-						ShaderToy1();
+						//ShaderToy1();
+						Translate();
 					} else if (id == 34) {//P
 						TakeScreenShot();
 					} else if (id == 65) {//a
@@ -439,9 +443,9 @@ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
 			int red = sampleColor.R;
 			int green = sampleColor.G;
 			int blue = sampleColor.B;
-			double r_output =Math.Pow(red/255.0, 2.2);
-			double g_output = Math.Pow(green/255.0, 2.2);
-			double b_output =Math.Pow(blue/255.0, 2.2);
+			double r_output = Math.Pow(red / 255.0, 2.2);
+			double g_output = Math.Pow(green / 255.0, 2.2);
+			double b_output = Math.Pow(blue / 255.0, 2.2);
 			ClipboardShare.SetText(string.Format("{0}\r\n{1}\r\n{2}", r_output, g_output, b_output));
 		}
 		public static Color ConvertHexToColor(string hex)
@@ -526,19 +530,59 @@ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
 		}
 		
 		
-		public static void ShaderToy1(){
-			var n=Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location),"003.html");
+		public static void ShaderToy1()
+		{
+			var n = Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location), "003.html");
 			
-			var str=File.ReadAllText(n);
-			var s=ClipboardShare.GetText();
-			var dir=@"C:\Users\Administrator\Desktop\视频\Net\WebApp\ShaderToy";
-			var d=Directory.GetFiles(dir,"*.html")
-				.Select(x=>{
-				        	var m=Regex.Match(Path.GetFileName(x),"[0-9]+");
-				        	return m.Success?int.Parse(m.Value):0;
-				        }).Max()+1;
-			var dd=Path.Combine(dir,d.ToString().PadLeft(3,'0')+".html");
-			File.WriteAllText(dd,Regex.Replace(str,"\\{\\{[0-9]+}}",s));
+			var str = File.ReadAllText(n);
+			var s = ClipboardShare.GetText();
+			var dir = @"C:\Users\Administrator\Desktop\视频\Net\WebApp\ShaderToy";
+			var d = Directory.GetFiles(dir, "*.html")
+				.Select(x => {
+				var m = Regex.Match(Path.GetFileName(x), "[0-9]+");
+				return m.Success ? int.Parse(m.Value) : 0;
+			}).Max() + 1;
+			var dd = Path.Combine(dir, d.ToString().PadLeft(3, '0') + ".html");
+			File.WriteAllText(dd, Regex.Replace(str, "\\{\\{[0-9]+}}", s));
+		}
+		public static void Translate(string s = "")
+		{
+			//string q
+			// http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=%s&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=
+			// en
+			// http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=
+			var l = "en";
+			s = s == "" ? ClipboardShare.GetText() : s;
+		
+			var isChinese = Regex.IsMatch(s, "[\u4e00-\u9fa5]");
+			if (!isChinese) {
+				l = "zh";
+			}
+			var req = WebRequest.Create(
+				          "http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=" + l + "&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=" +
+				          s);
+			//req.Proxy = new WebProxy("127.0.0.1", 10809);
+			var res = req.GetResponse();
+			using (var reader = new StreamReader(res.GetResponseStream())) {
+				//var obj =
+				//  (JsonElement)JsonSerializer.Deserialize<Dictionary<String, dynamic>>(reader.ReadToEnd())["sentences"];
+				var obj = JsonConvert.DeserializeObject<JObject>(reader.ReadToEnd())["sentences"].ToObject<JArray>();
+				var sb = new StringBuilder();
+				for (int i = 0; i < obj.Count; i++) {
+					sb.Append(obj[i]["trans"]).Append(' ');
+				}
+				// Regex.Replace(sb.ToString().Trim(), "[ ](?=[a-zA-Z0-9])", m => "_").ToLower();
+				// std::string {0}(){{\n}}
+				//return string.Format("{0}", Regex.Replace(sb.ToString().Trim(), " ([a-zA-Z0-9])", m => m.Groups[1].Value.ToUpper()).Decapitalize());
+				//return  sb.ToString().Trim();
+				/*
+			Clipboard.SetText( sb.ToString().Trim();
+			 .Trim().Camel().Capitalize())
+			 */
+				//return isChinese ? sb.ToString() : sb.ToString();
+				ClipboardShare.SetText(sb.ToString().Trim().Camel().Capitalize());
+			}
+			//Clipboard.SetText(string.Format(@"{0}", TransAPI.Translate(Clipboard.GetText())));
 		}
 	}
 	public static    class ClipboardShare
@@ -686,6 +730,26 @@ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
 		{
 			throw new Win32Exception(Marshal.GetLastWin32Error());
 		}
+		public static string Camel(this string value)
+		{
+			return
+            Regex.Replace(
+				Regex.Replace(value, "[\\-_ ]+([a-zA-Z])", m => m.Groups[1].Value.ToUpper()),
+				"\\s+",
+				""
+			);
+		}
+		public static String Capitalize(this String s)
+		{
+			if (string.IsNullOrEmpty(s))
+				return s;
+			if (s.Length == 1)
+				return s.ToUpper();
+			if (char.IsUpper(s[0]))
+				return s;
+			return char.ToUpper(s[0]) + s.Substring(1);
+		}
+
 	}
 	public static  class Screenshot
 	{

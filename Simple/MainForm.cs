@@ -104,7 +104,7 @@ public partial class MainForm : Form
 	}
 	public MainForm()
 	{
-		Utils.CreateDirectories();
+		//Utils.CreateDirectories();
 		
 //		RegisterHotKey(this.Handle, 81, 0, 81);
 //		RegisterHotKey(this.Handle, 87, 0, 87);
@@ -139,7 +139,7 @@ public partial class MainForm : Form
 		
 		//File.WriteAllText("1.txt".GetDesktopPath(), JsonConvert.SerializeObject(Directory.GetFiles(@"C:\Users\Administrator\Desktop\WeiXin").Select(x => Path.GetFileName(x))));
 		@"C:\Users\Administrator\Desktop\视频\Net\WebApp\Photoshop".CreateDirectoryIfNotExists();
-		@"C:\Users\Administrator\Desktop\视频\Net\WebApp\Blender\将光标移动到X轴最小的点.py".CreateFileIfNotExists();
+		@"D:\Documents\Repositories\SVG\app\src\main\jni\server_utils.cpp".CreateFileIfNotExists();
 //		var dir = @"C:\Users\Administrator\Desktop\视频\Net\Simple";
 //		dir.CreateDirectoryIfNotExists();
 //		var fn = Path.Combine(dir, "Images.cs");
