@@ -28,7 +28,7 @@ public class Utils
 			} else
 				ss = "." + Regex.Replace(ss, "^[0.-]", "").Trim('.');
 			
-			ClipboardShare.SetText((float.Parse(ss) ).ToString());
+			ClipboardShare.SetText((float.Parse(ss)).ToString());
 		} else {
 		
 			if (Regex.IsMatch(ss, "^[\\d.-]+$")) {
@@ -462,16 +462,18 @@ bpy.context.object.rotation_euler[0] = 1.5708", Translate());
 	[DllImport("user32.dll", CharSet = CharSet.Auto)]
 	public static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, IntPtr lParam);
 	
-	public static void CreateDirectories()
+	public static void CreateDirectories(string dir, string[] names)
 	{
-		new []{ "Materials", "Scenes", "Shaders","Textures","Scripts","Models"}.ToList().ForEach(x => {
-			(@"C:\Users\Administrator\Desktop\Projects\Shaders\Assets\Chapter 4\" + x).CreateDirectoryIfNotExists();
-		});
-		var dir=".Folder".GetDesktopPath();
+		//new []{ "Materials", "Scenes", "Shaders","Textures","Scripts","Models"}
 		dir.CreateDirectoryIfNotExists();
-		for (int i = 1; i < 100; i++) {
-			Directory.CreateDirectory(Path.Combine(dir,i.ToString().PadLeft(3,'0')));
-		}
+		names.ToList().ForEach(x => {
+		                       	(Path.Combine(dir, x)).CreateFileIfNotExists();//.CreateDirectoryIfNotExists();
+		});
+//		var dir=".Folder".GetDesktopPath();
+//		dir.CreateDirectoryIfNotExists();
+//		for (int i = 1; i < 100; i++) {
+//			Directory.CreateDirectory(Path.Combine(dir,i.ToString().PadLeft(3,'0')));
+//		}
 		
 	}
 }

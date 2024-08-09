@@ -199,21 +199,21 @@ namespace Kb
 			
 			//RegisterHotKey(IntPtr.Zero, 68, 0, 68);//D
 			//RegisterHotKey(IntPtr.Zero, 70, 0, 70);//F
-			RegisterHotKey(IntPtr.Zero, 0x51, 0, 0x51);//Q
-			RegisterHotKey(IntPtr.Zero, 34, 0, 34);//P
-			RegisterHotKey(IntPtr.Zero, 33, 0, 33);// PageUp
+//			RegisterHotKey(IntPtr.Zero, 0x51, 0, 0x51);//Q
+//			RegisterHotKey(IntPtr.Zero, 34, 0, 34);//P
+//			RegisterHotKey(IntPtr.Zero, 33, 0, 33);// PageUp
 			// document.addEventListener('keydown',evt=>console.log(evt));
 			
-			RegisterHotKey(IntPtr.Zero, 65, 0, 65);//A
-			RegisterHotKey(IntPtr.Zero, 0x53, 0, 0x53);//S
-			
+//			RegisterHotKey(IntPtr.Zero, 65, 0, 65);//A
+//			RegisterHotKey(IntPtr.Zero, 0x53, 0, 0x53);//S
+			RegisterHotKey(IntPtr.Zero, 49, 0, 49);
 			MSG msg;
 			int ret;
 			while ((ret = GetMessage(out msg, IntPtr.Zero, 0, 0)) != 0) {
 				if (ret == 1 && msg.message == 0x0312) {
 					ushort id = (ushort)msg.wParam;
 					
-					if (id == 0x51) { // Q
+					if (id == 49) { // Q
 						//BlenderGeometryNodes();
 						//PhotoshoBrush();
 						/*
@@ -222,7 +222,7 @@ namespace Kb
 						//BlenderDuplicateZ();
 						//ColorPicker();
 						//ShaderToy1();
-						Translate();
+						Translate("",true);
 					} else if (id == 34) {//P
 						TakeScreenShot();
 					} else if (id == 65) {//a
@@ -545,18 +545,22 @@ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
 			var dd = Path.Combine(dir, d.ToString().PadLeft(3, '0') + ".html");
 			File.WriteAllText(dd, Regex.Replace(str, "\\{\\{[0-9]+}}", s));
 		}
-		public static void Translate(string s = "")
+		public static void Translate(string s = "", bool zh = false)
 		{
 			//string q
 			// http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=%s&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=
 			// en
 			// http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=
-			var l = "en";
+			var l = zh ? "zh" : "en";
 			s = s == "" ? ClipboardShare.GetText() : s;
 		
-			var isChinese = Regex.IsMatch(s, "[\u4e00-\u9fa5]");
-			if (!isChinese) {
-				l = "zh";
+//			var isChinese = Regex.IsMatch(s, "[\u4e00-\u9fa5]");
+//			if (!isChinese) {
+//				l = "zh";
+//			}
+			if (zh) {
+				s = Regex.Replace(s, "[\r\n]+", " ");
+				s = s.Replace("- ", "");
 			}
 			var req = WebRequest.Create(
 				          "http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=" + l + "&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=" +
@@ -580,7 +584,11 @@ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
 			 .Trim().Camel().Capitalize())
 			 */
 				//return isChinese ? sb.ToString() : sb.ToString();
-				ClipboardShare.SetText(sb.ToString().Trim().Camel().Capitalize());
+				if (zh)
+					ClipboardShare.SetText(sb.ToString());
+				else
+					ClipboardShare.SetText(sb.ToString().Trim().Camel().Capitalize());
+	
 			}
 			//Clipboard.SetText(string.Format(@"{0}", TransAPI.Translate(Clipboard.GetText())));
 		}

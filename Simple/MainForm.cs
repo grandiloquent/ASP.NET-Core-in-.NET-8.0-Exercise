@@ -104,7 +104,15 @@ public partial class MainForm : Form
 	}
 	public MainForm()
 	{
-		//Utils.CreateDirectories();
+		Utils.CreateDirectories(@"C:\Users\Administrator\Desktop\视频\Net\TextRecognition\Shared",new string[]{
+		                        	"ClipboardShare.cs",
+		                        	"Screenshot.cs",
+		                        	"Win32.cs",
+		                        	"Shared.cs",
+		                        	"ImageUtils.cs",
+		                        	"Utils.cs"
+		                        
+		                        });
 		
 //		RegisterHotKey(this.Handle, 81, 0, 81);
 //		RegisterHotKey(this.Handle, 87, 0, 87);
@@ -139,7 +147,7 @@ public partial class MainForm : Form
 		
 		//File.WriteAllText("1.txt".GetDesktopPath(), JsonConvert.SerializeObject(Directory.GetFiles(@"C:\Users\Administrator\Desktop\WeiXin").Select(x => Path.GetFileName(x))));
 		@"C:\Users\Administrator\Desktop\视频\Net\WebApp\Photoshop".CreateDirectoryIfNotExists();
-		@"D:\Documents\Repositories\SVG\app\src\main\jni\server_utils.cpp".CreateFileIfNotExists();
+		@"D:\Documents\Repositories\app\app\src\main\assets\pdf_utils.js".CreateFileIfNotExists();
 //		var dir = @"C:\Users\Administrator\Desktop\视频\Net\Simple";
 //		dir.CreateDirectoryIfNotExists();
 //		var fn = Path.Combine(dir, "Images.cs");
