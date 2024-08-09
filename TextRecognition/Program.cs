@@ -49,3 +49,6 @@ while (KeyboardShare.GetMessage(out message, IntPtr.Zero, 0, 0) != 0)
     KeyboardShare.TranslateMessage(ref message);
     KeyboardShare.DispatchMessage(ref message);
 }
+/*
+ dotnet publish -r win-x64 --self-contained false -o C:\Users\Administrator\Desktop\YouTube -p:PublishSingleFile=true,AssemblyName=Knife
+ */
