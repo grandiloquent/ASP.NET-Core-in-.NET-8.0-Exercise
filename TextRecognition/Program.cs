@@ -41,7 +41,18 @@ kbh.KeyDown += async (s, k) =>
             }
         case Key.F8:
             {
-
+                if (_point1.X == 0)
+                {
+                    GetCursorPos(out _point1);
+                }
+                else
+                {
+                    GetCursorPos(out _point2);
+                    var value = ImageUtils.ScreenShoot(new Point(_point1.X, _point1.Y), new Point(_point2.X, _point2.Y));
+                    File.WriteAllBytes("",value);
+                    _point1 = new POINT();
+                    _point2 = new POINT();
+                }
                 break;
             }
         case Key.F7:
@@ -67,5 +78,5 @@ while (KeyboardShare.GetMessage(out message, IntPtr.Zero, 0, 0) != 0)
     KeyboardShare.DispatchMessage(ref message);
 }
 /*
- dotnet publish -r win-x64 --self-contained false -o C:\Users\Administrator\Desktop\YouTube -p:PublishSingleFile=true,AssemblyName=Knife
+ dotnet publish -r win-x64 --self-contained false -o C:\Users\Administrator\Desktop\.Folder\005 -p:PublishSingleFile=true,AssemblyName=TextRecognition
  */

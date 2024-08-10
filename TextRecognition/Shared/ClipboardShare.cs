@@ -1,7 +1,6 @@
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Text.RegularExpressions;
 
 public static class ClipboardShare
 {
@@ -177,24 +176,5 @@ public static class ClipboardShare
     {
         throw new Win32Exception(Marshal.GetLastWin32Error());
     }
-    public static string Camel(this string value)
-    {
-        return
-        Regex.Replace(
-            Regex.Replace(value, "[\\-_ ]+([a-zA-Z])", m => m.Groups[1].Value.ToUpper()),
-            "\\s+",
-            ""
-        );
-    }
-    public static String Capitalize(this String s)
-    {
-        if (string.IsNullOrEmpty(s))
-            return s;
-        if (s.Length == 1)
-            return s.ToUpper();
-        if (char.IsUpper(s[0]))
-            return s;
-        return char.ToUpper(s[0]) + s.Substring(1);
-    }
-
+   
 }
