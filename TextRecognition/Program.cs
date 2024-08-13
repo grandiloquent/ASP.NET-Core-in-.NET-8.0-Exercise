@@ -12,23 +12,12 @@ kbh.KeyDown += async (s, k) =>
     {
         case Key.F1:
             {
-                if (_point1.X == 0)
-                {
-                    GetCursorPos(out _point1);
-                }
-                else
-                {
-                    GetCursorPos(out _point2);
-                    var value = ImageUtils.Ocr(new Point(_point1.X, _point1.Y), new Point(_point2.X, _point2.Y));
-                    ClipboardShare.SetText(value);
-                    _point1 = new POINT();
-                    _point2 = new POINT();
-                }
+                Utils.ColorPicker();
                 break;
             }
         case Key.F2:
             {
-                Utils.Translate();
+
                 break;
             }
         case Key.F3:
@@ -37,6 +26,7 @@ kbh.KeyDown += async (s, k) =>
             }
         case Key.F4:
             {
+
                 break;
             }
         case Key.F8:
@@ -49,7 +39,7 @@ kbh.KeyDown += async (s, k) =>
                 {
                     GetCursorPos(out _point2);
                     var value = ImageUtils.ScreenShoot(new Point(_point1.X, _point1.Y), new Point(_point2.X, _point2.Y));
-                    File.WriteAllBytes("",value);
+                    File.WriteAllBytes("".GetDesktopPath().GetUniqueFileName(".png"), value);
                     _point1 = new POINT();
                     _point2 = new POINT();
                 }
@@ -61,10 +51,23 @@ kbh.KeyDown += async (s, k) =>
             }
         case Key.F10:
             {
+                ClipboardShare.SetText(Utils.Translate());
                 break;
             }
         case Key.F9:
             {
+                if (_point1.X == 0)
+                {
+                    GetCursorPos(out _point1);
+                }
+                else
+                {
+                    GetCursorPos(out _point2);
+                    var value = ImageUtils.Ocr(new Point(_point1.X, _point1.Y), new Point(_point2.X, _point2.Y));
+                    ClipboardShare.SetText(value);
+                    _point1 = new POINT();
+                    _point2 = new POINT();
+                }
                 break;
             }
     }

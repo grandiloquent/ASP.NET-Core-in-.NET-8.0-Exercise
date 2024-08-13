@@ -205,6 +205,7 @@ public class Utils
 		var isChinese = Regex.IsMatch(s, "[\u4e00-\u9fa5]");
 		if (!isChinese) {
 			l = "zh";
+			s=Regex.Replace(Regex.Replace(s,"[\r\n]+"," "),"- ","");
 		}
 		var req = WebRequest.Create(
 			          "http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=" + l + "&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=" +

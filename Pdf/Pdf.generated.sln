@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TextRecognition", "TextRecognition.csproj", "{D9D57ACD-67CF-4F60-A18E-0C17D121053E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pdf", "Pdf.csproj", "{C81A7709-32B8-4D68-9999-7BA93CE52557}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D9D57ACD-67CF-4F60-A18E-0C17D121053E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D9D57ACD-67CF-4F60-A18E-0C17D121053E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D9D57ACD-67CF-4F60-A18E-0C17D121053E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D9D57ACD-67CF-4F60-A18E-0C17D121053E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C81A7709-32B8-4D68-9999-7BA93CE52557}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C81A7709-32B8-4D68-9999-7BA93CE52557}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C81A7709-32B8-4D68-9999-7BA93CE52557}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C81A7709-32B8-4D68-9999-7BA93CE52557}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {5EF4B856-E7F1-4043-B05D-BE1CD655149B}
+		SolutionGuid = {E3336F5E-AE75-4C49-80E9-1CE7B7E5B73F}
 	EndGlobalSection
 EndGlobal

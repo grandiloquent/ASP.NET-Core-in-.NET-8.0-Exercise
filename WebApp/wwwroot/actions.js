@@ -234,7 +234,7 @@ function onMenu(evt) {
     addContextMenuItem(bottomSheet, '大小', () => {
         bottomSheet.remove();
         const url = new URL(window.location);
-        url.searchParams.set('size', true);
+        url.searchParams.set('isSize', true);
         window.location = url;
     });
     // createPdfFromImages
