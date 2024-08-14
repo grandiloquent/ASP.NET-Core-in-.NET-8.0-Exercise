@@ -26,11 +26,6 @@ kbh.KeyDown += async (s, k) =>
             }
         case Key.F4:
             {
-
-                break;
-            }
-        case Key.F8:
-            {
                 if (_point1.X == 0)
                 {
                     GetCursorPos(out _point1);
@@ -43,6 +38,11 @@ kbh.KeyDown += async (s, k) =>
                     _point1 = new POINT();
                     _point2 = new POINT();
                 }
+                break;
+            }
+        case Key.F8:
+            {
+
                 break;
             }
         case Key.F7:

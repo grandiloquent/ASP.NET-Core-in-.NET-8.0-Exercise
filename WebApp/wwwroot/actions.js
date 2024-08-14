@@ -137,7 +137,7 @@ function selectSameType(path, isDirectory) {
 
 function setDocumentTitle(path) {
     if (!path) return;
-    document.title = substringAfterLast(decodeURIComponent(path), "/")
+    document.title = substringAfterLast(decodeURIComponent(path), "\\")
 }
 
 function showContextMenu(evt) {
