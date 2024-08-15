@@ -257,7 +257,7 @@ async function onShowFavorites() {
         "C:\\Users\\Administrator\\Desktop\\视频",
         "C:\\Users\\Administrator\\Desktop\\视频\\文件",
         "D:\\文档",
-        "D:\\",
+        "D:\\文档\\书籍\\.PDF",
     ].forEach(p => {
         addFavoriteItem(bottomSheet, p);
     })

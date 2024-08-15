@@ -219,10 +219,10 @@ namespace Kb
 						/*
 						BlenderDuplicate();
 					*/
-						//BlenderDuplicateZ();
+					BlenderDuplicate();
 						//ColorPicker();
 						//ShaderToy1();
-						Translate("",true);
+						//Translate("",true);
 					} else if (id == 34) {//P
 						TakeScreenShot();
 					} else if (id == 65) {//a
@@ -271,8 +271,8 @@ namespace Kb
 			keybd_event((int)VK.D, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
 			keybd_event((int)VK.D, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
 			keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release 
-			keybd_event((int)VK.Y, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
-			keybd_event((int)VK.Y, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+			keybd_event((int)VK.R, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+			keybd_event((int)VK.R, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
 			keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press  
 			keybd_event((int)VK.V, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
 			keybd_event((int)VK.V, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
