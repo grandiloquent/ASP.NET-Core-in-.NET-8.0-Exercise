@@ -24,7 +24,7 @@ kbh.KeyDown += async (s, k) =>
             {
                 break;
             }
-        case Key.F4:
+        case Key.F10:
             {
                 if (_point1.X == 0)
                 {
@@ -42,16 +42,27 @@ kbh.KeyDown += async (s, k) =>
             }
         case Key.F8:
             {
-
+                ClipboardShare.SetText(Utils.Translate());
                 break;
             }
         case Key.F7:
             {
                 break;
             }
-        case Key.F10:
+        case Key.F12:
             {
-                ClipboardShare.SetText(Utils.Translate());
+ if (_point1.X == 0)
+                {
+                    GetCursorPos(out _point1);
+                }
+                else
+                {
+                    GetCursorPos(out _point2);
+                    var value = ImageUtils.Ocr(new Point(_point1.X, _point1.Y), new Point(_point2.X, _point2.Y));
+                    ClipboardShare.SetText(value);
+                    _point1 = new POINT();
+                    _point2 = new POINT();
+                }
                 break;
             }
         case Key.F9:
@@ -63,7 +74,7 @@ kbh.KeyDown += async (s, k) =>
                 else
                 {
                     GetCursorPos(out _point2);
-                    var value = ImageUtils.Ocr(new Point(_point1.X, _point1.Y), new Point(_point2.X, _point2.Y));
+                    var value = Utils.Ocr(new Point(_point1.X, _point1.Y), new Point(_point2.X, _point2.Y));
                     ClipboardShare.SetText(value);
                     _point1 = new POINT();
                     _point2 = new POINT();

@@ -4,6 +4,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Tesseract;
 using static Screenshot;
 
 public class Utils
@@ -83,5 +84,30 @@ public class Utils
         double g_output = Math.Pow(green / 255.0, 2.2);
         double b_output = Math.Pow(blue / 255.0, 2.2);
         ClipboardShare.SetText(string.Format("{0}\r\n{1}\r\n{2}", r_output, g_output, b_output));
+    }
+    static TesseractEngine _engine;
+    public static string Ocr(Point point1, Point point2)
+    {
+        var buf = ImageUtils.ScreenShoot(point1, point2);
+        if (buf == null)
+            return null;
+        if (_engine == null)
+            _engine = new TesseractEngine(@"C:\Users\Administrator\Desktop\视频\Net\TextRecognition\tessdata_best".GetEntryPath(), "eng", EngineMode.Default);
+       
+        using (var img = Pix.LoadFromMemory(buf))
+        {
+            using (var page = _engine.Process(img))
+            {
+                var text = page.GetText();
+                //						Console.WriteLine("Mean confidence: {0}", page.GetMeanConfidence());
+                //
+                //						Console.WriteLine("Text (GetText): \r\n{0}", text);
+                //						Console.WriteLine("Text (iterator):");
+                //						
+
+
+                return text;
+            }
+        }
     }
 }
