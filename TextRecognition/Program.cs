@@ -22,6 +22,8 @@ kbh.KeyDown += async (s, k) =>
             }
         case Key.F3:
             {
+                Utils.MakeFile();
+
                 break;
             }
         case Key.F10:
@@ -51,7 +53,7 @@ kbh.KeyDown += async (s, k) =>
             }
         case Key.F12:
             {
- if (_point1.X == 0)
+                if (_point1.X == 0)
                 {
                     GetCursorPos(out _point1);
                 }

@@ -49,7 +49,7 @@ public class Utils
 			 sb.ToString().Trim();
 			 .Trim().Camel().Capitalize()
 			 */
-            return isChinese ? sb.ToString() : sb.ToString();
+            return isChinese ? sb.ToString().Trim().Camel().Capitalize() : sb.ToString();
         }
         //Clipboard.SetText(string.Format(@"{0}", TransAPI.Translate(Clipboard.GetText())));
     }
@@ -93,7 +93,7 @@ public class Utils
             return null;
         if (_engine == null)
             _engine = new TesseractEngine(@"C:\Users\Administrator\Desktop\视频\Net\TextRecognition\tessdata_best".GetEntryPath(), "eng", EngineMode.Default);
-       
+
         using (var img = Pix.LoadFromMemory(buf))
         {
             using (var page = _engine.Process(img))
@@ -109,5 +109,16 @@ public class Utils
                 return text;
             }
         }
+    }
+
+    public static void MakeFile()
+    {
+        var dir = @"D:\Documents\Repositories\AutoClicker\app\src\main\java\psycho\euphoria\autoclicker";
+        var filename = Path.Combine(dir, "ClickUtils.java");
+        if (!File.Exists(filename))
+        {
+            File.Create(filename).Dispose();
+        }
+
     }
 }
