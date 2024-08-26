@@ -417,6 +417,8 @@ public static class Android
 				sb.AppendLine(Regex.Replace(second, "\\$\\d+", (i + 1).ToString()));
 			}
 			textBox.Text = first + "\r\n" + sb.ToString();
+		}else if(first.StartsWith(".")){
+			first.TrimStart('.').CreateFileIfNotExists();
 		} else {
 			var array = first.Split(' ');
 			if (array.Length > 1)
