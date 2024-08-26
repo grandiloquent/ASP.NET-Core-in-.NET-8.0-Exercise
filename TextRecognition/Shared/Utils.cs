@@ -49,7 +49,7 @@ public class Utils
 			 sb.ToString().Trim();
 			 .Trim().Camel().Capitalize()
 			 */
-            return isChinese ? sb.ToString().Trim().Camel().Capitalize() : sb.ToString();
+            return isChinese ? $"public static String {sb.ToString().Trim().Camel().DeCapitalize()}(){{\n\n return \"\";\n\n}}" : sb.ToString();
         }
         //Clipboard.SetText(string.Format(@"{0}", TransAPI.Translate(Clipboard.GetText())));
     }
@@ -114,7 +114,7 @@ public class Utils
     public static void MakeFile()
     {
         var dir = @"D:\Documents\Repositories\AutoClicker\app\src\main\java\psycho\euphoria\autoclicker";
-        var filename = Path.Combine(dir, "ClickUtils.java");
+        var filename = Path.Combine(dir, "Utils.java");
         if (!File.Exists(filename))
         {
             File.Create(filename).Dispose();

@@ -4,6 +4,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 public static class Android
@@ -208,7 +209,8 @@ public static class Android
 				}
 				ClipboardShare.SetText(textBox.Text.Substring(start, end - start + 1).Trim());
 			} else if (arg.KeyCode == Keys.F) {
-				var s = Clipboard.GetText().Trim();
+				ReplaceString(textBox);
+				/*var s = Clipboard.GetText().Trim();
 				var s1 = string.Format(@"class _quick_{0}(Operator):
     """""" Quick {0} """"""
     bl_idname = ""quick.{0}""
@@ -227,53 +229,53 @@ public static class Android
 		
     _quick_{0},", s, s.Capitalize());
 				Clipboard.SetText(s1);
-			} else if (arg.KeyCode == Keys.G) {
-			
-				textBox.SelectedText = Utils.Translate(ClipboardShare.GetText());
-			} else if (arg.KeyCode == Keys.L) {
+			}  else if (arg.KeyCode == Keys.L) {
 				FormatBlenderScript(textBox, v => {
 					var o1 = 1 - v[0];
 					var o2 = (1 - o1 / 2) / 2;
 					var o3 = o2 - o1 / 2;
 					return (o3 / o2 * -1).ToString();
 				});
-			}
-		} 
-		return;
-		if (arg.Alt) {
-			if (arg.KeyCode == Keys.Q) {
-				ClipboardShare.SetText("bpy.ops.object.align(bb_quality=True, align_mode='OPT_1', relative_to='OPT_2', align_axis={ 'X'})");
-			} else if (arg.KeyCode == Keys.W) {
-				ClipboardShare.SetText("bpy.ops.object.align(bb_quality=True, align_mode='OPT_2', relative_to='OPT_2', align_axis={ 'X'})");
-			} else if (arg.KeyCode == Keys.E) {
-				ClipboardShare.SetText("bpy.ops.object.align(bb_quality=True, align_mode='OPT_3', relative_to='OPT_2', align_axis={ 'X'})");
-			} else if (arg.KeyCode == Keys.A) {
-				ClipboardShare.SetText("bpy.ops.object.align(bb_quality=True, align_mode='OPT_1', relative_to='OPT_2', align_axis={ 'Y'})");
-			} else if (arg.KeyCode == Keys.S) {
-				ClipboardShare.SetText("bpy.ops.object.align(bb_quality=True, align_mode='OPT_2', relative_to='OPT_2', align_axis={ 'Y'})");
-			} else if (arg.KeyCode == Keys.D) {
-				ClipboardShare.SetText("bpy.ops.object.align(bb_quality=True, align_mode='OPT_3', relative_to='OPT_2', align_axis={ 'Y'})");
-			} else if (arg.KeyCode == Keys.Z) {
-				ClipboardShare.SetText("bpy.ops.object.align(bb_quality=True, align_mode='OPT_1', relative_to='OPT_2', align_axis={ 'Z'})");
-			} else if (arg.KeyCode == Keys.X) {
-				ClipboardShare.SetText("bpy.ops.object.align(bb_quality=True, align_mode='OPT_2', relative_to='OPT_2', align_axis={ 'Z'})");
-			} else if (arg.KeyCode == Keys.C) {
-				ClipboardShare.SetText("bpy.ops.object.align(bb_quality=True, align_mode='OPT_3', relative_to='OPT_2', align_axis={ 'Z'})");
+			}*/
+			} else if (arg.KeyCode == Keys.G) {
+			
+				textBox.SelectedText = Utils.Translate(ClipboardShare.GetText());
 			}
 			return;
-		} else if (arg.Shift) {
-			if (arg.KeyCode == Keys.P) {
-				ClipboardShare.SetText("bpy.ops.mesh.primitive_plane_add(enter_editmode=True)");
-			} else if (arg.KeyCode == Keys.U) {
-				ClipboardShare.SetText("bpy.ops.mesh.primitive_cube_add(enter_editmode=True)");
-			} else if (arg.KeyCode == Keys.C) {
-				ClipboardShare.SetText("bpy.ops.mesh.primitive_circle_add(enter_editmode=True)");
-			} else if (arg.KeyCode == Keys.Y) {
-				// vertices=12,
-				ClipboardShare.SetText("bpy.ops.mesh.primitive_cylinder_add( enter_editmode=True)");
-			} 
-			return;
-		}
+			if (arg.Alt) {
+				if (arg.KeyCode == Keys.Q) {
+					ClipboardShare.SetText("bpy.ops.object.align(bb_quality=True, align_mode='OPT_1', relative_to='OPT_2', align_axis={ 'X'})");
+				} else if (arg.KeyCode == Keys.W) {
+					ClipboardShare.SetText("bpy.ops.object.align(bb_quality=True, align_mode='OPT_2', relative_to='OPT_2', align_axis={ 'X'})");
+				} else if (arg.KeyCode == Keys.E) {
+					ClipboardShare.SetText("bpy.ops.object.align(bb_quality=True, align_mode='OPT_3', relative_to='OPT_2', align_axis={ 'X'})");
+				} else if (arg.KeyCode == Keys.A) {
+					ClipboardShare.SetText("bpy.ops.object.align(bb_quality=True, align_mode='OPT_1', relative_to='OPT_2', align_axis={ 'Y'})");
+				} else if (arg.KeyCode == Keys.S) {
+					ClipboardShare.SetText("bpy.ops.object.align(bb_quality=True, align_mode='OPT_2', relative_to='OPT_2', align_axis={ 'Y'})");
+				} else if (arg.KeyCode == Keys.D) {
+					ClipboardShare.SetText("bpy.ops.object.align(bb_quality=True, align_mode='OPT_3', relative_to='OPT_2', align_axis={ 'Y'})");
+				} else if (arg.KeyCode == Keys.Z) {
+					ClipboardShare.SetText("bpy.ops.object.align(bb_quality=True, align_mode='OPT_1', relative_to='OPT_2', align_axis={ 'Z'})");
+				} else if (arg.KeyCode == Keys.X) {
+					ClipboardShare.SetText("bpy.ops.object.align(bb_quality=True, align_mode='OPT_2', relative_to='OPT_2', align_axis={ 'Z'})");
+				} else if (arg.KeyCode == Keys.C) {
+					ClipboardShare.SetText("bpy.ops.object.align(bb_quality=True, align_mode='OPT_3', relative_to='OPT_2', align_axis={ 'Z'})");
+				}
+				return;
+			} else if (arg.Shift) {
+				if (arg.KeyCode == Keys.P) {
+					ClipboardShare.SetText("bpy.ops.mesh.primitive_plane_add(enter_editmode=True)");
+				} else if (arg.KeyCode == Keys.U) {
+					ClipboardShare.SetText("bpy.ops.mesh.primitive_cube_add(enter_editmode=True)");
+				} else if (arg.KeyCode == Keys.C) {
+					ClipboardShare.SetText("bpy.ops.mesh.primitive_circle_add(enter_editmode=True)");
+				} else if (arg.KeyCode == Keys.Y) {
+					// vertices=12,
+					ClipboardShare.SetText("bpy.ops.mesh.primitive_cylinder_add( enter_editmode=True)");
+				} 
+				return;
+			}
 //		if (arg.KeyCode == Keys.F1) {
 //			EncodeBin();
 //		}
@@ -304,6 +306,7 @@ public static class Android
 //		} 
 		
 		 
+		}
 	}
 	[DllImport("user32.dll")]
 	[return: MarshalAs(UnmanagedType.Bool)]
@@ -342,7 +345,7 @@ public static class Android
 		Color sampleColor = sampleBitmap.GetPixel(sampleSize / 2, sampleSize / 2);
 		sampleBitmap.Dispose();
 		var s = ColorTranslator.ToHtml(sampleColor);
-		textBox.SelectedText=string.Format("{0}\r\n{1}\r\n{2}\r\n{3}",sampleColor.R,sampleColor.G,sampleColor.B,s);
+		textBox.SelectedText = string.Format("{0}\r\n{1}\r\n{2}\r\n{3}", sampleColor.R, sampleColor.G, sampleColor.B, s);
 	}
 	
 	static	int sampleSize = 5;
@@ -402,12 +405,27 @@ public static class Android
 		var s = textBox.Text.Trim();
 		var first = s.SubstringBefore('\n').Trim();
 		var second = s.SubstringAfter('\n').Trim();
-		var array = first.Split(' ');
-		if (array.Length > 1)
-			textBox.Text = first + "\r\n" + second.Replace(
-				array[0], array[1]
+		if (Regex.IsMatch(first, "^\\d+$")) {
+			var sb = new StringBuilder();
+			for (int i = 0; i < int.Parse(first); i++) {
+				sb.AppendLine(Regex.Replace(second, "\\$\\d+", (i + 1+int.Parse(Regex.Match(second,"(?<=\\$)\\d+").Value)).ToString()));
+			}
+			textBox.Text = first + "\r\n" + sb.ToString();
+		}else if (Regex.IsMatch(first, "^\\$\\d+$")) {
+			var sb = new StringBuilder();
+			for (int i = 0; i < int.Parse(first); i++) {
+				sb.AppendLine(Regex.Replace(second, "\\$\\d+", (i + 1).ToString()));
+			}
+			textBox.Text = first + "\r\n" + sb.ToString();
+		} else {
+			var array = first.Split(' ');
+			if (array.Length > 1)
+				textBox.Text = first + "\r\n" + second.Replace(
+					array[0], array[1]
 			
-			);
+				);
+		}
+		
 	}
 	private static void CreateFile(TextBox textBox)
 	{

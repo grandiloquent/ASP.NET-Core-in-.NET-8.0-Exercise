@@ -354,7 +354,7 @@ try {
 			/*
 			 sb.ToString().Trim();
 			 */
-			Clipboard.SetText(sb.ToString().Trim().Camel().Capitalize());
+			Clipboard.SetText(sb.ToString().Trim().Camel().Decapitalize());
 		}
 		//Clipboard.SetText(string.Format(@"{0}", TransAPI.Translate(Clipboard.GetText())));
 	}

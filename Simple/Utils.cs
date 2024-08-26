@@ -228,7 +228,7 @@ public class Utils
 			 sb.ToString().Trim();
 			 .Trim().Camel().Capitalize()
 			 */
-			return isChinese ? sb.ToString() : sb.ToString();
+			return isChinese ? string.Format("public static void {0}(){{\r\n}}",sb.ToString().Trim().Camel().Decapitalize()) : sb.ToString();
 		}
 		//Clipboard.SetText(string.Format(@"{0}", TransAPI.Translate(Clipboard.GetText())));
 	}

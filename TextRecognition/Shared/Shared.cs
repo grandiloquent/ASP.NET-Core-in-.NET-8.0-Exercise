@@ -39,6 +39,16 @@ public static class Shared
             return s;
         return char.ToUpper(s[0]) + s.Substring(1);
     }
+    public static String DeCapitalize(this String s)
+    {
+        if (string.IsNullOrEmpty(s))
+            return s;
+        if (s.Length == 1)
+            return s.ToLower();
+        if (char.IsLower(s[0]))
+            return s;
+        return char.ToLower(s[0]) + s.Substring(1);
+    }
     public static string GetDesktopPath(this string f)
     {
         return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), f);
