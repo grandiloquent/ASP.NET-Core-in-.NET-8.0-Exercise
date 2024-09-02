@@ -104,15 +104,12 @@ public partial class MainForm : Form
 	}
 	public MainForm()
 	{
-		Utils.CreateDirectories(@"C:\Users\Administrator\Desktop\视频\Net\TextRecognition\Shared",new string[]{
-		                        	"ClipboardShare.cs",
-		                        	"Screenshot.cs",
-		                        	"Win32.cs",
-		                        	"Shared.cs",
-		                        	"ImageUtils.cs",
-		                        	"Utils.cs"
+		Utils.CreateDirectories(@"D:\.Folder\003\SwipeUp\app\src\main\java\psycho\euphoria\swipeup",new string[]{
+		                        	"MainActivity.java",
+		                        	"AppService.java"
 		                        
 		                        });
+		
 		
 //		RegisterHotKey(this.Handle, 81, 0, 81);
 //		RegisterHotKey(this.Handle, 87, 0, 87);

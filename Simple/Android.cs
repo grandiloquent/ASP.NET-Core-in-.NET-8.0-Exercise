@@ -408,17 +408,42 @@ public static class Android
 		if (Regex.IsMatch(first, "^\\d+$")) {
 			var sb = new StringBuilder();
 			for (int i = 0; i < int.Parse(first); i++) {
-				sb.AppendLine(Regex.Replace(second, "\\$\\d+", (i + 1+int.Parse(Regex.Match(second,"(?<=\\$)\\d+").Value)).ToString()));
+				sb.AppendLine(Regex.Replace(second, "\\$\\d+", (i + 1 + int.Parse(Regex.Match(second, "(?<=\\$)\\d+").Value)).ToString()));
 			}
 			textBox.Text = first + "\r\n" + sb.ToString();
-		}else if (Regex.IsMatch(first, "^\\$\\d+$")) {
+		} else if (Regex.IsMatch(first, "^\\$\\d+$")) {
 			var sb = new StringBuilder();
 			for (int i = 0; i < int.Parse(first); i++) {
 				sb.AppendLine(Regex.Replace(second, "\\$\\d+", (i + 1).ToString()));
 			}
 			textBox.Text = first + "\r\n" + sb.ToString();
-		}else if(first.StartsWith(".")){
+		} else if (first.StartsWith(".")) {
 			first.TrimStart('.').CreateFileIfNotExists();
+		} else if (first.StartsWith("_")) {
+		
+			var path = first.TrimStart('_');
+			var fileName = Path.GetFileName(path);
+			System.IO.Compression.ZipFile.ExtractToDirectory("Douyin5Guang.zip".GetEntryPath(),
+				Path.GetDirectoryName(path));
+			var dir = Directory.GetDirectories(Path.GetDirectoryName(path)).First();
+			var src = Path.GetFileName(dir);
+			Directory.Move(dir, path);
+			var files = Directory.GetFiles(Path.Combine(path,"app\\src"), "*.java", SearchOption.AllDirectories);
+			foreach (var element in files) {
+				File.WriteAllText(element, File.ReadAllText(element).Replace(
+					src.ToLower(), fileName.ToLower()
+				));
+			}
+			var srcParent = Path.GetDirectoryName(files.First());
+			Directory.Move(srcParent, Path.Combine(Path.GetDirectoryName(srcParent), fileName.ToLower()));
+			               
+			files = Directory.GetFiles(path, "*.kts", SearchOption.AllDirectories);
+			foreach (var element in files) {
+				File.WriteAllText(element, File.ReadAllText(element).Replace(
+					src.ToLower(), fileName.ToLower()
+				));
+			}
+			
 		} else {
 			var array = first.Split(' ');
 			if (array.Length > 1)
