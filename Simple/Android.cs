@@ -3,10 +3,13 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 public static class Android
 {
 	static void EncodeBin()
@@ -238,8 +241,12 @@ public static class Android
 				});
 			}*/
 			} else if (arg.KeyCode == Keys.G) {
-			
-				textBox.SelectedText = Utils.Translate(ClipboardShare.GetText());
+				var s = textBox.Text.Trim();
+				var first = s.SubstringBefore('\n').Trim();
+				var second = s.SubstringAfter('\n').Trim();
+				s=Translate(first.TrimStart('1'),first.StartsWith("1")?1:0);
+				ClipboardShare.SetText(s);
+				textBox.SelectedText = s;
 			}
 			return;
 			if (arg.Alt) {
@@ -399,7 +406,45 @@ public static class Android
 		
 		
 	}
-	
+	public static string Translate(string s = "", int mode = 1)
+	{
+		//string q
+		// http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=%s&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=
+		// en
+		// http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=
+		var l = "en";
+		s = s == "" ? ClipboardShare.GetText() : s;
+		
+		var isChinese = Regex.IsMatch(s, "[\u4e00-\u9fa5]");
+		if (!isChinese) {
+			l = "zh";
+			s = Regex.Replace(Regex.Replace(s, "[\r\n]+", " "), "- ", "");
+		}
+		var req = WebRequest.Create(
+			          "http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=" + l + "&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=" +
+			          s);
+		//req.Proxy = new WebProxy("127.0.0.1", 10809);
+		var res = req.GetResponse();
+		using (var reader = new StreamReader(res.GetResponseStream())) {
+			//var obj =
+			//  (JsonElement)JsonSerializer.Deserialize<Dictionary<String, dynamic>>(reader.ReadToEnd())["sentences"];
+			var obj = JsonConvert.DeserializeObject<JObject>(reader.ReadToEnd())["sentences"].ToObject<JArray>();
+			var sb = new StringBuilder();
+			for (int i = 0; i < obj.Count; i++) {
+				sb.Append(obj[i]["trans"]).Append(' ');
+			}
+			// Regex.Replace(sb.ToString().Trim(), "[ ](?=[a-zA-Z0-9])", m => "_").ToLower();
+			// std::string {0}(){{\n}}
+			//return string.Format("{0}", Regex.Replace(sb.ToString().Trim(), " ([a-zA-Z0-9])", m => m.Groups[1].Value.ToUpper()).Decapitalize());
+			//return  sb.ToString().Trim();
+			/*
+			 sb.ToString().Trim();
+			 .Trim().Camel().Capitalize()
+			 */
+			return isChinese ? (mode == 0 ? string.Format("private void {0}(){{\r\n}}", sb.ToString().Trim().Camel().Decapitalize()) : sb.ToString().Trim().Camel().Decapitalize()) : sb.ToString();
+		}
+		//Clipboard.SetText(string.Format(@"{0}", TransAPI.Translate(Clipboard.GetText())));
+	}
 	private static void ReplaceString(TextBox textBox)
 	{
 		var s = textBox.Text.Trim();
@@ -423,12 +468,12 @@ public static class Android
 		
 			var path = first.TrimStart('_');
 			var fileName = Path.GetFileName(path);
-			System.IO.Compression.ZipFile.ExtractToDirectory("Douyin5Guang.zip".GetEntryPath(),
+			System.IO.Compression.ZipFile.ExtractToDirectory("Dou5.zip".GetEntryPath(),
 				Path.GetDirectoryName(path));
 			var dir = Directory.GetDirectories(Path.GetDirectoryName(path)).First();
 			var src = Path.GetFileName(dir);
 			Directory.Move(dir, path);
-			var files = Directory.GetFiles(Path.Combine(path,"app\\src"), "*.java", SearchOption.AllDirectories);
+			var files = Directory.GetFiles(Path.Combine(path, "app\\src"), "*.java", SearchOption.AllDirectories);
 			foreach (var element in files) {
 				File.WriteAllText(element, File.ReadAllText(element).Replace(
 					src.ToLower(), fileName.ToLower()
