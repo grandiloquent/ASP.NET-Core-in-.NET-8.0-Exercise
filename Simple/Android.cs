@@ -468,7 +468,7 @@ public static class Android
 		
 			var path = first.TrimStart('_');
 			var fileName = Path.GetFileName(path);
-			System.IO.Compression.ZipFile.ExtractToDirectory("Dou5.zip".GetEntryPath(),
+			System.IO.Compression.ZipFile.ExtractToDirectory("KuaiYaFood.zip".GetEntryPath(),
 				Path.GetDirectoryName(path));
 			var dir = Directory.GetDirectories(Path.GetDirectoryName(path)).First();
 			var src = Path.GetFileName(dir);
@@ -489,6 +489,12 @@ public static class Android
 				));
 			}
 			
+		}else if (first.StartsWith("/")){
+		
+			textBox.Text=textBox.Text.FormatString();
+		}else if(first.StartsWith("\\")){
+			textBox.Text=string.Join("",Regex.Split(textBox.Text,"\\d+")
+				.Select(x=>x+"\"+xxx+\""));
 		} else {
 			var array = first.Split(' ');
 			if (array.Length > 1)
