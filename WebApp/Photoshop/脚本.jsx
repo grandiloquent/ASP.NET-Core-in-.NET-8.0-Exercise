@@ -1,7 +1,7 @@
 var pointSamples = app.activeDocument.colorSamplers
 
 function toInt(value) {
-    return value | 0;
+    return Math.round(value) | 0;
 }
 
 var rgb = pointSamples[0].color.rgb;
@@ -13,18 +13,19 @@ for (var i = 1; i < pointSamples.length; i++) {
     var xx=toInt(pointSamples[i].position[0]);
     var yy=toInt(pointSamples[i].position[1]);
     var gg = pointSamples[i].color.rgb;
-    buffer.push(xx+", i + ("+y+" - "+yy+"), "+gg.red+", "+gg.green+", "+gg.blue);
+    buffer.push(xx+", i + ("+yy+" - "+y+"), "+toInt(gg.red)+", "+toInt(gg.green)+", "+toInt(gg.blue));
 }
 
 
 var s='if (checkIfColorIsRange(20, bitmap, new int[]{' +
 buffer.join(",\n")+
     '})) {' +
+    'click(mAccessibilityService, getRandomNumber('+x+' + 20, '+x+' + 100),getRandomNumber(i+80,i+160));'+
     '                                            break;' +
     '                                        }'
 
 s='for (int i = '+toInt(pointSamples[pointSamples.length-2].position[1])+'; i < '+toInt(pointSamples[pointSamples.length-1].position[1])+'; i++) {'+
-'\n                                    if (checkIfColorIsRange(20, bitmap, new int[]{'+x+", i, "+rgb.red+", "+rgb.green+""+rgb.blue+'})) {'+
+'\n                                    if (checkIfColorIsRange(20, bitmap, new int[]{'+x+", i, "+toInt(rgb.red)+", "+toInt(rgb.green)+","+toInt(rgb.blue)+'})) {'+
 '\n'+s+
 '\n                                        i += 964 - 882;'+
 '                                    }'+
