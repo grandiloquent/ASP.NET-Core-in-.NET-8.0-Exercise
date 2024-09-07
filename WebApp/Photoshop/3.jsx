@@ -27,5 +27,5 @@ var s="if (compareColor(20, decoded,\n" +
                             "\nThread.sleep(1000);\n"+
                             "                    }" 
                             s="// \nelse if ("+buffer.join('\n')+")\n{\n}";
-                            s="//\nelse if (Utils.checkIfColorIsRange(20,bitmap,new int[]{"+buffer1.join(',\n')+"})){\n// swipe(mAccessibilityService, getRandomNumber(300, 340), getRandomNumber(1380, 1580), getRandomNumber(340, 380), getRandomNumber(380, 680));\n}"
+                            s="//\nelse if (Utils.checkIfColorIsRange(20,bitmap,new int[]{"+buffer1.join(',\n')+"})){\n Toast.makeText(mAccessibilityService, \"\", Toast.LENGTH_SHORT).show();\n}"
                             $.writeln(s);

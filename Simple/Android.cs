@@ -468,7 +468,7 @@ public static class Android
 		
 			var path = first.TrimStart('_');
 			var fileName = Path.GetFileName(path);
-			System.IO.Compression.ZipFile.ExtractToDirectory("Kuai5YaFood.zip".GetEntryPath(),
+			System.IO.Compression.ZipFile.ExtractToDirectory("Kuai5Guang.zip".GetEntryPath(),
 				Path.GetDirectoryName(path));
 			var dir = Directory.GetDirectories(Path.GetDirectoryName(path)).First();
 			var src = Path.GetFileName(dir);
