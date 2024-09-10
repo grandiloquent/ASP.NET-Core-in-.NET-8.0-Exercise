@@ -441,7 +441,7 @@ public static class Android
 			 sb.ToString().Trim();
 			 .Trim().Camel().Capitalize()
 			 */
-			return isChinese ? (mode == 0 ? string.Format("private void {0}(){{\r\n}}", sb.ToString().Trim().Camel().Decapitalize()) : sb.ToString().Trim().Camel().Decapitalize()) : sb.ToString();
+			return isChinese ? (mode == 0 ? string.Format("public static boolean {0}(AccessibilityService accessibilityService, Bitmap bitmap){{\r\nreturn false;\r\n}}", sb.ToString().Trim().Camel().Decapitalize()) : sb.ToString().Trim().Camel().Decapitalize()) : sb.ToString();
 		}
 		//Clipboard.SetText(string.Format(@"{0}", TransAPI.Translate(Clipboard.GetText())));
 	}
@@ -464,6 +464,8 @@ public static class Android
 			textBox.Text = first + "\r\n" + sb.ToString();
 		} else if (first.StartsWith(".")) {
 			first.TrimStart('.').CreateFileIfNotExists();
+		}else if (first.StartsWith("xx")) {
+			Directory.Delete(first.TrimStart('x').Trim(),true);
 		} else if (first.StartsWith("_")) {
 		
 			var path = first.TrimStart('_');
