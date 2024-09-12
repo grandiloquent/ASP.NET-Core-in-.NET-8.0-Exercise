@@ -625,18 +625,18 @@ public static class Strings
 	}
 	public static string FormatString(this string s)
 	{
-//		s = s.Replace("\"", "\"\"")
-//			.Replace("{", "{{")
-//			.Replace("}", "}}");
+		s = s.Replace("\"", "\"\"")
+			.Replace("{", "{{")
+			.Replace("}", "}}");
 		// ClipboardShare.SetText()
 		//s = string.Format("var s1 = string.Format(@\"{0}\")", s);
 		//s = string.Format("{0}", s);
-		//s = string.Format("string.Format(@\"{0}\")", s);
+		s = string.Format("string.Format(@\"{0}\")", s);
 		//s = string.Format("var s1 = string.Join(Environment.NewLine,array.Select((x,i)=>string.Format(@\"{0}\")));", s);
 		
-		s=string.Join("'+\r\n'",s.Split(Environment.NewLine.ToArray(),StringSplitOptions.RemoveEmptyEntries)
-			.Select(x=>x.Replace("'","\\'")));
-		return string.Format("'{0}'", s);
+//		s=string.Join("'+\r\n'",s.Split(Environment.NewLine.ToArray(),StringSplitOptions.RemoveEmptyEntries)
+//			.Select(x=>x.Replace("'","\\'")));
+		return s;//string.Format("'{0}'", s);
 	}
 }
 public static class Files

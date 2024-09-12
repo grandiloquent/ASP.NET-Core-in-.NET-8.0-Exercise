@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -244,7 +245,7 @@ public static class Android
 				var s = textBox.Text.Trim();
 				var first = s.SubstringBefore('\n').Trim();
 				var second = s.SubstringAfter('\n').Trim();
-				s=Translate(first.TrimStart('1'),first.StartsWith("1")?1:0);
+				s = Translate(first.TrimStart('1'), first.StartsWith("1") ? 1 : 0);
 				ClipboardShare.SetText(s);
 				textBox.SelectedText = s;
 			}
@@ -441,7 +442,25 @@ public static class Android
 			 sb.ToString().Trim();
 			 .Trim().Camel().Capitalize()
 			 */
-			return isChinese ? (mode == 0 ? string.Format("public static boolean {0}(AccessibilityService accessibilityService, Bitmap bitmap){{\r\nreturn false;\r\n}}", sb.ToString().Trim().Camel().Decapitalize()) : sb.ToString().Trim().Camel().Decapitalize()) : sb.ToString();
+			return isChinese ? (mode == 0 ? string.Format(@"public static boolean checkIf{0}(AccessibilityService accessibilityService, Bitmap bitmap) {{
+        if (Utils.checkIfColorIsRange(20,bitmap,new int[]{{420,502,0,0,0,
+                415,481,255,237,237,
+                429,551,255,237,237,
+                455,503,0,0,0,
+                471,495,255,235,237}})) {{
+            Toast.makeText(accessibilityService, ""{1}"", Toast.LENGTH_SHORT).show();
+            click(accessibilityService, getRandomNumber(964,1020), getRandomNumber(358,412));
+            return true;
+        }}
+        return false;
+    }}
+
+/*
+if (TaskUtils.checkIf{0}(accessibilityService, bitmap)) {{
+                            return;
+                        }}
+*/
+", sb.ToString().Trim().Camel().Capitalize(), s) : sb.ToString().Trim().Camel().Decapitalize()) : sb.ToString();
 		}
 		//Clipboard.SetText(string.Format(@"{0}", TransAPI.Translate(Clipboard.GetText())));
 	}
@@ -464,13 +483,52 @@ public static class Android
 			textBox.Text = first + "\r\n" + sb.ToString();
 		} else if (first.StartsWith(".")) {
 			first.TrimStart('.').CreateFileIfNotExists();
-		}else if (first.StartsWith("xx")) {
-			Directory.Delete(first.TrimStart('x').Trim(),true);
+		} else if (first.StartsWith("ff")) {
+			var str = textBox.Text.TrimStart('f').FormatString();
+			ClipboardShare.SetText(str);
+			textBox.Text += str;
+		} else if (first.StartsWith("xx")) {
+			foreach (var element in Directory.GetFileSystemEntries(first.TrimStart('x').Trim())) {
+				if (File.Exists(element)) {
+					
+					File.Delete(element);
+				} else {
+					Directory.Delete(element, true);
+				}
+			}
+			
+		} else if (first.StartsWith("yy")) {
+			var matches = Regex.Matches(second, "\\d+").Cast<Match>().Select(x => x.Value).ToArray();
+			var list = new List<string>();
+			for (int i = 0; i < matches.Count(); i++) {
+				if (i == 2 || i > 6 && (i - 2) % 6 == 0)
+					list.Add(string.Format("values[i+1] == {0}", matches.ElementAt(i)));
+			}
+			var str = string.Join("||", list);
+			textBox.Text += str;
+			ClipboardShare.SetText(str);
+		} else if (first.StartsWith("1")) {
+			var list = textBox.Text.TrimStart('1').Trim()
+				.Split(Environment.NewLine.ToArray(), StringSplitOptions.RemoveEmptyEntries);
+			foreach (var element in list) {
+				var array = element.Split('|');
+				if (array.Length > 1) {
+					for (int i = 1; i < array.Length; i++) {
+						var path = Path.Combine(array[0], array[i]);
+						if (path.SubstringAfterLast('\\').Contains("."))
+							path.CreateFileIfNotExists();
+						else
+							path.CreateDirectoryIfNotExists();
+					}
+				}
+			}
+		} else if (first.StartsWith("2")) {
+			
 		} else if (first.StartsWith("_")) {
 		
 			var path = first.TrimStart('_');
 			var fileName = Path.GetFileName(path);
-			System.IO.Compression.ZipFile.ExtractToDirectory("Kuai5Guang.zip".GetEntryPath(),
+			System.IO.Compression.ZipFile.ExtractToDirectory("KuaiGuang.zip".GetEntryPath(),
 				Path.GetDirectoryName(path));
 			var dir = Directory.GetDirectories(Path.GetDirectoryName(path)).First();
 			var src = Path.GetFileName(dir);
@@ -491,12 +549,12 @@ public static class Android
 				));
 			}
 			
-		}else if (first.StartsWith("/")){
+		} else if (first.StartsWith("/")) {
 		
-			textBox.Text=textBox.Text.FormatString();
-		}else if(first.StartsWith("\\")){
-			textBox.Text=string.Join("",Regex.Split(textBox.Text,"\\d+")
-				.Select(x=>x+"\"+xxx+\""));
+			textBox.Text = textBox.Text.FormatString();
+		} else if (first.StartsWith("\\")) {
+			textBox.Text = string.Join("", Regex.Split(textBox.Text, "\\d+")
+				.Select(x => x + "\"+xxx+\""));
 		} else {
 			var array = first.Split(' ');
 			if (array.Length > 1)
