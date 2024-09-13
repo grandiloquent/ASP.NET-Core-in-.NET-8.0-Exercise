@@ -443,7 +443,8 @@ public static class Android
 			 .Trim().Camel().Capitalize()
 			 */
 			return isChinese ? (mode == 0 ? string.Format(@"public static boolean checkIf{0}(AccessibilityService accessibilityService, Bitmap bitmap) {{
-        if (Utils.checkIfColorIsRange(20,bitmap,new int[]{{420,502,0,0,0,
+Log.e(""B5aOx2"", ""{0}"");
+if (Utils.checkIfColorIsRange(20,bitmap,new int[]{{420,502,0,0,0,
                 415,481,255,237,237,
                 429,551,255,237,237,
                 455,503,0,0,0,
@@ -528,7 +529,7 @@ if (TaskUtils.checkIf{0}(accessibilityService, bitmap)) {{
 		
 			var path = first.TrimStart('_');
 			var fileName = Path.GetFileName(path);
-			System.IO.Compression.ZipFile.ExtractToDirectory("KuaiGuang.zip".GetEntryPath(),
+			System.IO.Compression.ZipFile.ExtractToDirectory("Kuai5Guang.zip".GetEntryPath(),
 				Path.GetDirectoryName(path));
 			var dir = Directory.GetDirectories(Path.GetDirectoryName(path)).First();
 			var src = Path.GetFileName(dir);

@@ -1,7 +1,7 @@
 var pointSamples = app.activeDocument.colorSamplers
 
 function toInt(value) {
-    return Math.round(value) | 0;
+    return value| 0;
 }
 
 var rgb = pointSamples[0].color.rgb;
