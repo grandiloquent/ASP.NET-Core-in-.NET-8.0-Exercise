@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
@@ -525,6 +526,19 @@ if (TaskUtils.checkIf{0}(accessibilityService, bitmap)) {{
 			}
 		} else if (first.StartsWith("2")) {
 			
+		}else if(first.StartsWith("d")){
+			var str=textBox.Text.TrimStart('d').SubstringAfterLast('=').SubstringBefore("&");
+			Process.Start(new ProcessStartInfo{
+			              FileName="yt-dlp_x86.exe",
+			              Arguments="--proxy http://127.0.0.1:10809  -f 137 https://www.youtube.com/watch?v="+
+			              	str,
+			              WorkingDirectory=@"C:\Users\Administrator\Desktop\视频"
+			              });
+			Process.Start(new ProcessStartInfo{
+			              FileName="yt-dlp_x86.exe",
+			              Arguments="--proxy http://127.0.0.1:10809  -f 299 https://www.youtube.com/watch?v="+str,
+			               WorkingDirectory=@"C:\Users\Administrator\Desktop\视频"
+			              });
 		} else if (first.StartsWith("_")) {
 		
 			var path = first.TrimStart('_');
