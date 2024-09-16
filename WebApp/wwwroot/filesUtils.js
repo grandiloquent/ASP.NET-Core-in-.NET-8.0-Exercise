@@ -96,8 +96,8 @@ async function render(path) {
 
                 queryElementByPath(item.parentNode.dataset.path).remove();
             } else {
-                renameFile(item.parentNode.dataset.path)
-                //deleteFile(item.parentNode.dataset.path);
+               // renameFile(item.parentNode.dataset.path)
+                deleteFile(item.parentNode.dataset.path);
                 //const buf = (localStorage.getItem("paths") && JSON.parse(localStorage.getItem("paths"))) || [];
             }
         });

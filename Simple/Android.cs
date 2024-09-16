@@ -500,13 +500,15 @@ if (TaskUtils.checkIf{0}(accessibilityService, bitmap)) {{
 			}
 			
 		} else if (first.StartsWith("yy")) {
-			var matches = Regex.Matches(second, "\\d+").Cast<Match>().Select(x => x.Value).ToArray();
+			var matches = Regex.Matches(second, "[\\d()i+ -]+(?=,)").Cast<Match>().Select(x => x.Value).ToArray();
 			var list = new List<string>();
 			for (int i = 0; i < matches.Count(); i++) {
-				if (i == 2 || i > 6 && (i - 2) % 6 == 0)
-					list.Add(string.Format("values[i+1] == {0}", matches.ElementAt(i)));
+				if (i%5==0){
+					list.Add( matches.ElementAt(i));
+					list.Add( matches.ElementAt(i+1));
+				}
 			}
-			var str = string.Join("||", list);
+			var str = string.Join(",\n", list).Replace("i","x");
 			textBox.Text += str;
 			ClipboardShare.SetText(str);
 		} else if (first.StartsWith("1")) {
