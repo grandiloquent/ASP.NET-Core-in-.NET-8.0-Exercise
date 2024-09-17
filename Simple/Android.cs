@@ -249,6 +249,8 @@ public static class Android
 				s = Translate(first.TrimStart('1'), first.StartsWith("1") ? 1 : 0);
 				ClipboardShare.SetText(s);
 				textBox.SelectedText = s;
+			}else if(arg.KeyCode==Keys.S){
+				ClipboardShare.SetText(textBox.Text.Trim());
 			}
 			return;
 			if (arg.Alt) {
@@ -527,6 +529,18 @@ if (TaskUtils.checkIf{0}(accessibilityService, bitmap)) {{
 				}
 			}
 		} else if (first.StartsWith("2")) {
+			var parts=first.TrimStart('2').Trim().Split(new char[]{'|'},StringSplitOptions.RemoveEmptyEntries);
+			
+			var files=Directory.GetFiles(parts[0],"*",SearchOption.AllDirectories)
+				.Where(x=>Path.GetFileName(x)==parts[1]);
+			
+			foreach (var element in files) {
+				var f=Path.Combine(parts[2],element.SubstringAfter(parts[0]+"\\"));
+				Path.GetDirectoryName(f).CreateDirectoryIfNotExists();
+				if(!File.Exists(f))
+					File.Copy(element,f);
+			}
+			
 			
 		}else if(first.StartsWith("d")){
 			var str=textBox.Text.TrimStart('d').SubstringAfterLast('=').SubstringBefore("&");

@@ -102,6 +102,7 @@ public partial class MainForm : Form
 		}
 		base.WndProc(ref m);
 	}
+	string _str = string.Empty;
 	public MainForm()
 	{
 		
@@ -189,8 +190,9 @@ public partial class MainForm : Form
 			Android.HandleKeyDown(textBox1, args);
 			//Video.HandleKeyDown(textBox1,args);
 		};
+		
 		using (var eventHookFactory = new EventHook.EventHookFactory()) {
-			var x= Keys.M;
+			var x = Keys.M;
 			var keyboardWatcher = eventHookFactory.GetKeyboardWatcher();
 			keyboardWatcher.Start();
 			keyboardWatcher.OnKeyInput += (s, e) => {
@@ -204,7 +206,7 @@ public partial class MainForm : Form
 //					} catch {
 //						
 //					}
-try {
+					try {
 						Images.Ocr(this, textBox1, 110);
 						
 					} catch {
@@ -219,78 +221,220 @@ try {
 					}
 				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F10") {
 					try {
-						Images.Ocr(this, textBox1,120);
+						Images.Ocr(this, textBox1, 120);
 						
 					} catch {
 						
 					}
 
-				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && KeyboardShare.isKeyPressed(18)) {
-
-					if (e.KeyData.Keyname == "D") {
-						var arg = string.Format("--proxy http://127.0.0.1:10809  -f 137 " + ClipboardShare.GetText());
-						Process.Start(new ProcessStartInfo {
-							FileName = "yt-dlp_x86.exe",
-							Arguments = arg,
-							WorkingDirectory = @"C:\Users\Administrator\Desktop\视频"
-						});
-					} else if (e.KeyData.Keyname == "Q") {
-						try {
-							Images.Ocr(this, textBox1, 0, 300, 20, false);
-							
-						} catch {
-							
-						}
-					} else if (e.KeyData.Keyname == "E") {
-						//string q
-						// http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=%s&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=
-						// en
-						// http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=
-						
-						var ss = ClipboardShare.GetText().Trim();
-						var req = WebRequest.Create(
-							           "http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=" + ss);
-						//req.Proxy = new WebProxy("127.0.0.1", 10809);
-						var res = req.GetResponse();
-						using (var reader = new StreamReader(res.GetResponseStream())) {
-							//var obj =
-							//  (JsonElement)JsonSerializer.Deserialize<Dictionary<String, dynamic>>(reader.ReadToEnd())["sentences"];
-								 
-							var obj = JsonConvert.DeserializeObject<JObject>(reader.ReadToEnd())["sentences"].ToObject<JArray>();
-							var sb = new StringBuilder();
-							for (int i = 0; i < obj.Count; i++) {
-								sb.Append(obj[i]["trans"]).Append(' ');
-							}
-							// Regex.Replace(sb.ToString().Trim(), "[ ](?=[a-zA-Z0-9])", m => "_").ToLower();
-							// std::string {0}(){{\n}}
-							//return string.Format("{0}", Regex.Replace(sb.ToString().Trim(), " ([a-zA-Z0-9])", m => m.Groups[1].Value.ToUpper()).Decapitalize());
-							//return  sb.ToString().Trim();
-							/*
-			 sb.ToString().Trim();
-							 */
-							ClipboardShare.SetText(sb.ToString().Trim().Camel().Capitalize());
-							
-						}
-						//Clipboard.SetText(string.Format(@"{0}", TransAPI.Translate(Clipboard.GetText())));
-					}
-					
-				}
+				} 
+//				else if (e.KeyData.EventType == EventHook.KeyEvent.up && KeyboardShare.isKeyPressed(18)) {
+//
+//					if (e.KeyData.Keyname == "D") {
+//						var arg = string.Format("--proxy http://127.0.0.1:10809  -f 137 " + ClipboardShare.GetText());
+//						Process.Start(new ProcessStartInfo {
+//							FileName = "yt-dlp_x86.exe",
+//							Arguments = arg,
+//							WorkingDirectory = @"C:\Users\Administrator\Desktop\视频"
+//						});
+//					} else if (e.KeyData.Keyname == "Q") {
+//						try {
+//							Images.Ocr(this, textBox1, 0, 300, 20, false);
+//							
+//						} catch {
+//							
+//						}
+//					} else if (e.KeyData.Keyname == "E") {
+//						//string q
+//						// http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=%s&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=
+//						// en
+//						// http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=
+//						
+//						var ss = ClipboardShare.GetText().Trim();
+//						var req = WebRequest.Create(
+//							           "http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=" + ss);
+//						//req.Proxy = new WebProxy("127.0.0.1", 10809);
+//						var res = req.GetResponse();
+//						using (var reader = new StreamReader(res.GetResponseStream())) {
+//							//var obj =
+//							//  (JsonElement)JsonSerializer.Deserialize<Dictionary<String, dynamic>>(reader.ReadToEnd())["sentences"];
+//								 
+//							var obj = JsonConvert.DeserializeObject<JObject>(reader.ReadToEnd())["sentences"].ToObject<JArray>();
+//							var sb = new StringBuilder();
+//							for (int i = 0; i < obj.Count; i++) {
+//								sb.Append(obj[i]["trans"]).Append(' ');
+//							}
+//							// Regex.Replace(sb.ToString().Trim(), "[ ](?=[a-zA-Z0-9])", m => "_").ToLower();
+//							// std::string {0}(){{\n}}
+//							//return string.Format("{0}", Regex.Replace(sb.ToString().Trim(), " ([a-zA-Z0-9])", m => m.Groups[1].Value.ToUpper()).Decapitalize());
+//							//return  sb.ToString().Trim();
+//							/*
+//			 sb.ToString().Trim();
+//							 */
+//							ClipboardShare.SetText(sb.ToString().Trim().Camel().Capitalize());
+//							
+//						}
+//						//Clipboard.SetText(string.Format(@"{0}", TransAPI.Translate(Clipboard.GetText())));
+//					}
+//					
+//				}
 					
 					
 				if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "Q") {
 					//Invoke(new Action(() => {
-						//Android.ColorPicker(textBox1);
+					//Android.ColorPicker(textBox1);
 					//}));
 					Utils.FormatNumber(false);
 				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "W") {
 					Utils.FormatNumber(true);
-				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "S") {
+				} 
+				if (e.KeyData.EventType == EventHook.KeyEvent.up) {
 					
-					
-					Invoke(new Action(() => {
-						//Android.ColorPicker();
-					}));
+					if (e.KeyData.Keyname == "0") {
+						_str += "0";
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					} else if (e.KeyData.Keyname == "D1") {
+						_str += "1";
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					} else if (e.KeyData.Keyname == "D2") {
+						_str += "2";
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					} else if (e.KeyData.Keyname == "D3") {
+						_str += "3";
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					} else if (e.KeyData.Keyname == "D4") {
+						_str += "4";
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					} else if (e.KeyData.Keyname == "D5") {
+						_str += "5";
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					} else if (e.KeyData.Keyname == "D6") {
+						_str += "6";
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					} else if (e.KeyData.Keyname == "D7") {
+						_str += "7";
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					} else if (e.KeyData.Keyname == "D8") {
+						_str += "8";
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					} else if (e.KeyData.Keyname == "D9") {
+						_str += "9";
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					} else if (e.KeyData.Keyname == "NumPad1") {
+						_str += "1";
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					} else if (e.KeyData.Keyname == "NumPad2") {
+						_str += "2";
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					} else if (e.KeyData.Keyname == "NumPad3") {
+						_str += "3";
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					} else if (e.KeyData.Keyname == "NumPad4") {
+						_str += "4";
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					} else if (e.KeyData.Keyname == "NumPad5") {
+						_str += "5";
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					} else if (e.KeyData.Keyname == "NumPad6") {
+						_str += "6";
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					} else if (e.KeyData.Keyname == "NumPad7") {
+						_str += "7";
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					} else if (e.KeyData.Keyname == "NumPad8") {
+						_str += "8";
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					} else if (e.KeyData.Keyname == "NumPad9") {
+						_str += "9";
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					} else if (e.KeyData.Keyname == "NumPad0") {
+						_str += "0";
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					} else if (e.KeyData.Keyname == "OemMinus") {
+						_str = "-"+_str.TrimStart('-');
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					}else if (e.KeyData.Keyname == "Subtract") {
+						_str = "-"+_str.TrimStart('-');
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					}else if (e.KeyData.Keyname == "Add") {
+						_str = "-."+_str.TrimStart("-.".ToArray());
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					}else if (e.KeyData.Keyname == "OemPeriod") {
+						_str +=".";
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					}else if (e.KeyData.Keyname == "Decimal") {
+						_str +=".";
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					}else if (e.KeyData.Keyname == "Back") {
+						if(_str.Length>0)
+						_str =_str.Substring(0,_str.Length-1);
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					}else if (e.KeyData.Keyname == "Return") {
+						ClipboardShare.SetText(_str);
+						_str =string.Empty;
+						Invoke(new Action(() => {
+							Text = _str;
+						}));
+					}
+
+
 				}
+//				Invoke(new Action(() => {
+//					//textBox1.Text+="\r\n"+e.KeyData.Keyname;
+//					//Text = e.KeyData.Keyname;
+//				}));
 			};
 		}
 	}

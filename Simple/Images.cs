@@ -556,18 +556,19 @@ public static class Images
 	static TesseractEngine _engine;
 	public static void Ocr(MainForm fv, TextBox textBox1, int threshold = 128, int xOffset = 90, int yOffset = 20, bool isNumber = true)
 	{
-		Screenshot.POINT p = new Screenshot.POINT();
-		Screenshot.GetCursorPos(out p);
-		//Ocr(new Point(p.X, p.Y), new Point(p.X + 260, p.Y + 30));
-		if (_engine == null)
-			_engine = new TesseractEngine("./traineddata".GetEntryPath(), "eng", EngineMode.Default);
-		var buf = Images.ScreenShoot(new Point(p.X, p.Y), new Point(p.X + xOffset, p.Y + yOffset), threshold);
-		//var f = new FileStream("3.png".GetDesktopPath(), FileMode.OpenOrCreate);
-		//f.Write(buf, 0, buf.Length);
-		//f.Dispose();
-		using (var img = Pix.LoadFromMemory(buf)) {
-			using (var page = _engine.Process(img)) {
-				var text = page.GetText();
+		try {
+			Screenshot.POINT p = new Screenshot.POINT();
+			Screenshot.GetCursorPos(out p);
+			//Ocr(new Point(p.X, p.Y), new Point(p.X + 260, p.Y + 30));
+			if (_engine == null)
+				_engine = new TesseractEngine("./traineddata".GetEntryPath(), "eng", EngineMode.Default);
+			var buf = Images.ScreenShoot(new Point(p.X, p.Y), new Point(p.X + xOffset, p.Y + yOffset), threshold);
+			//var f = new FileStream("3.png".GetDesktopPath(), FileMode.OpenOrCreate);
+			//f.Write(buf, 0, buf.Length);
+			//f.Dispose();
+			using (var img = Pix.LoadFromMemory(buf)) {
+				using (var page = _engine.Process(img)) {
+					var text = page.GetText();
 //						Console.WriteLine("Mean confidence: {0}", page.GetMeanConfidence());
 //
 //						Console.WriteLine("Text (GetText): \r\n{0}", text);
@@ -575,18 +576,26 @@ public static class Images
 //						
 								
 					
-				fv.Invoke(new Action(() => {
-					textBox1.SelectedText = Environment.NewLine + Environment.NewLine + text + Environment.NewLine;
+					fv.Invoke(new Action(() => {
+					                     	if(string.IsNullOrWhiteSpace(text)){
+					                     		_engine = new TesseractEngine("./traineddata".GetEntryPath(), "eng", EngineMode.Default);
+					                     	   	return;
+					                     	   }
+						textBox1.SelectedText = Environment.NewLine + Environment.NewLine + text + Environment.NewLine;
 							
 						
-					if (isNumber) {
-						fv.Text = ProcessValue(text);
-					} else {
-						ClipboardShare.SetText(text);
-					}
+						if (isNumber) {
+							fv.Text = ProcessValue(text);
+						} else {
+							ClipboardShare.SetText(text);
+						}
 					
-				}));
+					}));
+				}
 			}
+		} catch {
+			
+			_engine = new TesseractEngine("./traineddata".GetEntryPath(), "eng", EngineMode.Default);
 		}
 	}
 }
