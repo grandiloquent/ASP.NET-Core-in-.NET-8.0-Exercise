@@ -160,6 +160,7 @@ EffectPass.prototype.MakeHeader_Image = function()
         this.mImagePassFooterVR +=  "gl_FragColor = color;}";
     */
     this.mHeader = header;
+    
     this.mHeaderLength = 0;
 }
 
@@ -1349,6 +1350,7 @@ EffectPass.prototype.SetOutputsByBufferID = function( slot, id )
 
 EffectPass.prototype.NewTexture = function( wa, slot, url, buffers, cubeBuffers, keyboard )
 {
+    
     var me = this;
     var renderer = this.mRenderer;
 
@@ -1383,7 +1385,6 @@ EffectPass.prototype.NewTexture = function( wa, slot, url, buffers, cubeBuffers,
                 channels = renderer.TEXFMT.C1I8;
             
             texture.globject = renderer.CreateTextureFromImage(renderer.TEXTYPE.T2D, texture.image, channels, rti.mFilter, rti.mWrap, rti.mVFlip);
-
             texture.loaded = true;
             if( me.mTextureCallbackFun!==null )
                 me.mTextureCallbackFun( me.mTextureCallbackObj, slot, texture.image, true, 1, 1, -1.0, me.mID );
@@ -1946,6 +1947,7 @@ EffectPass.prototype.NewTexture = function( wa, slot, url, buffers, cubeBuffers,
 
 EffectPass.prototype.Paint_Image = function( vrData, wa, d, time, dtime, fps, mouseOriX, mouseOriY, mousePosX, mousePosY, xres, yres, buffers, cubeBuffers, keyboard )
 {
+    
     let times = [ 0.0, 0.0, 0.0, 0.0 ];
 
     let dates = [ d.getFullYear(), // the year (four digits)
@@ -1970,8 +1972,10 @@ EffectPass.prototype.Paint_Image = function( vrData, wa, d, time, dtime, fps, mo
         }
         else if( inp.mInfo.mType==="texture" )
         {
+            
             if( inp.loaded===true  )
             {
+                
                 texID[i] = inp.globject;
                 texIsLoaded[i] = 1;
                 resos[3*i+0] = inp.image.width;
@@ -2194,6 +2198,7 @@ EffectPass.prototype.Paint_Image = function( vrData, wa, d, time, dtime, fps, mo
         }
         else if( inp.mInfo.mType==="buffer" )
         {
+            
             let id = inp.id;
             if( inp.loaded===true  )
             {
@@ -2216,6 +2221,7 @@ EffectPass.prototype.Paint_Image = function( vrData, wa, d, time, dtime, fps, mo
         }
     }
 
+    
     this.mRenderer.AttachTextures( 4, texID[0], texID[1], texID[2], texID[3] );
 
     //-----------------------------------
@@ -2838,6 +2844,7 @@ EffectPass.prototype.Paint = function( vrData, wa, da, time, dtime, fps, mouseOr
     }
     else if( this.mType==="buffer" )
     {
+       
         this.mEffect.ResizeBuffer(bufferID, this.mEffect.mXres, this.mEffect.mYres, false );
 
         let buffer = buffers[bufferID];
@@ -3607,6 +3614,7 @@ Effect.prototype.Paint = function(time, dtime, fps, mouseOriX, mouseOriY, mouseP
 
     if( this.mFrame===0 )
     {
+        
         for( let i=0; i<this.mMaxBuffers; i++ )
         {
             if( this.mBuffers[i].mTexture[0]!==null )
@@ -3839,11 +3847,12 @@ Effect.prototype.Load = function (jobj )
         if (rpass.type === "image"  ) rpassName = "Image";
         if (rpass.type === "buffer") rpassName = "Buffer " + String.fromCharCode(65 + assetID_to_bufferID(wpass.mOutputs[0]));
         if (rpass.type === "cubemap") rpassName = "Cube A";// " + String.fromCharCode(65 + assetID_to_bufferID(this.mPasses[j].mOutputs[0]));
+        
         wpass.SetName(rpassName);
         wpass.SetCode(rpass.code);
 
         this.mPasses.push(wpass);
-        console.log(this.mPasses);
+        
     }
     return true;
 }
@@ -3908,6 +3917,7 @@ Effect.prototype.Compile = function (preventCache, onResolve )
             }
         }
         me.mCompilationTime = getRealTime() - to;
+        console.log("Compilation Time",me.mCompilationTime );
         onResolve(!totalError);
     }).catch(console.log);
 }

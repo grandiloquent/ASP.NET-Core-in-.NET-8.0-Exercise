@@ -33,8 +33,8 @@ function ShaderToy(parentElement) {
 
     this.mCanvas = document.getElementById("demogl");
     this.mCanvas.tabIndex = "0"; // make it react to keyboard
-    this.mCanvas.width = this.mCanvas.offsetWidth;
-    this.mCanvas.height = this.mCanvas.offsetHeight;
+    this.mCanvas.width =512 //this.mCanvas.offsetWidth;
+    this.mCanvas.height =288 //this.mCanvas.offsetHeight;
 
     // ---------------------------------------
 
