@@ -280,13 +280,15 @@ public partial class MainForm : Form
 //				}
 					
 					
-				if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "Q") {
-					//Invoke(new Action(() => {
-					//Android.ColorPicker(textBox1);
-					//}));
+				if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "U") {
+					
 					Utils.FormatNumber(false);
 				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "W") {
 					Utils.FormatNumber(true);
+				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "P") {
+					Invoke(new Action(() => {
+					Android.ColorPicker1();
+					}));
 				} 
 				if (e.KeyData.EventType == EventHook.KeyEvent.up) {
 					

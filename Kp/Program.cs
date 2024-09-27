@@ -190,39 +190,72 @@ namespace Kb
 		[DllImport("user32.dll")]
 		[return: MarshalAs(UnmanagedType.Bool)]
 		static extern bool GetCursorPos(out POINT point);
+
+		static void BlenderMoveY()
+		{
+			keybd_event((int)VK.G, (byte)MapVirtualKey((uint)VK.G, 0), 0, 0); // N1 Press
+			keybd_event((int)VK.G, (byte)MapVirtualKey((uint)VK.G, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+			keybd_event((int)VK.Y, (byte)MapVirtualKey((uint)VK.Y, 0), 0, 0); // N1 Press
+			keybd_event((int)VK.Y, (byte)MapVirtualKey((uint)VK.Y, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+			
+		}
+		static void BlenderMoveZ()
+		{
+			keybd_event((int)VK.G, (byte)MapVirtualKey((uint)VK.G, 0), 0, 0); // N1 Press
+			keybd_event((int)VK.G, (byte)MapVirtualKey((uint)VK.G, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+			keybd_event((int)VK.Z, (byte)MapVirtualKey((uint)VK.Y, 0), 0, 0); // N1 Press
+			keybd_event((int)VK.Z, (byte)MapVirtualKey((uint)VK.Y, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+			
+		}
+		static void BlenderLoopCut()
+		{
+			keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.CTRL, 0), 0, 0); // N1 Press
+			keybd_event((int)VK.R, (byte)MapVirtualKey((uint)VK.R, 0), 0, 0); // N1 Press
+			keybd_event((int)VK.R, (byte)MapVirtualKey((uint)VK.R, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+			keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.CTRL, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+			keybd_event((int)VK.ENTER, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+			keybd_event((int)VK.ENTER, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+		}
 		public static void Main(string[] args)
 		{
 			//Directory.Delete(@"C:\Users\Administrator\AppData\Local\JetBrains\Fleet",true);
 			//GeneratorTri();
 			//RegisterHotKey(IntPtr.Zero, 81, 0, 81);//Q
-			//RegisterHotKey(IntPtr.Zero, 87, 0, 87);//W 
+			
 			
 			//RegisterHotKey(IntPtr.Zero, 68, 0, 68);//D
 			//RegisterHotKey(IntPtr.Zero, 70, 0, 70);//F
-//			RegisterHotKey(IntPtr.Zero, 0x51, 0, 0x51);//Q
+			RegisterHotKey(IntPtr.Zero, (int)Keys.J, 0, (int)Keys.J);
+			RegisterHotKey(IntPtr.Zero, (int)Keys.K, 0, (int)Keys.K);
+			RegisterHotKey(IntPtr.Zero, (int)Keys.L, 0, (int)Keys.L);
+			
 //			RegisterHotKey(IntPtr.Zero, 34, 0, 34);//P
 //			RegisterHotKey(IntPtr.Zero, 33, 0, 33);// PageUp
 			// document.addEventListener('keydown',evt=>console.log(evt));
 			
 //			RegisterHotKey(IntPtr.Zero, 65, 0, 65);//A
 //			RegisterHotKey(IntPtr.Zero, 0x53, 0, 0x53);//S
-			RegisterHotKey(IntPtr.Zero, 49, 0, 49);
+			//	RegisterHotKey(IntPtr.Zero, 49, 0, 49);
 			MSG msg;
 			int ret;
 			while ((ret = GetMessage(out msg, IntPtr.Zero, 0, 0)) != 0) {
 				if (ret == 1 && msg.message == 0x0312) {
 					ushort id = (ushort)msg.wParam;
 					
-					if (id == 49) { // Q
+					if (id == (int) Keys.J) { // Q
 						//BlenderGeometryNodes();
 						//PhotoshoBrush();
 						/*
 						BlenderDuplicate();
 					*/
-					BlenderDuplicate();
+						BlenderMoveY();
 						//ColorPicker();
 						//ShaderToy1();
 						//Translate("",true);
+					} else if (id ==  (int)Keys.K) {
+						BlenderMoveZ();
+					} else if (id ==  (int)Keys.L) {
+						BlenderLoopCut();
 					} else if (id == 34) {//P
 						TakeScreenShot();
 					} else if (id == 65) {//a

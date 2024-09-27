@@ -358,7 +358,39 @@ public static class Android
 		var s = ColorTranslator.ToHtml(sampleColor);
 		textBox.SelectedText = string.Format("{0}\r\n{1}\r\n{2}\r\n{3}", sampleColor.R, sampleColor.G, sampleColor.B, s);
 	}
-	
+	private static Bitmap GetSampleRegion(int mouseX, int mouseY)
+    {
+        var bmp = new Bitmap(sampleSize, sampleSize, PixelFormat.Format32bppArgb);
+        Graphics gfxScreenshot = Graphics.FromImage(bmp);
+        gfxScreenshot.CopyFromScreen(mouseX - sampleSize / 2, mouseY - sampleSize / 2, 0, 0, new Size(sampleSize, sampleSize));
+        gfxScreenshot.Save();
+        gfxScreenshot.Dispose();
+        return bmp;
+    }
+	 public static void ColorPicker1()
+    {
+        POINT p;
+        GetCursorPos(out p);
+        int mouseX = p.X;
+        int mouseY = p.Y;
+       
+        var sampleBitmap = GetSampleRegion( mouseX, mouseY);
+        Color sampleColor = sampleBitmap.GetPixel(sampleSize / 2, sampleSize / 2);
+        sampleBitmap.Dispose();
+        //			string tmpR = (sampleColor.R / 255f).ToString("0.##f", CultureInfo.GetCultureInfo("en-us"));
+        //			string tmpG = (sampleColor.G / 255f).ToString("0.##f", CultureInfo.GetCultureInfo("en-us"));
+        //			string tmpB = (sampleColor.B / 255f).ToString("0.##f", CultureInfo.GetCultureInfo("en-us"));
+        //			var s = string.Format("{0}, {1}, {2}", tmpR, tmpG, tmpB);
+        //var s = ColorTranslator.ToHtml(sampleColor);
+        //ClipboardShare.SetText(s.Substring(1));
+        int red = sampleColor.R;
+        int green = sampleColor.G;
+        int blue = sampleColor.B;
+        double r_output = Math.Pow(red / 255.0, 2.2);
+        double g_output = Math.Pow(green / 255.0, 2.2);
+        double b_output = Math.Pow(blue / 255.0, 2.2);
+        ClipboardShare.SetText(string.Format("{0}\r\n{1}\r\n{2}", r_output, g_output, b_output));
+    }
 	static	int sampleSize = 5;
 	private static Bitmap GetSampleRegion(Screen screen, int mouseX, int mouseY)
 	{
@@ -461,6 +493,7 @@ if (Utils.checkIfColorIsRange(20,bitmap,new int[]{{420,502,0,0,0,
 
 /*
 if (TaskUtils.checkIf{0}(accessibilityService, bitmap)) {{
+// {1}
                             return;
                         }}
 */
@@ -492,15 +525,7 @@ if (TaskUtils.checkIf{0}(accessibilityService, bitmap)) {{
 			ClipboardShare.SetText(str);
 			textBox.Text += str;
 		} else if (first.StartsWith("xx")) {
-			foreach (var element in Directory.GetFileSystemEntries(first.TrimStart('x').Trim())) {
-				if (File.Exists(element)) {
-					
-					File.Delete(element);
-				} else {
-					Directory.Delete(element, true);
-				}
-			}
-			
+			Handlers.DeleteDirectory(first);
 		} else if (first.StartsWith("yy")) {
 			var matches = Regex.Matches(second, "[\\d()i+ -]+(?=,)").Cast<Match>().Select(x => x.Value).ToArray();
 			var list = new List<string>();
@@ -514,47 +539,11 @@ if (TaskUtils.checkIf{0}(accessibilityService, bitmap)) {{
 			textBox.Text += str;
 			ClipboardShare.SetText(str);
 		} else if (first.StartsWith("1")) {
-			var list = textBox.Text.TrimStart('1').Trim()
-				.Split(Environment.NewLine.ToArray(), StringSplitOptions.RemoveEmptyEntries);
-			foreach (var element in list) {
-				var array = element.Split('|');
-				if (array.Length > 1) {
-					for (int i = 1; i < array.Length; i++) {
-						var path = Path.Combine(array[0], array[i]);
-						if (path.SubstringAfterLast('\\').Contains("."))
-							path.CreateFileIfNotExists();
-						else
-							path.CreateDirectoryIfNotExists();
-					}
-				}
-			}
+			Handlers.CreateDirectories(textBox);
 		} else if (first.StartsWith("2")) {
-			var parts=first.TrimStart('2').Trim().Split(new char[]{'|'},StringSplitOptions.RemoveEmptyEntries);
-			
-			var files=Directory.GetFiles(parts[0],"*",SearchOption.AllDirectories)
-				.Where(x=>Path.GetFileName(x)==parts[1]);
-			
-			foreach (var element in files) {
-				var f=Path.Combine(parts[2],element.SubstringAfter(parts[0]+"\\"));
-				Path.GetDirectoryName(f).CreateDirectoryIfNotExists();
-				if(!File.Exists(f))
-					File.Copy(element,f);
-			}
-			
-			
+			Handlers.CopyResourceFiles(first);
 		}else if(first.StartsWith("d")){
-			var str=textBox.Text.TrimStart('d').SubstringAfterLast('=').SubstringBefore("&");
-			Process.Start(new ProcessStartInfo{
-			              FileName="yt-dlp_x86.exe",
-			              Arguments="--proxy http://127.0.0.1:10809  -f 137 https://www.youtube.com/watch?v="+
-			              	str,
-			              WorkingDirectory=@"C:\Users\Administrator\Desktop\视频"
-			              });
-			Process.Start(new ProcessStartInfo{
-			              FileName="yt-dlp_x86.exe",
-			              Arguments="--proxy http://127.0.0.1:10809  -f 299 https://www.youtube.com/watch?v="+str,
-			               WorkingDirectory=@"C:\Users\Administrator\Desktop\视频"
-			              });
+			Handlers.DownloadYouTubeVideo(textBox);
 		} else if (first.StartsWith("_")) {
 		
 			var path = first.TrimStart('_');
@@ -586,7 +575,16 @@ if (TaskUtils.checkIf{0}(accessibilityService, bitmap)) {{
 		} else if (first.StartsWith("\\")) {
 			textBox.Text = string.Join("", Regex.Split(textBox.Text, "\\d+")
 				.Select(x => x + "\"+xxx+\""));
-		} else {
+		} else if (first.StartsWith("9")) {
+			//Handlers.CopyBlendFiles(first);
+			Handlers.Fetch(first.TrimStart('9').Trim());
+			//Handlers.SaveScripts(first.TrimStart('9').Trim());
+		}else if (first.StartsWith("8")) {
+			//Handlers.CopyBlendFiles(first);
+			var parts=first.TrimStart('8').Trim().Split('|');
+			Handlers.Download(parts[0],"https://www.shadertoy.com"+parts[1]
+			                  .SubstringBeforeLast("\"").SubstringAfterLast('"').Replace("\\",""));
+		}else {
 			var array = first.Split(' ');
 			if (array.Length > 1)
 				textBox.Text = first + "\r\n" + second.Replace(

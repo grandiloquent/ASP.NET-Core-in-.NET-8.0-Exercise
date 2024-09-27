@@ -37,6 +37,9 @@
     <Reference Include="EventHook">
       <HintPath>..\EventHook.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\..\..\Documents\Codes\App\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -78,6 +81,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Android.cs" />
+    <Compile Include="Handlers.cs" />
     <Compile Include="Images.cs" />
     <Compile Include="Keys.cs" />
     <Compile Include="MainForm.cs">
