@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function substringAfterLast(str, needle) {
+            const index = str.lastIndexOf(needle);
+
+            if (index === -1) return str
+            return str.substring(index + 1);
+        }
+    </script>
+</head>
+
+<body>
+    <div id="player">
+        <canvas id="demogl" class="playerCanvas" tabindex="0" width="392" height="220"></canvas>
+    </div>
+    <script src="2.js"></script>
+    <script src="3.js"></script>
+    <script src="15.js"></script>
+    <script src="16.js"></script>
+    <script>
+        watchInit()
+    </script>
+</body>
+
+</html>

@@ -136,7 +136,7 @@ public class Handlers
 		}
 	}
 	
-	public static void Fetch(string uri)
+	public static void Fetch(string dir, string uri)
 	{
 		//if (!uri.Contains("shadertoy.com")) {
 		//	return;
@@ -152,7 +152,7 @@ public class Handlers
 		req.GetRequestStream().Write(bytes, 0, bytes.Length);
 		using (var reader = new StreamReader(req.GetResponse().GetResponseStream())) {
 			var s = reader.ReadToEnd();
-			File.WriteAllText((id + ".json").GetDesktopPath(), s);
+			File.WriteAllText(Path.Combine(dir, id + ".json"), s);
 			//FormatJSON(s, uri);
 		}
 		
@@ -222,14 +222,34 @@ public class Handlers
 		var hd = new HtmlAgilityPack.HtmlDocument();
 		hd.LoadHtml(File.ReadAllText(filePath));
 		var nodes =	hd.DocumentNode.SelectNodes("//script[not(@src)]");
-		var dir="scripts".GetDesktopPath();
+		var dir = "scripts".GetDesktopPath();
 		dir.CreateDirectoryIfNotExists();
-		var i=0;
+		var i = 0;
 		foreach (var element in nodes) {
 			i++;
-			var f=Path.Combine(dir,i+".js");
-			File.WriteAllText(f,element.InnerHtml);
+			var f = Path.Combine(dir, i + ".js");
+			File.WriteAllText(f, element.InnerHtml);
 		}
+	}
+	
+	public static void ShaderToys()
+	{
+		var dir = @"C:\Users\Administrator\Desktop\视频\Net\WebApp\ShaderToy\Shaders";
+		var files = Directory.GetFiles(dir, "*.json");
+		var list=new List<string>();
+		foreach (var element in files) {
+			var obj = JsonConvert.DeserializeObject<JArray>(File.ReadAllText(element))[0]["info"];
+			var id = obj["id"] ;
+			var name = obj["name"] ;
+			list.Add(string.Format("<a href=\"./Shaders/index.html?id={0}\">{1}</a>",id,name));
+		}
+	
+		var text=File.ReadAllText("shadertoys.html".GetEntryPath())
+			.Replace("{0}",string.Join(Environment.NewLine,list));
+		File.WriteAllText(
+			Path.Combine(Path.GetDirectoryName(dir),"index.html"),text
+		);
+		
 	}
 	
 }

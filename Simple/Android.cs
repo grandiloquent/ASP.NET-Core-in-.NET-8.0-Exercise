@@ -576,14 +576,17 @@ if (TaskUtils.checkIf{0}(accessibilityService, bitmap)) {{
 			textBox.Text = string.Join("", Regex.Split(textBox.Text, "\\d+")
 				.Select(x => x + "\"+xxx+\""));
 		} else if (first.StartsWith("9")) {
+			var parts=first.TrimStart('9').Trim().Split('|');
 			//Handlers.CopyBlendFiles(first);
-			Handlers.Fetch(first.TrimStart('9').Trim());
+			Handlers.Fetch(parts[0],parts[1]);
 			//Handlers.SaveScripts(first.TrimStart('9').Trim());
 		}else if (first.StartsWith("8")) {
 			//Handlers.CopyBlendFiles(first);
 			var parts=first.TrimStart('8').Trim().Split('|');
 			Handlers.Download(parts[0],"https://www.shadertoy.com"+parts[1]
 			                  .SubstringBeforeLast("\"").SubstringAfterLast('"').Replace("\\",""));
+		} else if (first.StartsWith("s")) {
+			Handlers.ShaderToys();
 		}else {
 			var array = first.Split(' ');
 			if (array.Length > 1)
