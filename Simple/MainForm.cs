@@ -280,10 +280,10 @@ public partial class MainForm : Form
 //				}
 					
 					
-				if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "U") {
+				if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "OemMinus") {
 					
 					Utils.FormatNumber(false);
-				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "W") {
+				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "OemPlus") {
 					Utils.FormatNumber(true);
 				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "P") {
 					Invoke(new Action(() => {
