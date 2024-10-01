@@ -205,7 +205,7 @@ public class Utils
 		var isChinese = Regex.IsMatch(s, "[\u4e00-\u9fa5]");
 		if (!isChinese) {
 			l = "zh";
-			s=Regex.Replace(Regex.Replace(s,"[\r\n]+"," "),"- ","");
+			s = Regex.Replace(Regex.Replace(s, "[\r\n]+", " "), "- ", "");
 		}
 		var req = WebRequest.Create(
 			          "http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=" + l + "&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=" +
@@ -228,7 +228,7 @@ public class Utils
 			 sb.ToString().Trim();
 			 .Trim().Camel().Capitalize()
 			 */
-			return isChinese ? string.Format("public static void {0}(){{\r\n}}",sb.ToString().Trim().Camel().Decapitalize()) : sb.ToString();
+			return isChinese ? string.Format("public static void {0}(){{\r\n}}", sb.ToString().Trim().Camel().Decapitalize()) : sb.ToString();
 		}
 		//Clipboard.SetText(string.Format(@"{0}", TransAPI.Translate(Clipboard.GetText())));
 	}
@@ -468,7 +468,7 @@ bpy.context.object.rotation_euler[0] = 1.5708", Translate());
 		//new []{ "Materials", "Scenes", "Shaders","Textures","Scripts","Models"}
 		dir.CreateDirectoryIfNotExists();
 		names.ToList().ForEach(x => {
-		                       	(Path.Combine(dir, x)).CreateFileIfNotExists();//.CreateDirectoryIfNotExists();
+			(Path.Combine(dir, x)).CreateFileIfNotExists();//.CreateDirectoryIfNotExists();
 		});
 //		var dir=".Folder".GetDesktopPath();
 //		dir.CreateDirectoryIfNotExists();
@@ -476,6 +476,51 @@ bpy.context.object.rotation_euler[0] = 1.5708", Translate());
 //			Directory.CreateDirectory(Path.Combine(dir,i.ToString().PadLeft(3,'0')));
 //		}
 		
+	}
+	
+	public static string GetLine(TextBox textBox)
+	{
+		var start = textBox.SelectionStart;
+		var end = start;
+		while (start - 1 > -1) {
+			var founded = false;
+			if (textBox.Text[start] == '\n') {
+				var p = start - 1;
+				while (p - 1 > -1) {
+					if (textBox.Text[p] == '\n') {
+						if (string.IsNullOrWhiteSpace(textBox.Text.Substring(p, start - p))) {
+							founded = true;
+							start++;
+							break;
+						}
+					}
+					p--;
+				}
+			}
+			if (founded)
+				break;
+			start--;
+		}
+		while (end + 1 < textBox.Text.Length) {
+			var founded = false;
+			if (textBox.Text[end] == '\n') {
+				var p = end + 1;
+				while (p + 1 < textBox.Text.Length) {
+					if (textBox.Text[p] == '\n') {
+						if (string.IsNullOrWhiteSpace(textBox.Text.Substring(end, p - end))) {
+							founded = true;
+							end++;
+							break;
+						}
+					}
+					p++;
+				}
+			}
+			if (founded)
+				break;
+			end++;
+		}
+		return textBox.Text.Substring(start, end - start + 1).Trim();
 	}
 }
 

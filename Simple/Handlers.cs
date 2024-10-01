@@ -236,20 +236,47 @@ public class Handlers
 	{
 		var dir = @"C:\Users\Administrator\Desktop\视频\Net\WebApp\ShaderToy\Shaders";
 		var files = Directory.GetFiles(dir, "*.json");
-		var list=new List<string>();
+		var list = new List<string>();
 		foreach (var element in files) {
 			var obj = JsonConvert.DeserializeObject<JArray>(File.ReadAllText(element))[0]["info"];
-			var id = obj["id"] ;
-			var name = obj["name"] ;
-			list.Add(string.Format("<a href=\"./Shaders/index.html?id={0}\">{1}</a>",id,name));
+			var id = obj["id"];
+			var name = obj["name"];
+			list.Add(string.Format("<a href=\"./Shaders/index.html?id={0}\">{1}</a>", id, name));
 		}
 	
-		var text=File.ReadAllText("shadertoys.html".GetEntryPath())
-			.Replace("{0}",string.Join(Environment.NewLine,list));
+		var text = File.ReadAllText("shadertoys.html".GetEntryPath())
+			.Replace("{0}", string.Join(Environment.NewLine, list));
 		File.WriteAllText(
-			Path.Combine(Path.GetDirectoryName(dir),"index.html"),text
+			Path.Combine(Path.GetDirectoryName(dir), "index.html"), text
 		);
 		
+	}
+	
+	public static void RunBlender(int start = 1, string dir = @"C:\Users\Administrator\Desktop\.Folder\099")
+	{
+		 
+		if (start == 1) {
+			try {
+				start += Directory.GetFiles(dir, "*.blend")
+			.Max(x => {
+					var s = Path.GetFileNameWithoutExtension(x);
+					if (Regex.IsMatch(s, "^\\d+$")) {
+						return int.Parse(s);
+					} else {
+						return 0;
+					}
+				});
+			} catch {
+			
+			}
+		}
+		
+		var f = Path.Combine(dir, start.ToString().PadLeft(3, '0') + ".blend");
+		if (!File.Exists(f)) {
+			var str = "1.blend".GetEntryPath();
+			File.Copy(str, f);
+		}
+		Process.Start(f);
 	}
 	
 }

@@ -249,8 +249,11 @@ public static class Android
 				s = Translate(first.TrimStart('1'), first.StartsWith("1") ? 1 : 0);
 				ClipboardShare.SetText(s);
 				textBox.SelectedText = s;
-			}else if(arg.KeyCode==Keys.S){
-				ClipboardShare.SetText(textBox.Text.Trim());
+			}else if(arg.KeyCode==Keys.R){
+				var parts=Utils.GetLine(textBox).Trim();
+				Process.Start(
+					parts.SubstringBefore(' '),parts.SubstringAfter(' ')
+				);
 			}
 			return;
 			if (arg.Alt) {
@@ -587,6 +590,16 @@ if (TaskUtils.checkIf{0}(accessibilityService, bitmap)) {{
 			                  .SubstringBeforeLast("\"").SubstringAfterLast('"').Replace("\\",""));
 		} else if (first.StartsWith("s")) {
 			Handlers.ShaderToys();
+		} else if (first.StartsWith("b")) {
+		var parts=first.TrimStart('b').Trim().Split('|');
+		var start=1;
+		try {
+			start=int.Parse(parts[0]);
+		} catch   {
+			
+		 
+		}
+		Handlers.RunBlender(start);
 		}else {
 			var array = first.Split(' ');
 			if (array.Length > 1)
