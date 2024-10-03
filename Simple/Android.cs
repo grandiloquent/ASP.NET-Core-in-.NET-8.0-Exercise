@@ -249,11 +249,20 @@ public static class Android
 				s = Translate(first.TrimStart('1'), first.StartsWith("1") ? 1 : 0);
 				ClipboardShare.SetText(s);
 				textBox.SelectedText = s;
-			}else if(arg.KeyCode==Keys.R){
-				var parts=Utils.GetLine(textBox).Trim();
+			} else if (arg.KeyCode == Keys.R) {
+				var parts = Utils.GetLine(textBox).Trim();
 				Process.Start(
-					parts.SubstringBefore(' '),parts.SubstringAfter(' ')
+					parts.SubstringBefore(' '), parts.SubstringAfter(' ')
 				);
+			} else if (arg.KeyCode == Keys.Q) {
+				var line = Utils.GetLine(textBox);
+				if (line.StartsWith("d")) {
+					Handlers.DownloadYouTubeVideo(line.TrimStart('d'));
+				}else if (line.StartsWith("_")) {
+					Handlers.QuickAndroid(line);
+				}else if (line.StartsWith("t")) {
+					Handlers.Translate(line.TrimStart('t'));
+				}
 			}
 			return;
 			if (arg.Alt) {
@@ -362,38 +371,38 @@ public static class Android
 		textBox.SelectedText = string.Format("{0}\r\n{1}\r\n{2}\r\n{3}", sampleColor.R, sampleColor.G, sampleColor.B, s);
 	}
 	private static Bitmap GetSampleRegion(int mouseX, int mouseY)
-    {
-        var bmp = new Bitmap(sampleSize, sampleSize, PixelFormat.Format32bppArgb);
-        Graphics gfxScreenshot = Graphics.FromImage(bmp);
-        gfxScreenshot.CopyFromScreen(mouseX - sampleSize / 2, mouseY - sampleSize / 2, 0, 0, new Size(sampleSize, sampleSize));
-        gfxScreenshot.Save();
-        gfxScreenshot.Dispose();
-        return bmp;
-    }
-	 public static void ColorPicker1()
-    {
-        POINT p;
-        GetCursorPos(out p);
-        int mouseX = p.X;
-        int mouseY = p.Y;
+	{
+		var bmp = new Bitmap(sampleSize, sampleSize, PixelFormat.Format32bppArgb);
+		Graphics gfxScreenshot = Graphics.FromImage(bmp);
+		gfxScreenshot.CopyFromScreen(mouseX - sampleSize / 2, mouseY - sampleSize / 2, 0, 0, new Size(sampleSize, sampleSize));
+		gfxScreenshot.Save();
+		gfxScreenshot.Dispose();
+		return bmp;
+	}
+	public static void ColorPicker1()
+	{
+		POINT p;
+		GetCursorPos(out p);
+		int mouseX = p.X;
+		int mouseY = p.Y;
        
-        var sampleBitmap = GetSampleRegion( mouseX, mouseY);
-        Color sampleColor = sampleBitmap.GetPixel(sampleSize / 2, sampleSize / 2);
-        sampleBitmap.Dispose();
-        //			string tmpR = (sampleColor.R / 255f).ToString("0.##f", CultureInfo.GetCultureInfo("en-us"));
-        //			string tmpG = (sampleColor.G / 255f).ToString("0.##f", CultureInfo.GetCultureInfo("en-us"));
-        //			string tmpB = (sampleColor.B / 255f).ToString("0.##f", CultureInfo.GetCultureInfo("en-us"));
-        //			var s = string.Format("{0}, {1}, {2}", tmpR, tmpG, tmpB);
-        //var s = ColorTranslator.ToHtml(sampleColor);
-        //ClipboardShare.SetText(s.Substring(1));
-        int red = sampleColor.R;
-        int green = sampleColor.G;
-        int blue = sampleColor.B;
-        double r_output = Math.Pow(red / 255.0, 2.2);
-        double g_output = Math.Pow(green / 255.0, 2.2);
-        double b_output = Math.Pow(blue / 255.0, 2.2);
-        ClipboardShare.SetText(string.Format("{0}\r\n{1}\r\n{2}", r_output, g_output, b_output));
-    }
+		var sampleBitmap = GetSampleRegion(mouseX, mouseY);
+		Color sampleColor = sampleBitmap.GetPixel(sampleSize / 2, sampleSize / 2);
+		sampleBitmap.Dispose();
+		//			string tmpR = (sampleColor.R / 255f).ToString("0.##f", CultureInfo.GetCultureInfo("en-us"));
+		//			string tmpG = (sampleColor.G / 255f).ToString("0.##f", CultureInfo.GetCultureInfo("en-us"));
+		//			string tmpB = (sampleColor.B / 255f).ToString("0.##f", CultureInfo.GetCultureInfo("en-us"));
+		//			var s = string.Format("{0}, {1}, {2}", tmpR, tmpG, tmpB);
+		//var s = ColorTranslator.ToHtml(sampleColor);
+		//ClipboardShare.SetText(s.Substring(1));
+		int red = sampleColor.R;
+		int green = sampleColor.G;
+		int blue = sampleColor.B;
+		double r_output = Math.Pow(red / 255.0, 2.2);
+		double g_output = Math.Pow(green / 255.0, 2.2);
+		double b_output = Math.Pow(blue / 255.0, 2.2);
+		ClipboardShare.SetText(string.Format("{0}\r\n{1}\r\n{2}", r_output, g_output, b_output));
+	}
 	static	int sampleSize = 5;
 	private static Bitmap GetSampleRegion(Screen screen, int mouseX, int mouseY)
 	{
@@ -495,9 +504,9 @@ if (Utils.checkIfColorIsRange(20,bitmap,new int[]{{420,502,0,0,0,
     }}
 
 /*
-if (TaskUtils.checkIf{0}(accessibilityService, bitmap)) {{
+if (TaskUtils.checkIf{0}(this, bitmap)) {{
 // {1}
-                            return;
+                            
                         }}
 */
 ", sb.ToString().Trim().Camel().Capitalize(), s) : sb.ToString().Trim().Camel().Decapitalize()) : sb.ToString();
@@ -533,74 +542,47 @@ if (TaskUtils.checkIf{0}(accessibilityService, bitmap)) {{
 			var matches = Regex.Matches(second, "[\\d()i+ -]+(?=,)").Cast<Match>().Select(x => x.Value).ToArray();
 			var list = new List<string>();
 			for (int i = 0; i < matches.Count(); i++) {
-				if (i%5==0){
-					list.Add( matches.ElementAt(i));
-					list.Add( matches.ElementAt(i+1));
+				if (i % 5 == 0) {
+					list.Add(matches.ElementAt(i));
+					list.Add(matches.ElementAt(i + 1));
 				}
 			}
-			var str = string.Join(",\n", list).Replace("i","x");
+			var str = string.Join(",\n", list).Replace("i", "x");
 			textBox.Text += str;
 			ClipboardShare.SetText(str);
 		} else if (first.StartsWith("1")) {
 			Handlers.CreateDirectories(textBox);
 		} else if (first.StartsWith("2")) {
 			Handlers.CopyResourceFiles(first);
-		}else if(first.StartsWith("d")){
-			Handlers.DownloadYouTubeVideo(textBox);
-		} else if (first.StartsWith("_")) {
-		
-			var path = first.TrimStart('_');
-			var fileName = Path.GetFileName(path);
-			System.IO.Compression.ZipFile.ExtractToDirectory("Kuai5Guang.zip".GetEntryPath(),
-				Path.GetDirectoryName(path));
-			var dir = Directory.GetDirectories(Path.GetDirectoryName(path)).First();
-			var src = Path.GetFileName(dir);
-			Directory.Move(dir, path);
-			var files = Directory.GetFiles(Path.Combine(path, "app\\src"), "*.java", SearchOption.AllDirectories);
-			foreach (var element in files) {
-				File.WriteAllText(element, File.ReadAllText(element).Replace(
-					src.ToLower(), fileName.ToLower()
-				));
-			}
-			var srcParent = Path.GetDirectoryName(files.First());
-			Directory.Move(srcParent, Path.Combine(Path.GetDirectoryName(srcParent), fileName.ToLower()));
-			               
-			files = Directory.GetFiles(path, "*.kts", SearchOption.AllDirectories);
-			foreach (var element in files) {
-				File.WriteAllText(element, File.ReadAllText(element).Replace(
-					src.ToLower(), fileName.ToLower()
-				));
-			}
-			
-		} else if (first.StartsWith("/")) {
+		}  else if (first.StartsWith("/")) {
 		
 			textBox.Text = textBox.Text.FormatString();
 		} else if (first.StartsWith("\\")) {
 			textBox.Text = string.Join("", Regex.Split(textBox.Text, "\\d+")
 				.Select(x => x + "\"+xxx+\""));
 		} else if (first.StartsWith("9")) {
-			var parts=first.TrimStart('9').Trim().Split('|');
+			var parts = first.TrimStart('9').Trim().Split('|');
 			//Handlers.CopyBlendFiles(first);
-			Handlers.Fetch(parts[0],parts[1]);
+			Handlers.Fetch(parts[0], parts[1]);
 			//Handlers.SaveScripts(first.TrimStart('9').Trim());
-		}else if (first.StartsWith("8")) {
+		} else if (first.StartsWith("8")) {
 			//Handlers.CopyBlendFiles(first);
-			var parts=first.TrimStart('8').Trim().Split('|');
-			Handlers.Download(parts[0],"https://www.shadertoy.com"+parts[1]
-			                  .SubstringBeforeLast("\"").SubstringAfterLast('"').Replace("\\",""));
+			var parts = first.TrimStart('8').Trim().Split('|');
+			Handlers.Download(parts[0], "https://www.shadertoy.com" + parts[1]
+			                  .SubstringBeforeLast("\"").SubstringAfterLast('"').Replace("\\", ""));
 		} else if (first.StartsWith("s")) {
 			Handlers.ShaderToys();
 		} else if (first.StartsWith("b")) {
-		var parts=first.TrimStart('b').Trim().Split('|');
-		var start=1;
-		try {
-			start=int.Parse(parts[0]);
-		} catch   {
+			var parts = first.TrimStart('b').Trim().Split('|');
+			var start = 1;
+			try {
+				start = int.Parse(parts[0]);
+			} catch {
 			
 		 
-		}
-		Handlers.RunBlender(start);
-		}else {
+			}
+			Handlers.RunBlender(start);
+		} else {
 			var array = first.Split(' ');
 			if (array.Length > 1)
 				textBox.Text = first + "\r\n" + second.Replace(

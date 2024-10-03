@@ -58,17 +58,14 @@ public partial class MainForm : Form
 	private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 	protected override void WndProc(ref Message m)
 	{
-		if (m.Msg == 0x0312 && textBox1.Text == "xyz") {
+		if (m.Msg == 0x0312) {
 			/*
 				  ushort id = (ushort)m.WParam;
         Keys key = (Keys)( ( (int)m.LParam >> 16 ) & 0xFFFF );
         Modifiers mods = (Modifiers)( (int)m.LParam & 0xFFFF );*/
 			ushort id = (ushort)m.WParam;
-			if (id == 81) {
-				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_E);
-				//System.Threading.Thread.Sleep(200);
-				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Z);
-				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Z);
+			if (id == (ushort)Keys.Q) {
+				Blender();
 			} else if (id == 87) {
 				//System.Threading.Thread.Sleep(100);
 				//Utils.Press(0x45);
@@ -108,7 +105,7 @@ public partial class MainForm : Form
 		
 		
 		
-//		RegisterHotKey(this.Handle, 81, 0, 81);
+		//RegisterHotKey(this.Handle, (int)Key.KeyQ, 0, (int)Key.KeyQ);
 //		RegisterHotKey(this.Handle, 87, 0, 87);
 //		RegisterHotKey(this.Handle, 65, 0, 65);
 //		RegisterHotKey(this.Handle, 68, 0, 68);
@@ -196,9 +193,12 @@ public partial class MainForm : Form
 			var keyboardWatcher = eventHookFactory.GetKeyboardWatcher();
 			keyboardWatcher.Start();
 			keyboardWatcher.OnKeyInput += (s, e) => {
-//				Invoke(new Action(() => {
-//				                  	textBox1.Text=e.KeyData.Keyname;
-//					}));
+				 
+				/*
+				 Invoke(new Action(() => {
+				                  	textBox1.Text+=Environment.NewLine+e.KeyData.Keyname;
+					}));
+				 */
 				if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F8") {
 //					try {
 //						Images.Ocr(this, textBox1, 0, 120, 120);
@@ -285,11 +285,12 @@ public partial class MainForm : Form
 					Utils.FormatNumber(false);
 				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "OemPlus") {
 					Utils.FormatNumber(true);
-				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "P") {
-					Invoke(new Action(() => {
-					Android.ColorPicker1();
-					}));
 				} 
+//				else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "P") {
+//					Invoke(new Action(() => {
+//						
+//					}));
+//				} 
 				if (e.KeyData.EventType == EventHook.KeyEvent.up) {
 					
 					if (e.KeyData.Keyname == "0") {
@@ -393,39 +394,39 @@ public partial class MainForm : Form
 							Text = _str;
 						}));
 					} else if (e.KeyData.Keyname == "OemMinus") {
-						_str = "-"+_str.TrimStart('-');
+						_str = "-" + _str.TrimStart('-');
 						Invoke(new Action(() => {
 							Text = _str;
 						}));
-					}else if (e.KeyData.Keyname == "Subtract") {
-						_str = "-"+_str.TrimStart('-');
+					} else if (e.KeyData.Keyname == "Subtract") {
+						_str = "-" + _str.TrimStart('-');
 						Invoke(new Action(() => {
 							Text = _str;
 						}));
-					}else if (e.KeyData.Keyname == "Add") {
-						_str = "-."+_str.TrimStart("-.".ToArray());
+					} else if (e.KeyData.Keyname == "Add") {
+						_str = "-." + _str.TrimStart("-.".ToArray());
 						Invoke(new Action(() => {
 							Text = _str;
 						}));
-					}else if (e.KeyData.Keyname == "OemPeriod") {
-						_str +=".";
+					} else if (e.KeyData.Keyname == "OemPeriod") {
+						_str += ".";
 						Invoke(new Action(() => {
 							Text = _str;
 						}));
-					}else if (e.KeyData.Keyname == "Decimal") {
-						_str +=".";
+					} else if (e.KeyData.Keyname == "Decimal") {
+						_str += ".";
 						Invoke(new Action(() => {
 							Text = _str;
 						}));
-					}else if (e.KeyData.Keyname == "Back") {
-						if(_str.Length>0)
-						_str =_str.Substring(0,_str.Length-1);
+					} else if (e.KeyData.Keyname == "Back") {
+						if (_str.Length > 0)
+							_str = _str.Substring(0, _str.Length - 1);
 						Invoke(new Action(() => {
 							Text = _str;
 						}));
-					}else if (e.KeyData.Keyname == "Return") {
+					} else if (e.KeyData.Keyname == "Return") {
 						ClipboardShare.SetText(_str);
-						_str =string.Empty;
+						_str = string.Empty;
 						Invoke(new Action(() => {
 							Text = _str;
 						}));
@@ -767,7 +768,145 @@ public partial class MainForm : Form
 	Point _p1;
 	Point _p2;
 	
-	
-	
+	static void Blender()
+	{
+		keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press  
+		keybd_event((int)VK.A, (byte)MapVirtualKey((uint)VK.A, 0), 0, 0); // N1 Press  
+		keybd_event((int)VK.A, (byte)MapVirtualKey((uint)VK.A, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+		keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release 
+		keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.S, 0), 0, 0); // N1 Press  
+		keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.S, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+		/*
+			 keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press  
+			keybd_event((int)VK.D, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+			keybd_event((int)VK.D, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+			keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release 
+			keybd_event((int)VK.R, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+			keybd_event((int)VK.R, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+			keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press  
+			keybd_event((int)VK.V, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+			keybd_event((int)VK.V, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+			keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release 
+			keybd_event((int)VK.ENTER, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+			keybd_event((int)VK.ENTER, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+			 */
+	}
+	#pragma warning disable 649
+	internal struct INPUT
+	{
+		public UInt32 Type;
+		public KEYBOARDMOUSEHARDWARE Data;
+	}
+	[StructLayout(LayoutKind.Explicit)]
+	//This is KEYBOARD-MOUSE-HARDWARE union INPUT won't work if you remove MOUSE or HARDWARE
+        internal struct KEYBOARDMOUSEHARDWARE
+	{
+		[FieldOffset(0)]
+		public KEYBDINPUT Keyboard;
+		[FieldOffset(0)]
+		public HARDWAREINPUT Hardware;
+		[FieldOffset(0)]
+		public MOUSEINPUT Mouse;
+	}
+	internal struct KEYBDINPUT
+	{
+		public UInt16 Vk;
+		public UInt16 Scan;
+		public UInt32 Flags;
+		public UInt32 Time;
+		public IntPtr ExtraInfo;
+	}
+	internal struct MOUSEINPUT
+	{
+		public Int32 X;
+		public Int32 Y;
+		public UInt32 MouseData;
+		public UInt32 Flags;
+		public UInt32 Time;
+		public IntPtr ExtraInfo;
+	}
+	internal struct HARDWAREINPUT
+	{
+		public UInt32 Msg;
+		public UInt16 ParamL;
+		public UInt16 ParamH;
+	}
+	[DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true, CallingConvention = CallingConvention.Winapi)]
+	static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, uint extraInfo);
+	const uint MOUSEEVENTF_ABSOLUTE = 0x8000;
+	const uint MOUSEEVENTF_LEFTDOWN = 0x0002;
+	const uint MOUSEEVENTF_LEFTUP = 0x0004;
+	const uint MOUSEEVENTF_MIDDLEDOWN = 0x0020;
+	const uint MOUSEEVENTF_MIDDLEUP = 0x0040;
+	const uint MOUSEEVENTF_MOVE = 0x0001;
+	const uint MOUSEEVENTF_RIGHTDOWN = 0x0008;
+	const uint MOUSEEVENTF_RIGHTUP = 0x0010;
+	const uint MOUSEEVENTF_XDOWN = 0x0080;
+	const uint MOUSEEVENTF_XUP = 0x0100;
+	const uint MOUSEEVENTF_WHEEL = 0x0800;
+	const uint MOUSEEVENTF_HWHEEL = 0x01000;
+	public enum MouseEventDataXButtons : uint
+	{
+		XBUTTON1 = 0x00000001,
+		XBUTTON2 = 0x00000002
+	}
+	[DllImport("user32.dll")]
+	static extern void mouse_event(uint dwFlags, int dx, int dy, uint dwData,
+		int dwExtraInfo);
+	[DllImport("user32.dll", SetLastError = true)]
+	static extern int MapVirtualKey(uint uCode, uint uMapType);
+	[DllImport("user32.dll", SetLastError = true)]
+	static extern UInt32 SendInput(UInt32 numberOfInputs, INPUT[] inputs, Int32 sizeOfInputStructure);
+	enum VK
+	{
+		ENTER = 0x0D,
+		SHIFT = 0x10,
+		CTRL = 0x11,
+		MENU = 0x12,
+		NUMPAD0 = 0x60,
+		NUMPAD1 = 0x61,
+		NUMPAD2 = 0x62,
+		NUMPAD3 = 0x63,
+		NUMPAD4 = 0x64,
+		NUMPAD5 = 0x65,
+		NUMPAD6 = 0x66,
+		NUMPAD7 = 0x67,
+		NUMPAD8 = 0x68,
+		NUMPAD9 = 0x69,
+		PageUp = 33,
+		PageDown = 34,
+		A = 65,
+		B = 66,
+		C = 67,
+		D = 68,
+		E = 69,
+		F = 70,
+		G = 71,
+		H = 72,
+		I = 73,
+		J = 74,
+		K = 75,
+		L = 76,
+		M = 77,
+		N = 78,
+		O = 79,
+		P = 80,
+		Q = 81,
+		R = 82,
+		S = 83,
+		T = 84,
+		U = 85,
+		V = 86,
+		W = 87,
+		X = 88,
+		Y = 89,
+		Z = 90,
+		OemOpenBrackets = 219,
+		Backslash = 220,
+		OemCloseBrackets = 221,
+	}
+	const uint KEYEVENTF_KEYUP = 0x0002;
+	public const int INPUT_KEYBOARD = 1;
+
 	
 }

@@ -35,10 +35,10 @@ $.writeln(s);
 if(pointSamples.length>8){
 
 
-var x3="convertX("+parseFloat(pointSamples[5].position[0]|0)+"),convertX("+parseFloat(pointSamples[6].position[0]|0+")");
-var y3="convertY("+parseFloat(pointSamples[7].position[1]|0)+"),convertY("+parseFloat(pointSamples[8].position[1]|0+")");
+var x3=parseFloat(pointSamples[5].position[0]|0)+","+parseFloat(pointSamples[6].position[0]|0);
+var y3=parseFloat(pointSamples[7].position[1]|0)+","+parseFloat(pointSamples[8].position[1]|0);
 
-var s3="click(accessibilityService, getRandomNumber("+x3+")), getRandomNumber("+y3+")));";
+var s3="click(accessibilityService, getRandomNumber("+x3+"), getRandomNumber("+y3+"));";
 //s=x+"\n"+y;
 $.writeln(s3);
 }

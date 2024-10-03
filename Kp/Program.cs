@@ -225,9 +225,9 @@ namespace Kb
 			
 			//RegisterHotKey(IntPtr.Zero, 68, 0, 68);//D
 			//RegisterHotKey(IntPtr.Zero, 70, 0, 70);//F
-			RegisterHotKey(IntPtr.Zero, (int)Keys.J, 0, (int)Keys.J);
-			RegisterHotKey(IntPtr.Zero, (int)Keys.K, 0, (int)Keys.K);
-			RegisterHotKey(IntPtr.Zero, (int)Keys.L, 0, (int)Keys.L);
+			RegisterHotKey(IntPtr.Zero, (int)Keys.D9, 0, (int)Keys.D9);
+			RegisterHotKey(IntPtr.Zero, (int)Keys.W, 0, (int)Keys.W);
+			RegisterHotKey(IntPtr.Zero, (int)Keys.E, 0, (int)Keys.E);
 			
 //			RegisterHotKey(IntPtr.Zero, 34, 0, 34);//P
 //			RegisterHotKey(IntPtr.Zero, 33, 0, 33);// PageUp
@@ -242,19 +242,19 @@ namespace Kb
 				if (ret == 1 && msg.message == 0x0312) {
 					ushort id = (ushort)msg.wParam;
 					
-					if (id == (int) Keys.J) { // Q
+					if (id == (int) Keys.D9) { // Q
 						//BlenderGeometryNodes();
 						//PhotoshoBrush();
 						/*
 						BlenderDuplicate();
 					*/
-						BlenderMoveY();
+					BlenderGeometryNodes();
 						//ColorPicker();
 						//ShaderToy1();
 						//Translate("",true);
-					} else if (id ==  (int)Keys.K) {
+					} else if (id ==  (int)Keys.W) {
 						BlenderMoveZ();
-					} else if (id ==  (int)Keys.L) {
+					} else if (id ==  (int)Keys.E) {
 						BlenderLoopCut();
 					} else if (id == 34) {//P
 						TakeScreenShot();
@@ -295,8 +295,8 @@ namespace Kb
 			keybd_event((int)VK.A, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
 			keybd_event((int)VK.A, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
 			keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release 
-			//keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
-			//keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+			keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+			keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
 		}
 		static void BlenderDuplicate()
 		{

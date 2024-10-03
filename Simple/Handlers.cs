@@ -26,9 +26,9 @@ public class Handlers
 	}
 
 	
-	public static void DownloadYouTubeVideo(TextBox textBox)
+	public static void DownloadYouTubeVideo(string str)
 	{
-		var str = textBox.Text.TrimStart('d').SubstringAfterLast('=').SubstringBefore("&");
+		str = str.SubstringBefore("&").SubstringAfterLast('=');
 		Process.Start(new ProcessStartInfo {
 			FileName = "yt-dlp_x86.exe",
 			Arguments = "--proxy http://127.0.0.1:10809  -f 137 https://www.youtube.com/watch?v=" +
@@ -279,4 +279,69 @@ public class Handlers
 		Process.Start(f);
 	}
 	
+	public static void QuickAndroid(string first)
+	{
+		var path = first.TrimStart('_');
+		var fileName = Path.GetFileName(path);
+		System.IO.Compression.ZipFile.ExtractToDirectory("Dou.zip".GetEntryPath(),
+			Path.GetDirectoryName(path));
+		var dir = Directory.GetDirectories(Path.GetDirectoryName(path)).First();
+		var src = Path.GetFileName(dir);
+		Directory.Move(dir, path);
+		var files = Directory.GetFiles(Path.Combine(path, "app\\src"), "*.java", SearchOption.AllDirectories);
+		foreach (var element in files) {
+			File.WriteAllText(element, File.ReadAllText(element).Replace(
+				src.ToLower(), fileName.ToLower()
+			));
+		}
+		var srcParent = Path.GetDirectoryName(files.First());
+		Directory.Move(srcParent, Path.Combine(Path.GetDirectoryName(srcParent), fileName.ToLower()));
+			               
+		files = Directory.GetFiles(path, "*.kts", SearchOption.AllDirectories);
+		foreach (var element in files) {
+			File.WriteAllText(element, File.ReadAllText(element).Replace(
+				src.ToLower(), fileName.ToLower()
+			));
+		}
+	}
+	public static void Translate(string s)
+	{
+		var file=@"D:\.Folder\007\KuaiGuang5\app\src\main\java\psycho\euphoria\kuaiguang5\TaskUtils.java";
+		var l = "en";
+		var req = WebRequest.Create(
+			          "http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=" + l + "&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=" +
+			          s);
+		var res = req.GetResponse();
+		using (var reader = new StreamReader(res.GetResponseStream())) {
+			var obj = JsonConvert.DeserializeObject<JObject>(reader.ReadToEnd())["sentences"].ToObject<JArray>();
+			var sb = new StringBuilder();
+			for (int i = 0; i < obj.Count; i++) {
+				sb.Append(obj[i]["trans"]).Append(' ');
+			}
+			
+			s =	string.Format(@"public static boolean checkIf{0}(AccessibilityService accessibilityService, Bitmap bitmap) {{
+Log.e(""B5aOx2"", ""{0}"");
+if (Utils.checkIfColorIsRange(20,bitmap,new int[]{{420,502,0,0,0,
+                415,481,255,237,237,
+                429,551,255,237,237,
+                455,503,0,0,0,
+                471,495,255,235,237}})) {{
+            Toast.makeText(accessibilityService, ""{1}"", Toast.LENGTH_SHORT).show();
+            click(accessibilityService, getRandomNumber(964,1020), getRandomNumber(358,412));
+            return true;
+        }}
+        return false;
+    }}
+
+/*
+else if (TaskUtils.checkIf{0}(this, bitmap)) {{
+// {1}
+                            
+                        }}
+*/
+", sb.ToString().Trim().Camel().Capitalize(), s);
+			File.WriteAllText(file,File.ReadAllText
+			                  (file).SubstringBeforeLast("}")+s+"}");
+		}
+	}
 }

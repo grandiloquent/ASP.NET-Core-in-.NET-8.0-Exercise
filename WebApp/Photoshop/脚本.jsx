@@ -20,7 +20,7 @@ for (var i = 1; i < pointSamples.length; i++) {
 var s='if (checkIfColorIsRange(20, bitmap, new int[]{' +
 buffer.join(",\n")+
     '})) {' +
-    'click(accessibilityService, getRandomNumber(convertX('+x+'), convertX('+x+') + 100),getRandomNumber(convertY(i),convertY(i)+100));'+
+    'click(accessibilityService, getRandomNumber('+x+', '+x+' + 100),getRandomNumber(i,i+40));'+
     '                                            break;' +
     '                                        }'
 

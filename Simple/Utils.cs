@@ -520,6 +520,9 @@ bpy.context.object.rotation_euler[0] = 1.5708", Translate());
 				break;
 			end++;
 		}
+		if(start==end&& end==0){
+			return string.Empty;
+		}
 		return textBox.Text.Substring(start, end - start + 1).Trim();
 	}
 }
