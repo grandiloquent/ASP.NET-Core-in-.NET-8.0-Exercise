@@ -226,8 +226,8 @@ namespace Kb
 			//RegisterHotKey(IntPtr.Zero, 68, 0, 68);//D
 			//RegisterHotKey(IntPtr.Zero, 70, 0, 70);//F
 			RegisterHotKey(IntPtr.Zero, (int)Keys.D9, 0, (int)Keys.D9);
-			RegisterHotKey(IntPtr.Zero, (int)Keys.W, 0, (int)Keys.W);
-			RegisterHotKey(IntPtr.Zero, (int)Keys.E, 0, (int)Keys.E);
+			//RegisterHotKey(IntPtr.Zero, (int)Keys.W, 0, (int)Keys.W);
+			//RegisterHotKey(IntPtr.Zero, (int)Keys.E, 0, (int)Keys.E);
 			
 //			RegisterHotKey(IntPtr.Zero, 34, 0, 34);//P
 //			RegisterHotKey(IntPtr.Zero, 33, 0, 33);// PageUp

@@ -306,7 +306,7 @@ public class Handlers
 	}
 	public static void Translate(string s)
 	{
-		var file=@"D:\.Folder\007\KuaiGuang5\app\src\main\java\psycho\euphoria\kuaiguang5\TaskUtils.java";
+		var file = @"D:\.Folder\007\KuaiGuang5\app\src\main\java\psycho\euphoria\kuaiguang5\TaskUtils.java";
 		var l = "en";
 		var req = WebRequest.Create(
 			          "http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=" + l + "&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=" +
@@ -340,8 +340,34 @@ else if (TaskUtils.checkIf{0}(this, bitmap)) {{
                         }}
 */
 ", sb.ToString().Trim().Camel().Capitalize(), s);
-			File.WriteAllText(file,File.ReadAllText
-			                  (file).SubstringBeforeLast("}")+s+"}");
+			File.WriteAllText(file, File.ReadAllText
+			                  (file).SubstringBeforeLast("}") + s + "}");
 		}
+	}
+	
+	public static void GenerateBlenderScript(string n)
+	{
+		var file = @"C:\Users\Administrator\Desktop\视频\Net\WebApp\Blender\quick_shader_node.py";
+		var s = File.ReadAllText(file);
+		
+		
+		s = s.Replace("#1",	string.Format(@"class ShaderNode{0}(Operator):
+    """""" ShaderNode{0} """"""
+    bl_idname = ""shadernode.{1}""
+    bl_label = """"
+    bl_options = {{""REGISTER"", ""UNDO""}}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        bpy.context.view_layer.objects.active.active_material.node_tree.nodes.new('ShaderNode{0}')
+        return {{'FINISHED'}}", n, n.ToLower()) + "\r\n#1");
+		
+		s = s.Replace("#2", string.Format(@"        row.operator(ShaderNode{0}.bl_idname, text=""{0}"")", n) + "\r\n#2");
+		s=s.Replace("#3",string.Format(@"    ShaderNode{0},",n)+"\r\n#3");
+		File.WriteAllText(file, s);
+		
 	}
 }

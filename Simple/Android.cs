@@ -262,6 +262,8 @@ public static class Android
 					Handlers.QuickAndroid(line);
 				}else if (line.StartsWith("t")) {
 					Handlers.Translate(line.TrimStart('t'));
+				}else if (line.StartsWith("s")) {
+					Handlers.GenerateBlenderScript(line.TrimStart('s'));
 				}
 			}
 			return;
