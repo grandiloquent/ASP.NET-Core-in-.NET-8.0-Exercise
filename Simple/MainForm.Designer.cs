@@ -183,7 +183,7 @@
 			this.Name = "MainForm";
 			this.Text = "Simple";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormFormClosing);
-			this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainFormKeyUp);
+			//this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.MainFormKeyUp);
 			this.splitContainer1.Panel1.ResumeLayout(false);
 			this.splitContainer1.Panel2.ResumeLayout(false);
 			this.splitContainer1.Panel2.PerformLayout();

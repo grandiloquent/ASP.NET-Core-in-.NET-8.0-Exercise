@@ -283,7 +283,7 @@ public class Handlers
 	{
 		var path = first.TrimStart('_');
 		var fileName = Path.GetFileName(path);
-		System.IO.Compression.ZipFile.ExtractToDirectory("Dou.zip".GetEntryPath(),
+		System.IO.Compression.ZipFile.ExtractToDirectory("Baidu5.zip".GetEntryPath(),
 			Path.GetDirectoryName(path));
 		var dir = Directory.GetDirectories(Path.GetDirectoryName(path)).First();
 		var src = Path.GetFileName(dir);
@@ -306,7 +306,7 @@ public class Handlers
 	}
 	public static void Translate(string s)
 	{
-		var file = @"D:\.Folder\007\KuaiGuang5\app\src\main\java\psycho\euphoria\kuaiguang5\TaskUtils.java";
+		var file = @"D:\.Folder\013\KuaiGuang0\app\src\main\java\psycho\euphoria\kuaiguang0\TaskUtils.java";
 		var l = "en";
 		var req = WebRequest.Create(
 			          "http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=" + l + "&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=" +

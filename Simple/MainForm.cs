@@ -286,11 +286,11 @@ public partial class MainForm : Form
 				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "OemPlus") {
 					Utils.FormatNumber(true);
 				} 
-//				else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "P") {
-//					Invoke(new Action(() => {
-//						
-//					}));
-//				} 
+				else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "P") {
+					Invoke(new Action(() => {
+					                  	Screenshot.SaveScreenshot();
+					}));
+				} 
 				if (e.KeyData.EventType == EventHook.KeyEvent.up) {
 					
 					if (e.KeyData.Keyname == "0") {
@@ -736,31 +736,31 @@ public partial class MainForm : Form
 			LoadData();
 		}
 	}
-	void MainFormKeyUp(object sender, KeyEventArgs e)
-	{
-		if (e.Control && e.KeyCode == Keys.D1) {
-			Screenshot.GetCursorPos(out _p3);
-		} else if (e.Control && e.KeyCode == Keys.D2) {
-			Screenshot.GetCursorPos(out _p4);
-			using (Bitmap bitmap = new Bitmap(_p4.X - _p3.X, _p4.Y - _p3.Y)) {
-				// Draw the screenshot into our bitmap.
-				using (Graphics g = Graphics.FromImage(bitmap)) {
-					g.CopyFromScreen(_p3.X, _p3.Y, 0, 0, bitmap.Size);
-				}
-				
-				var i = 1;
-				var f = (i + ".png").GetDesktopPath();
-				while (File.Exists(f)) {
-					i++;
-					f = (i + ".png").GetDesktopPath();
-				}
-				var ms = new FileStream(f, FileMode.OpenOrCreate);
-				bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-				bitmap.Dispose();
-				
-			}
-		}
-	}
+//	void MainFormKeyUp(object sender, KeyEventArgs e)
+//	{
+//		if (e.Control && e.KeyCode == Keys.D1) {
+//			Screenshot.GetCursorPos(out _p3);
+//		} else if (e.Control && e.KeyCode == Keys.D2) {
+//			Screenshot.GetCursorPos(out _p4);
+//			using (Bitmap bitmap = new Bitmap(_p4.X - _p3.X, _p4.Y - _p3.Y)) {
+//				// Draw the screenshot into our bitmap.
+//				using (Graphics g = Graphics.FromImage(bitmap)) {
+//					g.CopyFromScreen(_p3.X, _p3.Y, 0, 0, bitmap.Size);
+//				}
+//				
+//				var i = 1;
+//				var f = (i + ".png").GetDesktopPath();
+//				while (File.Exists(f)) {
+//					i++;
+//					f = (i + ".png").GetDesktopPath();
+//				}
+//				var ms = new FileStream(f, FileMode.OpenOrCreate);
+//				bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+//				bitmap.Dispose();
+//				
+//			}
+//		}
+//	}
 	
 	Screenshot.POINT _p3 = new Screenshot.POINT();
 	Screenshot.POINT _p4 = new Screenshot.POINT();
