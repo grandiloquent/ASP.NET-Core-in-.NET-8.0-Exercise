@@ -286,7 +286,7 @@ public partial class MainForm : Form
 				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "OemPlus") {
 					Utils.FormatNumber(true);
 				} 
-				else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "P") {
+				else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F10") {
 					Invoke(new Action(() => {
 					                  	Screenshot.SaveScreenshot();
 					}));

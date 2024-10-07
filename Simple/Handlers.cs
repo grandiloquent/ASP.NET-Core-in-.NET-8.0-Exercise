@@ -283,7 +283,7 @@ public class Handlers
 	{
 		var path = first.TrimStart('_');
 		var fileName = Path.GetFileName(path);
-		System.IO.Compression.ZipFile.ExtractToDirectory("Baidu5.zip".GetEntryPath(),
+		System.IO.Compression.ZipFile.ExtractToDirectory("KuaiGuang5.zip".GetEntryPath(),
 			Path.GetDirectoryName(path));
 		var dir = Directory.GetDirectories(Path.GetDirectoryName(path)).First();
 		var src = Path.GetFileName(dir);
@@ -306,7 +306,7 @@ public class Handlers
 	}
 	public static void Translate(string s)
 	{
-		var file = @"D:\.Folder\013\KuaiGuang0\app\src\main\java\psycho\euphoria\kuaiguang0\TaskUtils.java";
+		var file = @"D:\.Folder\003\KuaiGuang0\app\src\main\java\psycho\euphoria\kuaiguang0\TaskUtils.java";
 		var l = "en";
 		var req = WebRequest.Create(
 			          "http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=" + l + "&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=" +
@@ -362,7 +362,7 @@ else if (TaskUtils.checkIf{0}(this, bitmap)) {{
         return True
 
     def execute(self, context):
-        bpy.context.view_layer.objects.active.active_material.node_tree.nodes.new('ShaderNode{0}')
+        shader('ShaderNode{0}')
         return {{'FINISHED'}}", n, n.ToLower()) + "\r\n#1");
 		
 		s = s.Replace("#2", string.Format(@"        row.operator(ShaderNode{0}.bl_idname, text=""{0}"")", n) + "\r\n#2");

@@ -20,14 +20,16 @@ for (var i = 0; i < Math.min(pointSamples.length, 5); i++) {
         + (rgb.blue | 0));
 }
 var s = "if (compareColor(20, decoded,\n" +
-    buffer.join('\n') +
-    "                    )) {\n" +
+    buffer.join('\n') +")"
++"&& Utils.checkColorTotal(bitmap, +"+parseFloat(pointSamples[4].position[0] | 0)+"+,"+parseFloat(pointSamples[4].position[1] | 1)+" 84, 750)"
+    "                    ) {\n" +
     "                        Log.e(\"B5aOx2\", String.format(\"screenShoot2, %s\", \"3\"));\n" +
     "                        click(accessibilityService, getRandomNumber(300, 780), getRandomNumber(1320, 1380));\n" +
     "\nThread.sleep(1000);\n" +
     "                    }"
 s = "// \nelse if (" + buffer.join('\n') + ")\n{\n}";
-s = "Utils.checkIfColorIsRange(20,bitmap,new int[]{" + buffer1.join(',\n') + "})"
+s = "Utils.checkIfColorIsRange(20,bitmap,new int[]{" + buffer1.join(',\n') + "})\n"
+s+="&& Utils.checkColorTotal(bitmap, "+(parseFloat(pointSamples[4].position[0] | 0))+","+(parseFloat(pointSamples[4].position[1] | 1))+", 750)\n"
 
 //s="//\nelse if (Utils.checkIfColorIsRange(20,bitmap,new int[]{"+buffer1.join(',\n')+"})){\n Toast.makeText(mAccessibilityService, \"\", Toast.LENGTH_SHORT).show();\n}"
 $.writeln(s);
