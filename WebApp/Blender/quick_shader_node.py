@@ -234,12 +234,34 @@ class ShaderNodesAlignX(Operator):
     def execute(self, context):
         nodes = bpy.context.view_layer.objects.active.active_material.node_tree.nodes
         nodes = [n for n in nodes if n.select]
+        nodes.sort(key=lambda element: element.location.x)
         y = nodes[0].location.y
-        offset = 20
+        offset = 40
         x = nodes[0].location.x+nodes[0].dimensions.x+offset
         for i in range(1,len(nodes)):
             nodes[i].location=mathutils.Vector((x,y))
             x=nodes[i].location.x+nodes[i].dimensions.x+offset
+        return {'FINISHED'}
+class ShaderNodesAlignY(Operator):
+    """ ShaderNodesAlignY """
+    bl_idname = "shadernodes.aligny"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        nodes = bpy.context.view_layer.objects.active.active_material.node_tree.nodes
+        nodes = [n for n in nodes if n.select]
+        nodes.sort(key=lambda element: element.location.y)
+        x = nodes[0].location.x
+        offset = 40
+        y = nodes[0].location.y+nodes[0].dimensions.y+offset
+        for i in range(1,len(nodes)):
+            nodes[i].location=mathutils.Vector((x,y))
+            y=nodes[i].location.y+nodes[i].dimensions.y+offset
         return {'FINISHED'}
 class ShaderNodeLinkNodes(Operator):
     """ ShaderNode连接 """
@@ -310,6 +332,9 @@ class ShaderNodeTNC(Operator):
         valToRGB=bpy.context.view_layer.objects.active.active_material.node_tree.nodes.new('ShaderNodeValToRGB')
         bpy.context.view_layer.objects.active.active_material.node_tree.links.new(texCoord.outputs[3],texNoise.inputs[0])
         bpy.context.view_layer.objects.active.active_material.node_tree.links.new(texNoise.outputs[0],valToRGB.inputs[0])
+        offset = 40
+        texNoise.location=mathutils.Vector((texCoord.location.x+texCoord.dimensions.x+offset,texCoord.location.y))
+        valToRGB.location=mathutils.Vector((texNoise.location.x+texNoise.dimensions.x+offset,texCoord.location.y))
         return {'FINISHED'}
 #1
 class _align(Panel):
@@ -346,7 +371,9 @@ class _align(Panel):
         row.operator(ShaderNodeBsdfPrincipled.bl_idname, text="Principled")
         row = self.layout.row(align=True)
         row.operator(ShaderNodesAlignX.bl_idname, text="横对齐")
+        row.operator(ShaderNodesAlignY.bl_idname, text="竖对齐")
         row.operator(ShaderNodeLinkNodes.bl_idname, text="连接")
+        row = self.layout.row(align=True)
         row.operator(ShaderNodeTNC.bl_idname, text="坐标杂色映射")
 #2
 classes = [
@@ -367,6 +394,7 @@ classes = [
     ShaderNodeSeparateXYZ,
     ShaderNodeCombineXYZ,
     ShaderNodesAlignX,
+    ShaderNodesAlignY,
     ShaderNodeLinkNodes,
     ShaderNodeMapping,
     ShaderNodeInvert,
