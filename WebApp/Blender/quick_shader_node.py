@@ -255,13 +255,13 @@ class ShaderNodesAlignY(Operator):
     def execute(self, context):
         nodes = bpy.context.view_layer.objects.active.active_material.node_tree.nodes
         nodes = [n for n in nodes if n.select]
-        nodes.sort(key=lambda element: element.location.y)
+        nodes.sort(key=lambda element: element.location.y,reverse = True)
         x = nodes[0].location.x
         offset = 40
-        y = nodes[0].location.y+nodes[0].dimensions.y+offset
+        y = nodes[0].location.y-nodes[0].dimensions.y-offset
         for i in range(1,len(nodes)):
             nodes[i].location=mathutils.Vector((x,y))
-            y=nodes[i].location.y+nodes[i].dimensions.y+offset
+            y=nodes[i].location.y-nodes[i].dimensions.y-offset
         return {'FINISHED'}
 class ShaderNodeLinkNodes(Operator):
     """ ShaderNode连接 """

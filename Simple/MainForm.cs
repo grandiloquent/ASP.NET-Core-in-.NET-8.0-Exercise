@@ -56,49 +56,49 @@ public partial class MainForm : Form
 
 	[DllImport("user32.dll", SetLastError = true)]
 	private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
-	protected override void WndProc(ref Message m)
-	{
-		if (m.Msg == 0x0312) {
-			/*
-				  ushort id = (ushort)m.WParam;
-        Keys key = (Keys)( ( (int)m.LParam >> 16 ) & 0xFFFF );
-        Modifiers mods = (Modifiers)( (int)m.LParam & 0xFFFF );*/
-			ushort id = (ushort)m.WParam;
-			if (id == (ushort)Keys.Q) {
-				Blender();
-			} else if (id == 87) {
-				//System.Threading.Thread.Sleep(100);
-				//Utils.Press(0x45);
-				//System.Threading.Thread.Sleep(100);
-				//Utils.Press(0x59);
-						 
-				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_G);
-				//System.Threading.Thread.Sleep(200);
-				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Z);
-				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Z);
-			} else if (id == 65) {
-				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_G);
-				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Y);
-				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Y);
-			} else if (id == 68) {
-				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_S);
-				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Y);
-				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Y);
-		
-				//new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.SHIFT);
-				//new WindowsInput.InputSimulator().Keyboard.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.SHIFT,WindowsInput.Native.VirtualKeyCode.VK_X);
-				
-			} else if (id == 70) {
-				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_S);
-				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Z);
-				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Z);
-				
-			}
-				
-				
-		}
-		base.WndProc(ref m);
-	}
+//	protected override void WndProc(ref Message m)
+//	{
+//		if (m.Msg == 0x0312) {
+//			/*
+//				  ushort id = (ushort)m.WParam;
+//        Keys key = (Keys)( ( (int)m.LParam >> 16 ) & 0xFFFF );
+//        Modifiers mods = (Modifiers)( (int)m.LParam & 0xFFFF );*/
+//			ushort id = (ushort)m.WParam;
+//			if (id == (ushort)Keys.Q) {
+//				Blender();
+//			} else if (id == 87) {
+//				//System.Threading.Thread.Sleep(100);
+//				//Utils.Press(0x45);
+//				//System.Threading.Thread.Sleep(100);
+//				//Utils.Press(0x59);
+//						 
+//				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_G);
+//				//System.Threading.Thread.Sleep(200);
+//				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Z);
+//				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Z);
+//			} else if (id == 65) {
+//				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_G);
+//				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Y);
+//				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Y);
+//			} else if (id == 68) {
+//				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_S);
+//				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Y);
+//				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Y);
+//		
+//				//new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.SHIFT);
+//				//new WindowsInput.InputSimulator().Keyboard.ModifiedKeyStroke(WindowsInput.Native.VirtualKeyCode.SHIFT,WindowsInput.Native.VirtualKeyCode.VK_X);
+//				
+//			} else if (id == 70) {
+//				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_S);
+//				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Z);
+//				new WindowsInput.InputSimulator().Keyboard.KeyPress(WindowsInput.Native.VirtualKeyCode.VK_Z);
+//				
+//			}
+//				
+//				
+//		}
+//		base.WndProc(ref m);
+//	}
 	string _str = string.Empty;
 	public MainForm()
 	{
