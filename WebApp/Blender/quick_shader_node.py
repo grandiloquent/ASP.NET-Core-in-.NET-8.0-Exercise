@@ -236,7 +236,7 @@ class ShaderNodesAlignX(Operator):
         nodes = [n for n in nodes if n.select]
         nodes.sort(key=lambda element: element.location.x)
         y = nodes[0].location.y
-        offset = 40
+        offset = 60
         x = nodes[0].location.x+nodes[0].dimensions.x+offset
         for i in range(1,len(nodes)):
             nodes[i].location=mathutils.Vector((x,y))
@@ -257,7 +257,7 @@ class ShaderNodesAlignY(Operator):
         nodes = [n for n in nodes if n.select]
         nodes.sort(key=lambda element: element.location.y,reverse = True)
         x = nodes[0].location.x
-        offset = 40
+        offset = 60
         y = nodes[0].location.y-nodes[0].dimensions.y-offset
         for i in range(1,len(nodes)):
             nodes[i].location=mathutils.Vector((x,y))
@@ -332,7 +332,7 @@ class ShaderNodeTNC(Operator):
         valToRGB=bpy.context.view_layer.objects.active.active_material.node_tree.nodes.new('ShaderNodeValToRGB')
         bpy.context.view_layer.objects.active.active_material.node_tree.links.new(texCoord.outputs[3],texNoise.inputs[0])
         bpy.context.view_layer.objects.active.active_material.node_tree.links.new(texNoise.outputs[0],valToRGB.inputs[0])
-        offset = 40
+        offset = 60
         texNoise.location=mathutils.Vector((texCoord.location.x+texCoord.dimensions.x+offset,texCoord.location.y))
         valToRGB.location=mathutils.Vector((texNoise.location.x+texNoise.dimensions.x+offset,texCoord.location.y))
         return {'FINISHED'}

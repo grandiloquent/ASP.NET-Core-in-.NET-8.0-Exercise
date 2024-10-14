@@ -283,7 +283,7 @@ public class Handlers
 	{
 		var path = first.TrimStart('_');
 		var fileName = Path.GetFileName(path);
-		System.IO.Compression.ZipFile.ExtractToDirectory("KuaiGuang0.zip".GetEntryPath(),
+		System.IO.Compression.ZipFile.ExtractToDirectory("KuaiGuang5.zip".GetEntryPath(),
 			Path.GetDirectoryName(path));
 		var dir = Directory.GetDirectories(Path.GetDirectoryName(path)).First();
 		var src = Path.GetFileName(dir);
@@ -306,7 +306,7 @@ public class Handlers
 	}
 	public static void Translate(string s)
 	{
-		var file = @"D:\.Folder\006\Dou0\app\src\main\java\psycho\euphoria\dou0\TaskUtils.java";
+		var file = @"D:\.Folder\006\Dou\app\src\main\java\psycho\euphoria\dou\TaskUtils.java";
 		var l = "en";
 		var req = WebRequest.Create(
 			          "http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=" + l + "&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=" +
@@ -366,8 +366,38 @@ else if (TaskUtils.checkIf{0}(this, bitmap)) {{
         return {{'FINISHED'}}", n, n.ToLower()) + "\r\n#1");
 		
 		s = s.Replace("#2", string.Format(@"        row.operator(ShaderNode{0}.bl_idname, text=""{0}"")", n) + "\r\n#2");
-		s=s.Replace("#3",string.Format(@"    ShaderNode{0},",n)+"\r\n#3");
+		s = s.Replace("#3", string.Format(@"    ShaderNode{0},", n) + "\r\n#3");
 		File.WriteAllText(file, s);
 		
+	}
+	
+	public static void EscapeForJavaScript(string s)
+	{
+		var lines = s.Split(Environment.NewLine.ToArray(), StringSplitOptions.RemoveEmptyEntries);
+		var list = new List<string>();
+		var vars = new List<string>();
+	
+		foreach (var element in lines) {
+			if (Regex.IsMatch(element, "\\$\\d+")) {
+				var parts = Regex.Split(element, "\\$\\d+");
+				var matches = Regex.Matches(element, "\\$\\d+").Cast<Match>().Select(x => x.Value).ToArray();
+				var tempList = new List<string>();
+				var i = 0;
+				foreach (var p in parts) {					
+					tempList.Add("\"" + p.Replace("\"", "\\\"") + "\"");
+					if (i < parts.Length - 1) {
+						var name = matches[i].Substring(1);
+						tempList.Add(string.Format("+x{0}+", name));
+						vars.Add(string.Format("var x{0} = \"\";",name));
+					}
+					i++;
+				}
+				list.Add(string.Join("", tempList));
+			} else {
+				list.Add("\"" + element.Replace("\"", "\\\"") + "\"");
+			}
+		}
+		ClipboardShare.SetText(string.Join(Environment.NewLine,vars)+Environment.NewLine+"var str ="+
+		                       string.Join("+"+Environment.NewLine,list)+";");
 	}
 }

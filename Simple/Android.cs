@@ -575,15 +575,16 @@ if (TaskUtils.checkIf{0}(this, bitmap)) {{
 		} else if (first.StartsWith("s")) {
 			Handlers.ShaderToys();
 		} else if (first.StartsWith("b")) {
-			var parts = first.TrimStart('b').Trim().Split('|');
-			var start = 1;
-			try {
-				start = int.Parse(parts[0]);
-			} catch {
-			
-		 
-			}
-			Handlers.RunBlender(start);
+//			var parts = first.TrimStart('b').Trim().Split('|');
+//			var start = 1;
+//			try {
+//				start = int.Parse(parts[0]);
+//			} catch {
+//			
+//		 
+//			}
+//			Handlers.RunBlender(start);
+			Handlers.EscapeForJavaScript(textBox.Text.TrimStart('b'));
 		} else {
 			var array = first.Split(' ');
 			if (array.Length > 1)

@@ -32,7 +32,7 @@ s = "Utils.checkIfColorIsRange(20,bitmap,new int[]{" + buffer1.join(',\n') + "})
 s+="&& Utils.checkColorTotal(bitmap, "+(parseFloat(pointSamples[4].position[0] | 0))+","+(parseFloat(pointSamples[4].position[1] | 1))+", 750)\n"
 
 //s="//\nelse if (Utils.checkIfColorIsRange(20,bitmap,new int[]{"+buffer1.join(',\n')+"})){\n Toast.makeText(mAccessibilityService, \"\", Toast.LENGTH_SHORT).show();\n}"
-$.writeln(s);
+//$.writeln(s);
 
 if(pointSamples.length>8){
 
@@ -42,5 +42,19 @@ var y3=parseFloat(pointSamples[7].position[1]|0)+","+parseFloat(pointSamples[8].
 
 var s3="click(accessibilityService, getRandomNumber("+x3+"), getRandomNumber("+y3+"));";
 //s=x+"\n"+y;
-$.writeln(s3);
+//$.writeln(s3);
 }
+
+var x1 = buffer1.join(',\n');
+var x2 = parseFloat(pointSamples[5].position[0]|0);
+var x3 = parseFloat(pointSamples[6].position[0]|0);
+var x4 = parseFloat(pointSamples[7].position[1]|0);
+var x5 = parseFloat(pointSamples[8].position[1]|0);
+var str ="if (Utils.checkIfColorIsRange(20,bitmap,new int[]{"+x1+"})"+
+"        ) {"+
+"            Toast.makeText(accessibilityService, \"\", Toast.LENGTH_SHORT).show();"+
+"            click(accessibilityService, getRandomNumber("+x2+","+x3+"), getRandomNumber("+x4+","+x5+"));"+
+"            return true;"+
+"        }";
+
+$.writeln(str);
