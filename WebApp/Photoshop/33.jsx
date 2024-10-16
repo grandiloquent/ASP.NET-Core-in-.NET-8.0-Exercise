@@ -46,15 +46,18 @@ var s3="click(accessibilityService, getRandomNumber("+x3+"), getRandomNumber("+y
 }
 
 var x1 = buffer1.join(',\n');
-var x2 =pointSamples.length>8 && parseFloat(pointSamples[5].position[0]|0);
-var x3 =pointSamples.length>8 &&  parseFloat(pointSamples[6].position[0]|0);
-var x4 =pointSamples.length>8 &&  parseFloat(pointSamples[7].position[1]|0);
-var x5 = pointSamples.length>8 && parseFloat(pointSamples[8].position[1]|0);
-var str ="if (Utils.checkIfColorIsRange(20,bitmap,new int[]{"+x1+"})"+
-"        ) {"+
-"            Toast.makeText(accessibilityService, \"\", Toast.LENGTH_SHORT).show();"+
-"            click(accessibilityService, getRandomNumber("+x2+","+x3+"), getRandomNumber("+x4+","+x5+"));"+
+var x2 =parseFloat(pointSamples[5].position[0]|0);
+var x3 = parseFloat(pointSamples[6].position[0]|0);
+var x4 = parseFloat(pointSamples[5].position[1]|0);
+var x5 = parseFloat(pointSamples[6].position[1]|0);
+var x6 = parseFloat(pointSamples[7].position[0]|0);
+var x7 = parseFloat(pointSamples[8].position[0]|0);
+var x8 = parseFloat(pointSamples[7].position[1]|0);
+var x9 = parseFloat(pointSamples[8].position[1]|0);
+var str ="if (Utils.checkIfColorIsRange(20, bitmap, new int[]{"+x1+"})) {"+
+"            Toast.makeText(accessibilityService, \"逛街上滑\", Toast.LENGTH_SHORT).show();"+
+"            swipe(accessibilityService, getRandomNumber("+x2+", "+x3+"), getRandomNumber("+x4+", "+x5+"),"+
+"                    getRandomNumber("+x6+", "+x7+"), getRandomNumber("+x8+", "+x9+"));"+
 "            return true;"+
 "        }";
-
 $.writeln(str);

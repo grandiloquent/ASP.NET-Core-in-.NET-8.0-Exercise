@@ -255,16 +255,34 @@ public static class Android
 					parts.SubstringBefore(' '), parts.SubstringAfter(' ')
 				);
 			} else if (arg.KeyCode == Keys.Q) {
-				var line = Utils.GetLine(textBox);
-				if (line.StartsWith("d")) {
+				var line = Utils.GetCurrentLine(textBox);
+				if (Regex.IsMatch(line, "^[a-z0-9]+\\.")) {
+//					Process.Start(new ProcessStartInfo {
+//						FileName = "adb",
+//						Arguments = "-s 192.168.8.21:6000 shell pm uninstall -k --user 0 " + line
+//					});
+					File.WriteAllLines("1.bat".GetDesktopPath(),textBox.Text.Split(Environment.NewLine.ToArray(),StringSplitOptions.RemoveEmptyEntries)
+					                   .Select(x=>"adb -s 192.168.8.21:6000 shell pm uninstall -k --user 0 "+x.SubstringAfter(":")).OrderBy(x=>x));
+				} else if (line.StartsWith("d")) {
 					Handlers.DownloadYouTubeVideo(line.TrimStart('d'));
-				}else if (line.StartsWith("_")) {
+				} else if (line.StartsWith("_")) {
 					Handlers.QuickAndroid(line);
-				}else if (line.StartsWith("t")) {
+				} else if (line.StartsWith("t")) {
 					Handlers.Translate(line.TrimStart('t'));
-				}else if (line.StartsWith("s")) {
+				} else if (line.StartsWith("s")) {
 					Handlers.GenerateBlenderScript(line.TrimStart('s'));
-				}
+				} else if (line.StartsWith("b")) {
+					
+					var parts = line.TrimStart('b').Trim().Split('|');
+					var start = 1;
+					try {
+						start = int.Parse(parts[0]);
+					} catch {
+			
+		 
+					}
+					Handlers.RunBlender(start);
+				}  
 			}
 			return;
 			if (arg.Alt) {
@@ -556,7 +574,7 @@ if (TaskUtils.checkIf{0}(this, bitmap)) {{
 			Handlers.CreateDirectories(textBox);
 		} else if (first.StartsWith("2")) {
 			Handlers.CopyResourceFiles(first);
-		}  else if (first.StartsWith("/")) {
+		} else if (first.StartsWith("/")) {
 		
 			textBox.Text = textBox.Text.FormatString();
 		} else if (first.StartsWith("\\")) {
@@ -575,15 +593,7 @@ if (TaskUtils.checkIf{0}(this, bitmap)) {{
 		} else if (first.StartsWith("s")) {
 			Handlers.ShaderToys();
 		} else if (first.StartsWith("b")) {
-//			var parts = first.TrimStart('b').Trim().Split('|');
-//			var start = 1;
-//			try {
-//				start = int.Parse(parts[0]);
-//			} catch {
-//			
-//		 
-//			}
-//			Handlers.RunBlender(start);
+			
 			Handlers.EscapeForJavaScript(textBox.Text.TrimStart('b'));
 		} else {
 			var array = first.Split(' ');

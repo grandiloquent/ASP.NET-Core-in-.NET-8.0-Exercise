@@ -69,7 +69,7 @@ public class Utils
 		while (j < s.Length - 1 && s[j] != '\n') {
 			j++;
 		}
-		return s.Substring(i, j - i);
+		return s.Substring(i, j - i).Trim();
 	}
 	public static double[] MatchDoubles(string s)
 	{

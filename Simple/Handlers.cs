@@ -283,7 +283,7 @@ public class Handlers
 	{
 		var path = first.TrimStart('_');
 		var fileName = Path.GetFileName(path);
-		System.IO.Compression.ZipFile.ExtractToDirectory("KuaiGuang5.zip".GetEntryPath(),
+		System.IO.Compression.ZipFile.ExtractToDirectory("Dou5.zip".GetEntryPath(),
 			Path.GetDirectoryName(path));
 		var dir = Directory.GetDirectories(Path.GetDirectoryName(path)).First();
 		var src = Path.GetFileName(dir);
