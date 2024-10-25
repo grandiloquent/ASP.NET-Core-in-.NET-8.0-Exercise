@@ -283,7 +283,7 @@ public class Handlers
 	{
 		var path = first.TrimStart('_');
 		var fileName = Path.GetFileName(path);
-		System.IO.Compression.ZipFile.ExtractToDirectory("Dou5.zip".GetEntryPath(),
+		System.IO.Compression.ZipFile.ExtractToDirectory("Dou10.zip".GetEntryPath(),
 			Path.GetDirectoryName(path));
 		var dir = Directory.GetDirectories(Path.GetDirectoryName(path)).First();
 		var src = Path.GetFileName(dir);
@@ -399,5 +399,23 @@ else if (TaskUtils.checkIf{0}(this, bitmap)) {{
 		}
 		ClipboardShare.SetText(string.Join(Environment.NewLine,vars)+Environment.NewLine+"var str ="+
 		                       string.Join("+"+Environment.NewLine,list)+";");
+	}
+	
+	
+	public static void EscapeCPlusPluse(string s){
+		var parts=Regex.Split(s,"\\{\\{[0-9a-zA-Z]+\\}\\}");
+		var matches=Regex.Matches(s,"(?<=\\{\\{)[0-9a-zA-Z]+(?=\\}\\})").Cast<Match>().Select(x=>x.Value).ToArray();
+		var list=new List<string>();
+		var i=0;
+		foreach (var element in parts) {
+			list.Add(string.Format("R\"({0})\"",element));
+			if(i<parts.Length-1)
+			list.Add(matches[i]);
+				i++;
+		}
+		
+		ClipboardShare.SetText("ss<<"+string.Join("<<\r\n",list)+";");
+		
+		
 	}
 }

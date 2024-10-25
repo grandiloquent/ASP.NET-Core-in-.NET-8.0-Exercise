@@ -31,7 +31,11 @@ namespace ShaderToy
 			req.GetRequestStream().Write(bytes, 0, bytes.Length);
 			using (var reader = new StreamReader(req.GetResponse().GetResponseStream())) {
 				var s = reader.ReadToEnd();
-				File.WriteAllText(Path.Combine(dir,id + ".json"), s);
+				s=File.ReadAllText(
+					Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location),"1.txt")
+				).Replace("{{0}}",s);
+				File.WriteAllText(Path.Combine(dir,id + ".txt"),s);
+				
 				
 			}
 		
@@ -49,7 +53,7 @@ namespace ShaderToy
 				clipboardWatcher.Start();
 				clipboardWatcher.OnClipboardModified += (s, e) => {
 					try {
-						ShaderToy.Fetch(@"C:\Users\Administrator\Desktop\视频\Net\WebApp\ShaderToy\Shaders",e.Data.ToString());
+						ShaderToy.Fetch(@"C:\Users\Administrator\Desktop",e.Data.ToString());
 						Console.WriteLine(e.Data.ToString());
 					} catch(Exception ex) {
 						Console.WriteLine(ex);

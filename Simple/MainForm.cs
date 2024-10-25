@@ -286,6 +286,11 @@ public partial class MainForm : Form
 				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "OemPlus") {
 					Utils.FormatNumber(true);
 				} 
+				else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F9") {
+					Invoke(new Action(() => {
+					                  	Android.ColorPicker1();
+					}));
+				} 
 				else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F10") {
 					Invoke(new Action(() => {
 					                  	Screenshot.SaveScreenshot();

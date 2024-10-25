@@ -256,13 +256,13 @@ public static class Android
 				);
 			} else if (arg.KeyCode == Keys.Q) {
 				var line = Utils.GetCurrentLine(textBox);
-				if (Regex.IsMatch(line, "^[a-z0-9]+\\.")) {
+				if (Regex.IsMatch(line, "^package:")) {
 //					Process.Start(new ProcessStartInfo {
 //						FileName = "adb",
 //						Arguments = "-s 192.168.8.21:6000 shell pm uninstall -k --user 0 " + line
-//					});
+//					}); -s 192.168.8.21:6000 
 					File.WriteAllLines("1.bat".GetDesktopPath(),textBox.Text.Split(Environment.NewLine.ToArray(),StringSplitOptions.RemoveEmptyEntries)
-					                   .Select(x=>"adb -s 192.168.8.21:6000 shell pm uninstall -k --user 0 "+x.SubstringAfter(":")).OrderBy(x=>x));
+					                   .Select(x=>"adb shell pm uninstall -k --user 0 "+x.SubstringAfter(":")).OrderBy(x=>x));
 				} else if (line.StartsWith("d")) {
 					Handlers.DownloadYouTubeVideo(line.TrimStart('d'));
 				} else if (line.StartsWith("_")) {
@@ -594,7 +594,7 @@ if (TaskUtils.checkIf{0}(this, bitmap)) {{
 			Handlers.ShaderToys();
 		} else if (first.StartsWith("b")) {
 			
-			Handlers.EscapeForJavaScript(textBox.Text.TrimStart('b'));
+			Handlers.EscapeCPlusPluse(textBox.Text.TrimStart('b'));
 		} else {
 			var array = first.Split(' ');
 			if (array.Length > 1)
