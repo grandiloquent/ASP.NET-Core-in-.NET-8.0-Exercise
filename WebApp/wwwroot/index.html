@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+
+        }
+
+        div {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+
+<body>
+    <h3>小米10</h3>
+    <div id="x10">
+
+    </div>
+    <h3>电脑</h3>
+    <div id="p">
+
+    </div>
+    <h3>其他</h3>
+    <div id="o1">
+
+    </div>
+    <h3>其他</h3>
+    <div id="o2">
+
+    </div>
+    <script>
+        function insertLinks(container, links) {
+            const buffer = [];
+            for (var i = 0; i < links.length; i += 2) {
+                buffer.push(`<a href="${links[i + 1]}">${links[i]}</a>`)
+            }
+
+            container.innerHTML = buffer.join("\n");
+        }
+        insertLinks(document.getElementById('x10'),
+            `
+笔记
+http://192.168.8.101:8500/
+文档
+http://192.168.8.101:8090/
+代码
+http://192.168.8.101:8100/
+程序
+http://192.168.8.101:8500/app.html
+`.split('\n').filter(x => x.trim())
+        );
+        insertLinks(document.getElementById('p'),
+            `
+视频
+http://192.168.8.34:8080/?path=C%3A%5CUsers%5CAdministrator%5CDesktop%5C%E8%A7%86%E9%A2%91
+`.split('\n').filter(x => x.trim())
+        );
+        insertLinks(document.getElementById('o1'),
+            `
+下载 GitHub 文件夹
+https://download-directory.github.io/
+书籍
+https://z-library.sk/
+Polygon Runway
+https://www.youtube.com/@polygonrunway/videos
+云端硬盘
+https://drive.google.com/
+VPN
+https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/Config%20list9.txt
+`.split('\n').filter(x => x.trim())
+        );
+        document.getElementById('o2').innerHTML = `
+https://www.youtube.com/watch?v=AWSAEY4M3gs
+https://www.shadertoy.com/results?query=&sort=popular&from=1272&num=12
+https://www.shadertoy.com/view/XdtGDj
+https://www.shadertoy.com/view/ltBGWh
+https://www.shadertoy.com/view/MdjGWc
+https://www.shadertoy.com/view/XssXDl
+https://www.youtube.com/watch?v=T1m-uivxgfI
+https://stackoverflow.com/questions/13620037/how-can-i-get-the-package-name-of-2nd-top-activity-which-is-in-other-package
+https://stackoverflow.com/questions/16780480/how-to-get-last-14-days-of-android-sms
+https://www.youtube.com/watch?v=5CzMC2kmHlQ&list=PLsGl9GczcgBs6TtApKKK-L_0Nm6fovNPk
+https://www.youtube.com/watch?v=YMSSJr4LWcs
+
+
+
+        `.split('\n').filter(x => x.trim()).sort().map(x => {
+            return `<a href="${x}">${x}</a>`
+
+        }).join('\n');
+    </script>
+</body>
+
+</html>

@@ -96,12 +96,13 @@ function zoomIn(video, evt) {
     const x = evt.clientX;
     const y = evt.clientY;
 
-    const width = (x - b.left) / b.width * video.videoWidth;
-    const height = (y - b.top) / b.height * video.videoHeight;
+    const ratio=2;
+    const width = (x - b.left) / b.width * (video.videoWidth * ratio);
+    const height = (y - b.top) / b.height * (video.videoHeight *ratio);
 
 
-    video.style.width = video.videoWidth + 'px';
-    video.style.height = video.videoHeight + 'px';
+    video.style.width = (video.videoWidth*ratio) + 'px';
+    video.style.height = (video.videoHeight*ratio) + 'px';
     video.style.left = (window.innerWidth / 2 - width) + 'px';
     video.style.top = (window.innerHeight / 2 - height) + 'px';
 }
@@ -387,7 +388,7 @@ window.addEventListener('keydown', async evt => {
     } else if (evt.key === 'l') {
         evt.preventDefault();
         if (!seeking) {
-            video.currentTime += 5/ fps;
+            video.currentTime += 5 / fps;
         }
     } else if (evt.key === 'i') {
         evt.preventDefault();

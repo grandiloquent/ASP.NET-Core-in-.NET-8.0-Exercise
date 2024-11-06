@@ -32,3 +32,26 @@ s='for (int i = '+toInt(pointSamples[pointSamples.length-2].position[0])+'; i < 
 '                                }'
 
     $.writeln(s);
+
+    function saveAsTextFile(filePath, content) {
+        var saveFile = new File(filePath);
+    
+        saveFile.encoding = "UTF8";
+        saveFile.open("w");
+        if (saveFile.error != "")
+            return saveFile.error;
+    
+        saveFile.write(content);
+        if (saveFile.error != "")
+            return saveFile.error;
+    
+        saveFile.close();
+        if (saveFile.error != "")
+            return saveFile.error;
+    
+        return "";
+    }
+    
+    var Path = app.activeDocument.path;
+    var saveFile = File(Path + "/3.txt");
+    saveAsTextFile(saveFile, s);

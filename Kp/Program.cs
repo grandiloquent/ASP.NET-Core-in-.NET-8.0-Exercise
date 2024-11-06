@@ -225,7 +225,14 @@ namespace Kb
 			
 			//RegisterHotKey(IntPtr.Zero, 68, 0, 68);//D
 			//RegisterHotKey(IntPtr.Zero, 70, 0, 70);//F
-			RegisterHotKey(IntPtr.Zero, (int)Keys.D9, 0, (int)Keys.D9);
+			RegisterHotKey(IntPtr.Zero, (int)Keys.W, 0, (int)Keys.W);
+			RegisterHotKey(IntPtr.Zero, (int)Keys.Q, 0, (int)Keys.Q);
+			RegisterHotKey(IntPtr.Zero, (int)Keys.E, 0, (int)Keys.E);
+			
+			RegisterHotKey(IntPtr.Zero, (int)Keys.F1, 0, (int)Keys.F1);
+			RegisterHotKey(IntPtr.Zero, (int)Keys.F2, 0, (int)Keys.F2);
+			RegisterHotKey(IntPtr.Zero, (int)Keys.F3, 0, (int)Keys.F3);
+			
 			//RegisterHotKey(IntPtr.Zero, (int)Keys.W, 0, (int)Keys.W);
 			//RegisterHotKey(IntPtr.Zero, (int)Keys.E, 0, (int)Keys.E);
 			
@@ -242,20 +249,58 @@ namespace Kb
 				if (ret == 1 && msg.message == 0x0312) {
 					ushort id = (ushort)msg.wParam;
 					
-					if (id == (int) Keys.D9) { // Q
-						//BlenderGeometryNodes();
-						//PhotoshoBrush();
-						/*
-						BlenderDuplicate();
-					*/
-					BlenderGeometryNodes();
-						//ColorPicker();
-						//ShaderToy1();
-						//Translate("",true);
-					} else if (id ==  (int)Keys.W) {
-						BlenderMoveZ();
-					} else if (id ==  (int)Keys.E) {
-						BlenderLoopCut();
+					if (id == (int)Keys.Q) { // Q
+						keybd_event((int)VK.L, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+						keybd_event((int)VK.L, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+						keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press  
+						keybd_event((int)VK.D, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+						keybd_event((int)VK.D, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+						keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release 
+							
+						keybd_event((int)VK.ENTER, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+						keybd_event((int)VK.ENTER, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+			
+					} else if (id == (int)Keys.W) {
+						keybd_event((int)VK.L, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+						keybd_event((int)VK.L, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+									
+						keybd_event((int)VK.G, (byte)MapVirtualKey((uint)VK.G, 0), 0, 0); // N1 Press  
+						keybd_event((int)VK.G, (byte)MapVirtualKey((uint)VK.G, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+					
+						keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press  
+						keybd_event((int)VK.Z, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+						keybd_event((int)VK.Z, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+						keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release 
+					} else if (id == (int)Keys.E) {
+						keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.G, 0), 0, 0); // N1 Press  
+						keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.G, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+					
+						keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press  
+						keybd_event((int)VK.Z, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+						keybd_event((int)VK.Z, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+						keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release 
+					} else if (id == (int)Keys.F1) {
+						keybd_event((int)VK.G, (byte)MapVirtualKey((uint)VK.G, 0), 0, 0); // N1 Press  
+						keybd_event((int)VK.G, (byte)MapVirtualKey((uint)VK.G, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+					
+						keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press  
+						keybd_event((int)VK.Z, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+						keybd_event((int)VK.Z, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+						keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release 
+					} else if (id == (int)Keys.F2) {
+						keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.G, 0), 0, 0); // N1 Press  
+						keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.G, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+					
+						keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press  
+						keybd_event((int)VK.Z, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+						keybd_event((int)VK.Z, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+						keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release 
+					} else if (id == (int)Keys.F3) {
+						keybd_event((int)VK.R, (byte)MapVirtualKey((uint)VK.G, 0), 0, 0); // N1 Press  
+						keybd_event((int)VK.R, (byte)MapVirtualKey((uint)VK.G, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
+					
+						keybd_event((int)VK.Z, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+						keybd_event((int)VK.Z, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
 					} else if (id == 34) {//P
 						TakeScreenShot();
 					} else if (id == 65) {//a
@@ -313,6 +358,11 @@ namespace Kb
 			keybd_event((int)VK.ENTER, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
 			keybd_event((int)VK.ENTER, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
 		}
+		static void BlenderDuplicate1()
+		{
+			
+		}
+		
 		static void PhotoshoBrush()
 		{
 			keybd_event((int)VK.I, (byte)MapVirtualKey((uint)VK.G, 0), 0, 0); // N1 Press  
@@ -422,7 +472,7 @@ mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
 			keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release 
 				
 		}
-	    
+	  
 		static void BlenderDuplicateZ()
 		{
 			keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press  

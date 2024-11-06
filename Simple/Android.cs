@@ -261,8 +261,8 @@ public static class Android
 //						FileName = "adb",
 //						Arguments = "-s 192.168.8.21:6000 shell pm uninstall -k --user 0 " + line
 //					}); -s 192.168.8.21:6000 
-					File.WriteAllLines("1.bat".GetDesktopPath(),textBox.Text.Split(Environment.NewLine.ToArray(),StringSplitOptions.RemoveEmptyEntries)
-					                   .Select(x=>"adb shell pm uninstall -k --user 0 "+x.SubstringAfter(":")).OrderBy(x=>x));
+					File.WriteAllLines("1.bat".GetDesktopPath(), textBox.Text.Split(Environment.NewLine.ToArray(), StringSplitOptions.RemoveEmptyEntries)
+					                   .Select(x => "adb shell pm uninstall -k --user 0 " + x.SubstringAfter(":")).OrderBy(x => x));
 				} else if (line.StartsWith("d")) {
 					Handlers.DownloadYouTubeVideo(line.TrimStart('d'));
 				} else if (line.StartsWith("_")) {
@@ -271,6 +271,12 @@ public static class Android
 					Handlers.Translate(line.TrimStart('t'));
 				} else if (line.StartsWith("s")) {
 					Handlers.GenerateBlenderScript(line.TrimStart('s'));
+				} else if (line.StartsWith("j")) {
+					Handlers.SplitFile(line.TrimStart('j'));
+				} else if (line.StartsWith("b")) {
+					Handlers.RunBlender(
+						Regex.IsMatch(line, "\\d+") ? int.Parse(Regex.Match(line, "\\d+").Value) : 1
+					);//EscapeCPlusPluse(textBox.Text.TrimStart('b'));
 				} else if (line.StartsWith("b")) {
 					
 					var parts = line.TrimStart('b').Trim().Split('|');
@@ -592,9 +598,6 @@ if (TaskUtils.checkIf{0}(this, bitmap)) {{
 			                  .SubstringBeforeLast("\"").SubstringAfterLast('"').Replace("\\", ""));
 		} else if (first.StartsWith("s")) {
 			Handlers.ShaderToys();
-		} else if (first.StartsWith("b")) {
-			
-			Handlers.EscapeCPlusPluse(textBox.Text.TrimStart('b'));
 		} else {
 			var array = first.Split(' ');
 			if (array.Length > 1)

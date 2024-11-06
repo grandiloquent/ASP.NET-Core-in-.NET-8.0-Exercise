@@ -388,7 +388,7 @@ else if (TaskUtils.checkIf{0}(this, bitmap)) {{
 					if (i < parts.Length - 1) {
 						var name = matches[i].Substring(1);
 						tempList.Add(string.Format("+x{0}+", name));
-						vars.Add(string.Format("var x{0} = \"\";",name));
+						vars.Add(string.Format("var x{0} = \"\";", name));
 					}
 					i++;
 				}
@@ -397,25 +397,46 @@ else if (TaskUtils.checkIf{0}(this, bitmap)) {{
 				list.Add("\"" + element.Replace("\"", "\\\"") + "\"");
 			}
 		}
-		ClipboardShare.SetText(string.Join(Environment.NewLine,vars)+Environment.NewLine+"var str ="+
-		                       string.Join("+"+Environment.NewLine,list)+";");
+		ClipboardShare.SetText(string.Join(Environment.NewLine, vars) + Environment.NewLine + "var str =" +
+		string.Join("+" + Environment.NewLine, list) + ";");
 	}
 	
 	
-	public static void EscapeCPlusPluse(string s){
-		var parts=Regex.Split(s,"\\{\\{[0-9a-zA-Z]+\\}\\}");
-		var matches=Regex.Matches(s,"(?<=\\{\\{)[0-9a-zA-Z]+(?=\\}\\})").Cast<Match>().Select(x=>x.Value).ToArray();
-		var list=new List<string>();
-		var i=0;
+	public static void EscapeCPlusPluse(string s)
+	{
+		var parts = Regex.Split(s, "\\{\\{[0-9a-zA-Z]+\\}\\}");
+		var matches = Regex.Matches(s, "(?<=\\{\\{)[0-9a-zA-Z]+(?=\\}\\})").Cast<Match>().Select(x => x.Value).ToArray();
+		var list = new List<string>();
+		var i = 0;
 		foreach (var element in parts) {
-			list.Add(string.Format("R\"({0})\"",element));
-			if(i<parts.Length-1)
-			list.Add(matches[i]);
-				i++;
+			list.Add(string.Format("R\"({0})\"", element));
+			if (i < parts.Length - 1)
+				list.Add(matches[i]);
+			i++;
 		}
 		
-		ClipboardShare.SetText("ss<<"+string.Join("<<\r\n",list)+";");
+		ClipboardShare.SetText("ss<<" + string.Join("<<\r\n", list) + ";");
 		
 		
+	}
+	public static void SplitFile(string path)
+	{
+				 
+		var strings = File.ReadAllText(path);
+		var length = strings.Length;
+		var dir = Path.GetDirectoryName(path);
+		var part = length / 6;
+		for (int i = 0; i < 6; i++) {
+			if(i<5)
+			File.WriteAllText(
+				Path.Combine(dir, Path.GetFileNameWithoutExtension(path) + (i + 1) + ".txt")
+				, strings.Substring(part * i, part ));
+			else
+				File.WriteAllText(
+				Path.Combine(dir, Path.GetFileNameWithoutExtension(path) + (i + 1) + ".txt")
+				, strings.Substring(part * i));
+		}
+		
+	 
 	}
 }

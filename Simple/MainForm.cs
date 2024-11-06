@@ -104,6 +104,12 @@ public partial class MainForm : Form
 	{
 		
 		
+//		var nn=@"C:\Users\Administrator\Desktop\.Folder\056\古龙作品全集.txt";
+//		var strings=File.ReadAllText(nn);
+//		var ll=strings.Length;
+//		var lhalf=ll/2;
+//		File.WriteAllText("1.txt".GetDesktopPath(),strings.Substring(0,lhalf));
+//		File.WriteAllText("2.txt".GetDesktopPath(),strings.Substring(lhalf));
 		
 		//RegisterHotKey(this.Handle, (int)Key.KeyQ, 0, (int)Key.KeyQ);
 //		RegisterHotKey(this.Handle, 87, 0, 87);
@@ -187,7 +193,6 @@ public partial class MainForm : Form
 			Android.HandleKeyDown(textBox1, args);
 			//Video.HandleKeyDown(textBox1,args);
 		};
-		
 		using (var eventHookFactory = new EventHook.EventHookFactory()) {
 			var x = Keys.M;
 			var keyboardWatcher = eventHookFactory.GetKeyboardWatcher();
@@ -288,7 +293,7 @@ public partial class MainForm : Form
 				} 
 				else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F9") {
 					Invoke(new Action(() => {
-					                  	Android.ColorPicker1();
+					                  	//Android.ColorPicker1();
 					}));
 				} 
 				else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F10") {
@@ -408,11 +413,6 @@ public partial class MainForm : Form
 						Invoke(new Action(() => {
 							Text = _str;
 						}));
-					} else if (e.KeyData.Keyname == "Add") {
-						_str = "-." + _str.TrimStart("-.".ToArray());
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
 					} else if (e.KeyData.Keyname == "OemPeriod") {
 						_str += ".";
 						Invoke(new Action(() => {
@@ -430,6 +430,13 @@ public partial class MainForm : Form
 							Text = _str;
 						}));
 					} else if (e.KeyData.Keyname == "Return") {
+						if(string.IsNullOrWhiteSpace(_str)){
+							_str="-.";
+							Invoke(new Action(() => {
+							Text = _str;
+						}));
+							return;
+						}
 						ClipboardShare.SetText(_str);
 						_str = string.Empty;
 						Invoke(new Action(() => {
@@ -741,31 +748,31 @@ public partial class MainForm : Form
 			LoadData();
 		}
 	}
-//	void MainFormKeyUp(object sender, KeyEventArgs e)
-//	{
-//		if (e.Control && e.KeyCode == Keys.D1) {
-//			Screenshot.GetCursorPos(out _p3);
-//		} else if (e.Control && e.KeyCode == Keys.D2) {
-//			Screenshot.GetCursorPos(out _p4);
-//			using (Bitmap bitmap = new Bitmap(_p4.X - _p3.X, _p4.Y - _p3.Y)) {
-//				// Draw the screenshot into our bitmap.
-//				using (Graphics g = Graphics.FromImage(bitmap)) {
-//					g.CopyFromScreen(_p3.X, _p3.Y, 0, 0, bitmap.Size);
-//				}
-//				
-//				var i = 1;
-//				var f = (i + ".png").GetDesktopPath();
-//				while (File.Exists(f)) {
-//					i++;
-//					f = (i + ".png").GetDesktopPath();
-//				}
-//				var ms = new FileStream(f, FileMode.OpenOrCreate);
-//				bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-//				bitmap.Dispose();
-//				
-//			}
-//		}
-//	}
+	void MainFormKeyUp(object sender, KeyEventArgs e)
+	{
+		if (e.Control && e.KeyCode == Keys.D1) {
+			Screenshot.GetCursorPos(out _p3);
+		} else if (e.Control && e.KeyCode == Keys.D2) {
+			Screenshot.GetCursorPos(out _p4);
+			using (Bitmap bitmap = new Bitmap(_p4.X - _p3.X, _p4.Y - _p3.Y)) {
+				// Draw the screenshot into our bitmap.
+				using (Graphics g = Graphics.FromImage(bitmap)) {
+					g.CopyFromScreen(_p3.X, _p3.Y, 0, 0, bitmap.Size);
+				}
+				
+				var i = 1;
+				var f = (i + ".png").GetDesktopPath();
+				while (File.Exists(f)) {
+					i++;
+					f = (i + ".png").GetDesktopPath();
+				}
+				var ms = new FileStream(f, FileMode.OpenOrCreate);
+				bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+				bitmap.Dispose();
+				
+			}
+		}
+	}
 	
 	Screenshot.POINT _p3 = new Screenshot.POINT();
 	Screenshot.POINT _p4 = new Screenshot.POINT();
