@@ -53,7 +53,8 @@ namespace ShaderToy
 				clipboardWatcher.Start();
 				clipboardWatcher.OnClipboardModified += (s, e) => {
 					try {
-						ShaderToy.Fetch(@"C:\Users\Administrator\Desktop",e.Data.ToString());
+						//ShaderToy.Fetch(@"C:\Users\Administrator\Desktop",e.Data.ToString());
+					
 						Console.WriteLine(e.Data.ToString());
 					} catch(Exception ex) {
 						Console.WriteLine(ex);

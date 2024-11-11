@@ -63,10 +63,11 @@ public class Utils
 		var s = textBox.Text;
 		var i = textBox.SelectionStart;
 		var j = textBox.SelectionStart + textBox.SelectionLength;
-		while (i > 0 && s[i] != '\n') {
+		
+		while (i > 0  && s[i-1] != '\n') {
 			i--;
 		}
-		while (j < s.Length - 1 && s[j] != '\n') {
+		while (j < s.Length  && s[j] != '\n') {
 			j++;
 		}
 		return s.Substring(i, j - i).Trim();

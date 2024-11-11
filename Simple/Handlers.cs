@@ -439,4 +439,22 @@ else if (TaskUtils.checkIf{0}(this, bitmap)) {{
 		
 	 
 	}
+	
+	public static void Delete(string dir){
+		if(Directory.Exists(dir)){
+			Directory.Delete(dir,true);
+		}else if(File.Exists(dir)){
+			File.Delete(dir);
+		}else{
+			var files=ClipboardShare.GetFileNames();
+			foreach (var f in files) {
+				if(Directory.Exists(f)){
+			Directory.Delete(f,true);
+		}else if(File.Exists(f)){
+			File.Delete(f);
+		}
+			}
+		}
+		
+	}
 }

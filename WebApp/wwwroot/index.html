@@ -23,6 +23,10 @@
     <div id="x10">
 
     </div>
+    <h3>红米K30</h3>
+    <div id="k30">
+
+    </div>
     <h3>电脑</h3>
     <div id="p">
 
@@ -54,6 +58,12 @@ http://192.168.8.101:8090/
 http://192.168.8.101:8100/
 程序
 http://192.168.8.101:8500/app.html
+`.split('\n').filter(x => x.trim())
+        );
+        insertLinks(document.getElementById('k30'),
+            `
+截图
+http://192.168.8.55:8500/files.html?path=%2Fstorage%2Femulated%2F0%2FPictures%2FScreenshots&size=0
 `.split('\n').filter(x => x.trim())
         );
         insertLinks(document.getElementById('p'),

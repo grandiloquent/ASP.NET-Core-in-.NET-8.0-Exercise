@@ -277,7 +277,9 @@ public static class Android
 					Handlers.RunBlender(
 						Regex.IsMatch(line, "\\d+") ? int.Parse(Regex.Match(line, "\\d+").Value) : 1
 					);//EscapeCPlusPluse(textBox.Text.TrimStart('b'));
-				} else if (line.StartsWith("b")) {
+				}else if(line.StartsWith("x")){
+					Handlers.Delete(line.Substring(1));
+				}else if (line.StartsWith("b")) {
 					
 					var parts = line.TrimStart('b').Trim().Split('|');
 					var start = 1;
