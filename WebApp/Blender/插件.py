@@ -484,6 +484,25 @@ class _loopcut_seven(Operator):
         loopcut(int(bpy.context.window_manager.clipboard))
         return {'FINISHED'}
 
+
+        loopcut(int(bpy.context.window_manager.clipboard))
+        return {'FINISHED'}
+
+class _collections_new(Operator):
+    """ Collections new """
+    bl_idname = "collections.new"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        o = bpy.data.collections.new(bpy.context.window_manager.clipboard)
+        bpy.context.scene.collection.children.link(o)
+        return {'FINISHED'}
+    
 class _loopcut_two(Operator):
     """ Selection group """
     bl_idname = "loopcut.two"
@@ -656,9 +675,11 @@ class _duplicate_rotate(Operator):
         return {'FINISHED'}
 
 def add_plane(mode):
-    bpy.ops.object.mode_set(mode='OBJECT')
+    if bpy.context.mode != "OBJECT":
+            bpy.ops.object.mode_set(mode='OBJECT')
     bpy.ops.mesh.primitive_plane_add()
-    bpy.ops.object.mode_set(mode='EDIT')
+    if bpy.context.mode != "EDIT":
+            bpy.ops.object.mode_set(mode='EDIT')
     return None
 
 class _add_plane(Operator):
@@ -1055,8 +1076,59 @@ class _quick_vert(Operator):
         ob = bpy.data.objects.new(name='Vert', object_data=me)
         bm.to_mesh(ob.data)
         bpy.context.collection.objects.link(ob)
+        bpy.context.view_layer.objects.active = ob
+        bpy.ops.object.mode_set(mode = 'EDIT')
+        
         return {'FINISHED'}
 
+class _add_cube(Operator):
+    """ add cube """
+    bl_idname = "add.cube"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        if bpy.context.mode != "OBJECT":
+            bpy.ops.object.mode_set(mode='OBJECT')
+        bpy.ops.mesh.primitive_cube_add()
+        if bpy.context.mode != "EDIT":
+            bpy.ops.object.mode_set(mode='EDIT')
+        return {'FINISHED'}
+    
+class _add_displace(Operator):
+    """ add displace """
+    bl_idname = "add.displace"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        
+        return True
+
+    def execute(self, context):
+        bpy.ops.object.modifier_add(type='DISPLACE')
+        bpy.context.object.modifiers["Displace"].strength = 0.05
+
+        return {'FINISHED'}
+class _round_cube(Operator):
+    """ round cube """
+    bl_idname = "round.cube"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        bpy.ops.mesh.primitive_round_cube_add(align='WORLD', location=(0, 0, 0), rotation=(0, 0, 0), change=False, radius=1, size=(0, 0, 0), arc_div=4, lin_div=0, div_type='CORNERS')
+        return {'FINISHED'}
+#1
 class _align(Panel):
     """将所选对象和其所在的组与光标对齐"""
     bl_label = "对齐"
@@ -1130,7 +1202,13 @@ class _align(Panel):
         row.operator(_view_axis_top.bl_idname, text="上")
         row.operator(_view_axis_front.bl_idname, text="前")
         row.operator(_view_axis_back.bl_idname, text="后")
-
+        row = self.layout.row(align=True)
+        row.operator(_collections_new.bl_idname, text="新建集合")
+        row.operator(_add_cube.bl_idname, text="新建立方体")
+        row.operator(_round_cube.bl_idname, text="新建圆球")
+        row = self.layout.row(align=True)
+        row.operator(_add_displace.bl_idname, text="Displace")
+#2
 
 classes = [
     _quick_render,
@@ -1182,7 +1260,12 @@ classes = [
     _quick_extrude_normals,
     _quick_parent,
     _align,
+    _collections_new,
     _quick_vert,
+    _add_cube,
+    _add_displace,
+    _round_cube,
+#3 
 ]
 
 def register():

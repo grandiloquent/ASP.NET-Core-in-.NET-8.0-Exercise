@@ -20,8 +20,11 @@ app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(wwwroot),
 });
-app.MapGet("/", () =>
+app.MapGet("/", (HttpRequest request) =>
 {
+    // foreach (var header in request.Headers){
+    // Console.WriteLine($"{header.Key} {header.Value}");
+    // }
     var f = Path.Combine(wwwroot, "files.html");
     return Results.File(f,
         Shared.GetMimeTypeForFileExtension(f));

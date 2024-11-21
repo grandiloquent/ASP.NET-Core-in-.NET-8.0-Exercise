@@ -219,14 +219,14 @@ public partial class MainForm : Form
 					}
 				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F9") {
 					try {
-						Images.Ocr(this, textBox1, 106);
+						Images.Ocr(this, textBox1, 90);
 						
 					} catch {
 						
 					}
 				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F10") {
 					try {
-						Images.Ocr(this, textBox1, 120);
+						Images.Ocr(this, textBox1, 110,120,60);
 						
 					} catch {
 						
@@ -291,14 +291,10 @@ public partial class MainForm : Form
 				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "OemPlus") {
 					Utils.FormatNumber(true);
 				} 
-				else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F9") {
+				
+				else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F11") {
 					Invoke(new Action(() => {
-					                  	//Android.ColorPicker1();
-					}));
-				} 
-				else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F10") {
-					Invoke(new Action(() => {
-					                  	Screenshot.SaveScreenshot();
+					               Screenshot.SaveScreenshot();
 					}));
 				} 
 				if (e.KeyData.EventType == EventHook.KeyEvent.up) {

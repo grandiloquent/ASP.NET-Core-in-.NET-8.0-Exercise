@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        let s = `        row = self.layout.row(align=True)
+        row.operator(GeometryNodeAlignX.bl_idname, text="对齐X")
+        row.operator(GeometryNodeAlignY.bl_idname, text="对齐Y")
+
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeFunctionNodeAlignEulerToVector.bl_idname, text="AlignEulerToVector")
+        row.operator(GeometryNodeFunctionNodeAlignRotationToVector.bl_idname, text="AlignRotationToVector")
+
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeCurvePrimitiveCircle.bl_idname, text="CurveCircle")
+        row.operator(GeometryNodeCurvePrimitiveLine.bl_idname, text="CurveLine")
+
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeInputTangent.bl_idname, text="CurveTangent")
+        row.operator(GeometryNodeCurveToMesh.bl_idname, text="CurveToMesh")
+
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeDistributePointsOnFaces.bl_idname, text="DistributePointsOnFaces")
+        row.operator(GeometryNodeCurveEndpointSelection.bl_idname, text="EndpointSelection")
+
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeInstanceOnPoints.bl_idname, text="InstanceOnPoints")
+        row.operator(GeometryNodeJoinGeometry.bl_idname, text="JoinGeometry")
+
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeShaderNodeTexNoise.bl_idname, text="Noise")
+        row.operator(GeometryNodeObjectInfo.bl_idname, text="ObjectInfo")
+
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeFunctionNodeRandomValue.bl_idname, text="RandomValue")
+        row.operator(GeometryNodeResampleCurve.bl_idname, text="ResampleCurve")
+
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeRotateInstances.bl_idname, text="RotateInstances")
+        row.operator(GeometryNodeSetCurveRadius.bl_idname, text="SetCurveRadius")
+
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeSetPosition.bl_idname, text="SetPosition")
+        row.operator(GeometryNodeShaderNodeValToRGB.bl_idname, text="ColorRamp")
+
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeSplineParameter.bl_idname, text="SplineParameter")
+        row.operator(GeometryNodeTrimCurve.bl_idname, text="TrimCurve")
+
+        row = self.layout.row(align=True)
+        
+        row.operator(GeometryNodeShaderNodeVectorMath.bl_idname, text="VectorMath")`
+        let lines = s.split("\n").filter(x => {
+            return x.trim() && x.indexOf("row.operator") !== -1
+        }).sort((x, y) => {
+return /(?<=text=").+(?=")/.exec(x)[0].localeCompare(/(?<=text=").+(?=")/.exec(y)[0])
+        }).map((x, y) =>{
+if(y%2 == 0){
+return `
+        row = self.layout.row(align=True)
+${x}`;
+}
+            return x;
+        });
+        console.log(lines.join("\n"));
+    </script>
+</body>
+
+</html>

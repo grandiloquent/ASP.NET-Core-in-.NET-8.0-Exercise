@@ -255,8 +255,24 @@ public static class Android
 					parts.SubstringBefore(' '), parts.SubstringAfter(' ')
 				);
 			} else if (arg.KeyCode == Keys.Q) {
-				var line = Utils.GetCurrentLine(textBox);
-				if (Regex.IsMatch(line, "^package:")) {
+				var line = ClipboardShare.GetText();
+				
+				if (Regex.IsMatch(line,"type=\"(GeometryNode|ShaderNode|FunctionNode)")) {
+					Handlers.GenerateBlenderScript(Regex.Match(line,"(?<=type=\")[A-Za-z]+(?=\")").Value
+					                               .Replace("GeometryNode",""));
+					return;
+				}
+				line=Utils.GetCurrentLine(textBox);
+				if (line.StartsWith("dot")) {
+					Process.Start(new ProcessStartInfo {
+					              FileName="cmd",
+					              Arguments="/C dotnet run",
+					              WorkingDirectory=@"C:\Users\Administrator\Desktop\视频\Net\WebApp",
+					              WindowStyle=ProcessWindowStyle.Hidden
+					});
+				}else if(line.StartsWith("sb")){
+					Handlers.BlenderScript(line.Substring(2));
+				} else if (Regex.IsMatch(line, "^package:")) {
 //					Process.Start(new ProcessStartInfo {
 //						FileName = "adb",
 //						Arguments = "-s 192.168.8.21:6000 shell pm uninstall -k --user 0 " + line
@@ -277,9 +293,11 @@ public static class Android
 					Handlers.RunBlender(
 						Regex.IsMatch(line, "\\d+") ? int.Parse(Regex.Match(line, "\\d+").Value) : 1
 					);//EscapeCPlusPluse(textBox.Text.TrimStart('b'));
-				}else if(line.StartsWith("x")){
+				} else if (line.StartsWith("x")) {
 					Handlers.Delete(line.Substring(1));
-				}else if (line.StartsWith("b")) {
+				} else if (line.StartsWith("p")) {
+					Handlers.ToWebp(line.Substring(1));
+				} else if (line.StartsWith("b")) {
 					
 					var parts = line.TrimStart('b').Trim().Split('|');
 					var start = 1;

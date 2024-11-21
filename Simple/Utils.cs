@@ -64,10 +64,10 @@ public class Utils
 		var i = textBox.SelectionStart;
 		var j = textBox.SelectionStart + textBox.SelectionLength;
 		
-		while (i > 0  && s[i-1] != '\n') {
+		while (i > 0 && s[i - 1] != '\n') {
 			i--;
 		}
-		while (j < s.Length  && s[j] != '\n') {
+		while (j < s.Length && s[j] != '\n') {
 			j++;
 		}
 		return s.Substring(i, j - i).Trim();
@@ -521,7 +521,7 @@ bpy.context.object.rotation_euler[0] = 1.5708", Translate());
 				break;
 			end++;
 		}
-		if(start==end&& end==0){
+		if (start == end && end == 0) {
 			return string.Empty;
 		}
 		return textBox.Text.Substring(start, end - start + 1).Trim();

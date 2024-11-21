@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -254,6 +256,25 @@ public class Handlers
 	
 	public static void RunBlender(int start = 1, string dir = @"C:\Users\Administrator\Desktop\.Folder\099")
 	{
+		if (start == 0) {
+			try {
+				start = Directory.GetFiles(dir, "*.blend")
+			.Max(x => {
+					var s = Path.GetFileNameWithoutExtension(x);
+					if (Regex.IsMatch(s, "^\\d+$")) {
+						return int.Parse(s);
+					} else {
+						return 0;
+					}
+				});
+				
+				Process.Start(Path.Combine(dir, start.ToString().PadLeft(3, '0') + ".blend"));
+				 
+			} catch {
+			
+			}
+			return;
+		}
 		 
 		if (start == 1) {
 			try {
@@ -347,13 +368,13 @@ else if (TaskUtils.checkIf{0}(this, bitmap)) {{
 	
 	public static void GenerateBlenderScript(string n)
 	{
-		var file = @"C:\Users\Administrator\Desktop\视频\Net\WebApp\Blender\quick_shader_node.py";
+		var file = @"C:\Users\Administrator\Desktop\视频\Net\WebApp\Blender\quick_geometry_node.py";
 		var s = File.ReadAllText(file);
 		
 		
-		s = s.Replace("#1",	string.Format(@"class ShaderNode{0}(Operator):
-    """""" ShaderNode{0} """"""
-    bl_idname = ""shadernode.{1}""
+		s = s.Replace("#1",	string.Format(@"class GeometryNode{0}(Operator):
+    """""" GeometryNode{0} """"""
+    bl_idname = ""geometrynode.{1}""
     bl_label = """"
     bl_options = {{""REGISTER"", ""UNDO""}}
 
@@ -362,11 +383,12 @@ else if (TaskUtils.checkIf{0}(this, bitmap)) {{
         return True
 
     def execute(self, context):
-        shader('ShaderNode{0}')
+        shader('GeometryNode{0}')
         return {{'FINISHED'}}", n, n.ToLower()) + "\r\n#1");
 		
-		s = s.Replace("#2", string.Format(@"        row.operator(ShaderNode{0}.bl_idname, text=""{0}"")", n) + "\r\n#2");
-		s = s.Replace("#3", string.Format(@"    ShaderNode{0},", n) + "\r\n#3");
+		s = s.Replace("#2", string.Format(@"        row = self.layout.row(align=True)
+        row.operator(GeometryNode{0}.bl_idname, text=""{0}"")", n) + "\r\n#2");
+		s = s.Replace("#3", string.Format(@"    GeometryNode{0},", n) + "\r\n#3");
 		File.WriteAllText(file, s);
 		
 	}
@@ -427,34 +449,84 @@ else if (TaskUtils.checkIf{0}(this, bitmap)) {{
 		var dir = Path.GetDirectoryName(path);
 		var part = length / 6;
 		for (int i = 0; i < 6; i++) {
-			if(i<5)
-			File.WriteAllText(
-				Path.Combine(dir, Path.GetFileNameWithoutExtension(path) + (i + 1) + ".txt")
-				, strings.Substring(part * i, part ));
+			if (i < 5)
+				File.WriteAllText(
+					Path.Combine(dir, Path.GetFileNameWithoutExtension(path) + (i + 1) + ".txt")
+				, strings.Substring(part * i, part));
 			else
 				File.WriteAllText(
-				Path.Combine(dir, Path.GetFileNameWithoutExtension(path) + (i + 1) + ".txt")
+					Path.Combine(dir, Path.GetFileNameWithoutExtension(path) + (i + 1) + ".txt")
 				, strings.Substring(part * i));
 		}
 		
 	 
 	}
 	
-	public static void Delete(string dir){
-		if(Directory.Exists(dir)){
-			Directory.Delete(dir,true);
-		}else if(File.Exists(dir)){
+	public static void Delete(string dir)
+	{
+		if (Directory.Exists(dir)) {
+			Directory.Delete(dir, true);
+		} else if (File.Exists(dir)) {
 			File.Delete(dir);
-		}else{
-			var files=ClipboardShare.GetFileNames();
+		} else {
+			var files = ClipboardShare.GetFileNames();
 			foreach (var f in files) {
-				if(Directory.Exists(f)){
-			Directory.Delete(f,true);
-		}else if(File.Exists(f)){
-			File.Delete(f);
-		}
+				if (Directory.Exists(f)) {
+					Directory.Delete(f, true);
+				} else if (File.Exists(f)) {
+					File.Delete(f);
+				}
 			}
 		}
+		
+	}
+	public static void BlenderScript(string text)
+	{
+		var file = @"C:\Users\Administrator\Desktop\视频\Net\WebApp\Blender\插件.py";
+		var contents = File.ReadAllText(file);
+		var s1 = string.Format(@"class _{0}(Operator):
+    """""" {1} """"""
+    bl_idname = ""{2}""
+    bl_label = """"
+    bl_options = {{""REGISTER"", ""UNDO""}}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        
+        return {{'FINISHED'}}", text.Replace(" ", "_").ToLower(), text, text.ToLower().Replace(" ", "."));
+		
+		contents = contents.Replace("#1", s1 + "\r\n#1");
+		var s2 = string.Format("row.operator(_{0}.bl_idname, text=\"{1}\")", text.Replace(" ", "_").ToLower(), text);
+		contents = contents.Replace("#2", s2 + "\r\n        #2");
+		var s3 = string.Format("_{0},", text.Replace(" ", "_").ToLower());
+		contents = contents.Replace("#3", s3 + "\r\n    #3");
+		File.WriteAllText(file, contents);
+	}
+	
+	public static void ToWebp(string path)
+	{
+		System.Drawing.Bitmap buffer = (System.Drawing.Bitmap)System.Drawing.Image.FromFile(path);
+		
+		Imazen.WebP.SimpleEncoder j = new Imazen.WebP.SimpleEncoder();
+		var o = new FileStream((Path.GetFileNameWithoutExtension(path) + ".webp").GetDesktopPath(), FileMode.OpenOrCreate);
+		j.Encode(buffer, o, 100, true);
+		var image = new Bitmap(buffer.Width, buffer.Height, buffer.PixelFormat);
+			
+		using (var graphics = Graphics.FromImage(image)) {
+			graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+			graphics.SmoothingMode = SmoothingMode.HighQuality;
+			graphics.CompositingQuality = CompositingQuality.HighQuality;
+			graphics.Clear(Color.White);
+			graphics.DrawImage(buffer,0, 0,buffer.Width, buffer.Height);
+			image.Save((Path.GetFileNameWithoutExtension(path) + ".jpg").GetDesktopPath(), System.Drawing.Imaging.ImageFormat.Jpeg);
+			image.Dispose();	
+		}
+	
+		buffer.Dispose();
+		o.Close();
 		
 	}
 }

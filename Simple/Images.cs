@@ -501,7 +501,11 @@ public static class Images
 //			try {
 //				Clipboard.SetText(float.Parse(number.Value).ToString());
 //			} catch {
-			ClipboardShare.SetText(number.Value);
+			var str = number.Value;
+			if (str.StartsWith("0") && !str.StartsWith("0.")) {
+				ClipboardShare.SetText("0." + str.Substring(1));
+			} else
+				ClipboardShare.SetText(number.Value);
 			 
 			//}
 		}
@@ -577,10 +581,10 @@ public static class Images
 								
 					
 					fv.Invoke(new Action(() => {
-					                     	if(string.IsNullOrWhiteSpace(text)){
-					                     		_engine = new TesseractEngine("./traineddata".GetEntryPath(), "eng", EngineMode.Default);
-					                     	   	return;
-					                     	   }
+						if (string.IsNullOrWhiteSpace(text)) {
+							_engine = new TesseractEngine("./traineddata".GetEntryPath(), "eng", EngineMode.Default);
+							return;
+						}
 						textBox1.SelectedText = Environment.NewLine + Environment.NewLine + text + Environment.NewLine;
 							
 						
