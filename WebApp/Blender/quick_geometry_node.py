@@ -392,7 +392,7 @@ class GeometryNodeAlignNY(Operator):
 class _align(Panel):
     """Shader"""
     bl_label = "几何"
-    bl_space_type = "VIEW_3D"
+    bl_space_type = "NODE_EDITOR"
     bl_region_type = "UI"
     bl_category = "几何"
 
