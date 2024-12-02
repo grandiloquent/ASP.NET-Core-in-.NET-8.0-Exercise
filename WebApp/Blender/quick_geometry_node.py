@@ -16,7 +16,7 @@ from bpy.types import Operator
 from bpy.types import Panel
 import mathutils
 
-_index =4
+_index =0
 def shader(name):
     g = bpy.data.node_groups[_index]
     nodes = g.nodes
@@ -277,12 +277,35 @@ class GeometryNodeAlignX(Operator):
         nodes = [n for n in nodes if n.select]
         nodes.sort(key=lambda element: element.location.x)
         y = nodes[0].location.y
-        offset = 120
+        offset = 60
         x = nodes[0].location.x+nodes[0].dimensions.x+offset
         for i in range(1,len(nodes)):
             nodes[i].location=mathutils.Vector((x,y))
             x=nodes[i].location.x+nodes[i].dimensions.x+offset
         return {'FINISHED'}
+class GeometryNodeAlignNX(Operator):
+    """ GeometryNodeAlignNX """
+    bl_idname = "geometrynode.alignnx"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        nodes = bpy.data.node_groups[_index].nodes
+        nodes = [n for n in nodes if n.select]
+        nodes.sort(key=lambda element: element.location.x,reverse=True)
+        y = nodes[0].location.y
+        offset = 60
+        x = nodes[0].location.x-nodes[0].dimensions.x-offset
+        for i in range(1,len(nodes)):
+            nodes[i].location=mathutils.Vector((x,y))
+            x=nodes[i].location.x-nodes[i].dimensions.x-offset
+        return {'FINISHED'}
+
+
 class GeometryNodeShaderNodeTexNoise(Operator):
     """ GeometryNodeShaderNodeTexNoise """
     bl_idname = "geometrynode.shadernodetexnoise"
@@ -343,6 +366,28 @@ class GeometryNodeAlignY(Operator):
             nodes[i].location=mathutils.Vector((x,y))
             y=nodes[i].location.y-nodes[i].dimensions.y-offset
         return {'FINISHED'}
+class GeometryNodeAlignNY(Operator):
+    """ GeometryNodeAlignNY """
+    bl_idname = "geometrynode.alignny"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        nodes = bpy.data.node_groups[_index].nodes
+        nodes = [n for n in nodes if n.select]
+        nodes.sort(key=lambda element: element.location.y)
+        x = nodes[0].location.x
+        offset = 40
+        y = nodes[0].location.y+nodes[0].dimensions.y+offset
+        for i in range(1,len(nodes)):
+            nodes[i].location=mathutils.Vector((x,y))
+            y=nodes[i].location.y+nodes[i].dimensions.y+offset
+        return {'FINISHED'}
+    
 #1
 class _align(Panel):
     """Shader"""
@@ -353,8 +398,10 @@ class _align(Panel):
 
     def draw(self, context):
         row = self.layout.row(align=True)
-        row.operator(GeometryNodeAlignX.bl_idname, text="对齐X")
-        row.operator(GeometryNodeAlignY.bl_idname, text="对齐Y")
+        row.operator(GeometryNodeAlignX.bl_idname, text="X")
+        row.operator(GeometryNodeAlignNX.bl_idname, text="-X")
+        row.operator(GeometryNodeAlignY.bl_idname, text="Y")
+        row.operator(GeometryNodeAlignNY.bl_idname, text="-Y")
 
         row = self.layout.row(align=True)
         row.operator(GeometryNodeFunctionNodeAlignEulerToVector.bl_idname, text="AlignEulerToVector")
@@ -422,10 +469,12 @@ classes = [
     GeometryNodeResampleCurve,
     GeometryNodeSetPosition,
     GeometryNodeAlignX,
+    GeometryNodeAlignNX,
     GeometryNodeShaderNodeTexNoise,
     GeometryNodeShaderNodeVectorMath,
     GeometryNodeRotateInstances,
     GeometryNodeAlignY,
+    GeometryNodeAlignNY,
 #3
 ]
 

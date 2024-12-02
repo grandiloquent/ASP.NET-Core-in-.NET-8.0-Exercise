@@ -304,7 +304,7 @@ public class Handlers
 	{
 		var path = first.TrimStart('_');
 		var fileName = Path.GetFileName(path);
-		System.IO.Compression.ZipFile.ExtractToDirectory("Dou10.zip".GetEntryPath(),
+		System.IO.Compression.ZipFile.ExtractToDirectory("Kuai.zip".GetEntryPath(),
 			Path.GetDirectoryName(path));
 		var dir = Directory.GetDirectories(Path.GetDirectoryName(path)).First();
 		var src = Path.GetFileName(dir);
@@ -521,6 +521,13 @@ else if (TaskUtils.checkIf{0}(this, bitmap)) {{
 			graphics.CompositingQuality = CompositingQuality.HighQuality;
 			graphics.Clear(Color.White);
 			graphics.DrawImage(buffer,0, 0,buffer.Width, buffer.Height);
+			/*
+			 EncoderParameters encoderParams = new EncoderParameters(1);
+			encoderParams.Param[0] = new EncoderParameter(Encoder.Quality, 80L);
+			ImageCodecInfo jpgEncoder = GetEncoder(ImageFormat.Jpeg);
+			// Save the image
+			finalImage.Save(f, jpgEncoder, encoderParams);
+			 */
 			image.Save((Path.GetFileNameWithoutExtension(path) + ".jpg").GetDesktopPath(), System.Drawing.Imaging.ImageFormat.Jpeg);
 			image.Dispose();	
 		}

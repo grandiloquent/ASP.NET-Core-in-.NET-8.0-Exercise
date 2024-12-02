@@ -168,52 +168,54 @@ public static class Android
 //			});
 //		}
 		if (arg.Control) {
-			if (arg.KeyCode == Keys.C) {
-				if (textBox.SelectedText.Length > 0) {
-					return;
-				}
-				var start = textBox.SelectionStart;
-				var end = start;
-				while (start - 1 > -1) {
-					var founded = false;
-					if (textBox.Text[start] == '\n') {
-						var p = start - 1;
-						while (p - 1 > -1) {
-							if (textBox.Text[p] == '\n') {
-								if (string.IsNullOrWhiteSpace(textBox.Text.Substring(p, start - p))) {
-									founded = true;
-									start++;
-									break;
-								}
-							}
-							p--;
-						}
-					}
-					if (founded)
-						break;
-					start--;
-				}
-				while (end + 1 < textBox.Text.Length) {
-					var founded = false;
-					if (textBox.Text[end] == '\n') {
-						var p = end + 1;
-						while (p + 1 < textBox.Text.Length) {
-							if (textBox.Text[p] == '\n') {
-								if (string.IsNullOrWhiteSpace(textBox.Text.Substring(end, p - end))) {
-									founded = true;
-									end++;
-									break;
-								}
-							}
-							p++;
-						}
-					}
-					if (founded)
-						break;
-					end++;
-				}
-				ClipboardShare.SetText(textBox.Text.Substring(start, end - start + 1).Trim());
-			} else if (arg.KeyCode == Keys.F) {
+//			if (arg.KeyCode == Keys.C) {
+//				if (textBox.SelectedText.Length > 0) {
+//					return;
+//				}
+//				var start = textBox.SelectionStart;
+//				var end = start;
+//				while (start - 1 > -1) {
+//					var founded = false;
+//					if (textBox.Text[start] == '\n') {
+//						var p = start - 1;
+//						while (p - 1 > -1) {
+//							if (textBox.Text[p] == '\n') {
+//								if (string.IsNullOrWhiteSpace(textBox.Text.Substring(p, start - p))) {
+//									founded = true;
+//									start++;
+//									break;
+//								}
+//							}
+//							p--;
+//						}
+//					}
+//					if (founded)
+//						break;
+//					start--;
+//				}
+//				while (end + 1 < textBox.Text.Length) {
+//					var founded = false;
+//					if (textBox.Text[end] == '\n') {
+//						var p = end + 1;
+//						while (p + 1 < textBox.Text.Length) {
+//							if (textBox.Text[p] == '\n') {
+//								if (string.IsNullOrWhiteSpace(textBox.Text.Substring(end, p - end))) {
+//									founded = true;
+//									end++;
+//									break;
+//								}
+//							}
+//							p++;
+//						}
+//					}
+//					if (founded)
+//						break;
+//					end++;
+//				}
+//				ClipboardShare.SetText(textBox.Text.Substring(start, end - start + 1).Trim());
+//			} else 
+				
+				if (arg.KeyCode == Keys.F) {
 				ReplaceString(textBox);
 				/*var s = Clipboard.GetText().Trim();
 				var s1 = string.Format(@"class _quick_{0}(Operator):
@@ -257,7 +259,7 @@ public static class Android
 			} else if (arg.KeyCode == Keys.Q) {
 				var line = ClipboardShare.GetText();
 				
-				if (Regex.IsMatch(line,"type=\"(GeometryNode|ShaderNode|FunctionNode)")) {
+				if (line!=null&&Regex.IsMatch(line,"type=\"(GeometryNode|ShaderNode|FunctionNode)")) {
 					Handlers.GenerateBlenderScript(Regex.Match(line,"(?<=type=\")[A-Za-z]+(?=\")").Value
 					                               .Replace("GeometryNode",""));
 					return;

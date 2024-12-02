@@ -219,14 +219,14 @@ public partial class MainForm : Form
 					}
 				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F9") {
 					try {
-						Images.Ocr(this, textBox1, 90);
+							Images.Ocr(this, textBox1,124,120,60);
 						
 					} catch {
 						
 					}
 				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F10") {
 					try {
-						Images.Ocr(this, textBox1, 110,120,60);
+						Images.Ocr(this, textBox1,84,120,60);
 						
 					} catch {
 						
@@ -297,151 +297,149 @@ public partial class MainForm : Form
 					               Screenshot.SaveScreenshot();
 					}));
 				} 
-				if (e.KeyData.EventType == EventHook.KeyEvent.up) {
-					
-					if (e.KeyData.Keyname == "0") {
-						_str += "0";
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "D1") {
-						_str += "1";
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "D2") {
-						_str += "2";
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "D3") {
-						_str += "3";
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "D4") {
-						_str += "4";
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "D5") {
-						_str += "5";
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "D6") {
-						_str += "6";
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "D7") {
-						_str += "7";
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "D8") {
-						_str += "8";
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "D9") {
-						_str += "9";
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "NumPad1") {
-						_str += "1";
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "NumPad2") {
-						_str += "2";
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "NumPad3") {
-						_str += "3";
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "NumPad4") {
-						_str += "4";
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "NumPad5") {
-						_str += "5";
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "NumPad6") {
-						_str += "6";
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "NumPad7") {
-						_str += "7";
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "NumPad8") {
-						_str += "8";
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "NumPad9") {
-						_str += "9";
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "NumPad0") {
-						_str += "0";
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "OemMinus") {
-						_str = "-" + _str.TrimStart('-');
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "Subtract") {
-						_str = "-" + _str.TrimStart('-');
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "OemPeriod") {
-						_str += ".";
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "Decimal") {
-						_str += ".";
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "Back") {
-						if (_str.Length > 0)
-							_str = _str.Substring(0, _str.Length - 1);
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					} else if (e.KeyData.Keyname == "Return") {
-						if(string.IsNullOrWhiteSpace(_str)){
-							_str="-.";
-							Invoke(new Action(() => {
-							Text = _str;
-						}));
-							return;
-						}
-						ClipboardShare.SetText(_str);
-						_str = string.Empty;
-						Invoke(new Action(() => {
-							Text = _str;
-						}));
-					}
-
-
-				}
+//				if (e.KeyData.EventType == EventHook.KeyEvent.up) {
+//					
+//					if (e.KeyData.Keyname == "0") {
+//						_str += "0";
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "D1") {
+//						_str += "1";
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "D2") {
+//						_str += "2";
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "D3") {
+//						_str += "3";
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "D4") {
+//						_str += "4";
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "D5") {
+//						_str += "5";
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "D6") {
+//						_str += "6";
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "D7") {
+//						_str += "7";
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "D8") {
+//						_str += "8";
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "D9") {
+//						_str += "9";
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "NumPad1") {
+//						_str += "1";
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "NumPad2") {
+//						_str += "2";
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "NumPad3") {
+//						_str += "3";
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "NumPad4") {
+//						_str += "4";
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "NumPad5") {
+//						_str += "5";
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "NumPad6") {
+//						_str += "6";
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "NumPad7") {
+//						_str += "7";
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "NumPad8") {
+//						_str += "8";
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "NumPad9") {
+//						_str += "9";
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "NumPad0") {
+//						_str += "0";
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "OemMinus") {
+//						_str = "-" + _str.TrimStart('-');
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "Subtract") {
+//						_str = "-" + _str.TrimStart('-');
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "OemPeriod") {
+//						_str += ".";
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "Decimal") {
+//						_str += ".";
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "Back") {
+//						if (_str.Length > 0)
+//							_str = _str.Substring(0, _str.Length - 1);
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					} else if (e.KeyData.Keyname == "Return") {
+//						if(string.IsNullOrWhiteSpace(_str)){
+//							_str="-.";
+//							Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//							return;
+//						}
+//						ClipboardShare.SetText(_str);
+//						_str = string.Empty;
+//						Invoke(new Action(() => {
+//							Text = _str;
+//						}));
+//					}
+//}
 //				Invoke(new Action(() => {
 //					//textBox1.Text+="\r\n"+e.KeyData.Keyname;
 //					//Text = e.KeyData.Keyname;
