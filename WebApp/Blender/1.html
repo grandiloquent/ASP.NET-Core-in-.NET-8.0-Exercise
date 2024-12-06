@@ -9,53 +9,61 @@
 
 <body>
     <script>
-        let s = `        row = self.layout.row(align=True)
-        row.operator(GeometryNodeAlignX.bl_idname, text="对齐X")
-        row.operator(GeometryNodeAlignY.bl_idname, text="对齐Y")
-
+        let s = `
         row = self.layout.row(align=True)
         row.operator(GeometryNodeFunctionNodeAlignEulerToVector.bl_idname, text="AlignEulerToVector")
         row.operator(GeometryNodeFunctionNodeAlignRotationToVector.bl_idname, text="AlignRotationToVector")
 
         row = self.layout.row(align=True)
-        row.operator(GeometryNodeCurvePrimitiveCircle.bl_idname, text="CurveCircle")
-        row.operator(GeometryNodeCurvePrimitiveLine.bl_idname, text="CurveLine")
-
-        row = self.layout.row(align=True)
-        row.operator(GeometryNodeInputTangent.bl_idname, text="CurveTangent")
-        row.operator(GeometryNodeCurveToMesh.bl_idname, text="CurveToMesh")
-
-        row = self.layout.row(align=True)
-        row.operator(GeometryNodeDistributePointsOnFaces.bl_idname, text="DistributePointsOnFaces")
-        row.operator(GeometryNodeCurveEndpointSelection.bl_idname, text="EndpointSelection")
-
-        row = self.layout.row(align=True)
-        row.operator(GeometryNodeInstanceOnPoints.bl_idname, text="InstanceOnPoints")
-        row.operator(GeometryNodeJoinGeometry.bl_idname, text="JoinGeometry")
-
-        row = self.layout.row(align=True)
-        row.operator(GeometryNodeShaderNodeTexNoise.bl_idname, text="Noise")
-        row.operator(GeometryNodeObjectInfo.bl_idname, text="ObjectInfo")
-
-        row = self.layout.row(align=True)
-        row.operator(GeometryNodeFunctionNodeRandomValue.bl_idname, text="RandomValue")
-        row.operator(GeometryNodeResampleCurve.bl_idname, text="ResampleCurve")
-
-        row = self.layout.row(align=True)
-        row.operator(GeometryNodeRotateInstances.bl_idname, text="RotateInstances")
-        row.operator(GeometryNodeSetCurveRadius.bl_idname, text="SetCurveRadius")
-
-        row = self.layout.row(align=True)
-        row.operator(GeometryNodeSetPosition.bl_idname, text="SetPosition")
         row.operator(GeometryNodeShaderNodeValToRGB.bl_idname, text="ColorRamp")
+        row.operator(GeometryNodeCurvePrimitiveCircle.bl_idname, text="CurveCircle")
+
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeCurvePrimitiveLine.bl_idname, text="CurveLine")
+        row.operator(GeometryNodeInputTangent.bl_idname, text="CurveTangent")
+
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeCurveToMesh.bl_idname, text="CurveToMesh")
+        row.operator(GeometryNodeDistributePointsOnFaces.bl_idname, text="DistributePointsOnFaces")
+
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeCurveEndpointSelection.bl_idname, text="EndpointSelection")
+        row.operator(GeometryNodeInstanceOnPoints.bl_idname, text="InstanceOnPoints")
+
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeJoinGeometry.bl_idname, text="JoinGeometry")
+        row.operator(GeometryNodeShaderNodeTexNoise.bl_idname, text="Noise")
+
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeObjectInfo.bl_idname, text="ObjectInfo")
+        row.operator(GeometryNodeFunctionNodeRandomValue.bl_idname, text="RandomValue")
+
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeResampleCurve.bl_idname, text="ResampleCurve")
+        row.operator(GeometryNodeRotateInstances.bl_idname, text="RotateInstances")
+
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeSetCurveRadius.bl_idname, text="SetCurveRadius")
+        row.operator(GeometryNodeSetPosition.bl_idname, text="SetPosition")
 
         row = self.layout.row(align=True)
         row.operator(GeometryNodeSplineParameter.bl_idname, text="SplineParameter")
         row.operator(GeometryNodeTrimCurve.bl_idname, text="TrimCurve")
 
         row = self.layout.row(align=True)
-        
-        row.operator(GeometryNodeShaderNodeVectorMath.bl_idname, text="VectorMath")`
+        row.operator(GeometryNodeShaderNodeVectorMath.bl_idname, text="VectorMath")
+
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeMeshIcoSphere.bl_idname, text="MeshIcoSphere")
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeInputSceneTime.bl_idname, text="InputSceneTime")
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeShaderNodeCombineXYZ.bl_idname, text="ShaderNodeCombineXYZ")
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeCaptureAttribute.bl_idname, text="CaptureAttribute")
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeShaderNodeVectorMath.bl_idname, text="ShaderNodeVectorMath")
+`
         let lines = s.split("\n").filter(x => {
             return x.trim() && x.indexOf("row.operator") !== -1
         }).sort((x, y) => {

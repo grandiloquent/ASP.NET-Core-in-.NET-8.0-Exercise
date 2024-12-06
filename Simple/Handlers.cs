@@ -371,8 +371,21 @@ else if (TaskUtils.checkIf{0}(this, bitmap)) {{
 		var file = @"C:\Users\Administrator\Desktop\视频\Net\WebApp\Blender\quick_geometry_node.py";
 		var s = File.ReadAllText(file);
 		
+		var nn=n;
+		if(!n.StartsWith("ShaderNode") && !n.StartsWith("Node")&& !n.StartsWith("FunctionNode")){
+			nn="GeometryNode"+n;
+		}
+		//(n.StartsWith("ShaderNode")?n:"GeometryNode"+n);
+		var nnn=n;
+		if(n.StartsWith("ShaderNode")){
+			nnn=n.Substring("ShaderNode".Length);
+		}else if(n.StartsWith("Node")){
+			nnn=n.Substring("Node".Length);
+		}else if(n.StartsWith("FunctionNode")){
+			nnn=n.Substring("FunctionNode".Length);
+		}
 		
-		s = s.Replace("#1",	string.Format(@"class GeometryNode{0}(Operator):
+		s = s.Replace("#1",	string.Format(@"class {0}(Operator):
     """""" GeometryNode{0} """"""
     bl_idname = ""geometrynode.{1}""
     bl_label = """"
@@ -383,12 +396,29 @@ else if (TaskUtils.checkIf{0}(this, bitmap)) {{
         return True
 
     def execute(self, context):
-        shader('GeometryNode{0}')
-        return {{'FINISHED'}}", n, n.ToLower()) + "\r\n#1");
+        shader('{0}')
+        return {{'FINISHED'}}",nn, n.ToLower()) + "\r\n#1");
 		
 		s = s.Replace("#2", string.Format(@"        row = self.layout.row(align=True)
-        row.operator(GeometryNode{0}.bl_idname, text=""{0}"")", n) + "\r\n#2");
-		s = s.Replace("#3", string.Format(@"    GeometryNode{0},", n) + "\r\n#3");
+        row.operator({0}.bl_idname, text=""{1}"")",nn, nnn) + "\r\n#2");
+		s = s.Replace("#3", ",\r\n"+string.Format(@"    {0}", nn) + "#3");
+		var lines=Regex.Match(s,"(?<=#4)[^#]+(?=#2)").Value.Split(Environment.NewLine.ToArray(),StringSplitOptions.RemoveEmptyEntries);
+		var list=new List<string>();
+		foreach (var element in lines) {
+			if(element.TrimStart().StartsWith("row.operator"))
+				list.Add(element);
+		}
+		list=list.OrderBy(x=>Regex.Match(x,"(?<=text=\").+(?=\")").Value).ToList();
+		var ls=new List<string>();
+		var i=0;
+		foreach (var element in list) {
+			if(i%2==0)
+				ls.Add("        row = self.layout.row(align=True)");
+			ls.Add(element);
+			i++;
+		}
+		
+		s=Regex.Replace(s,"(?<=#4)[^#]+(?=#2)","\r\n"+string.Join(Environment.NewLine,ls)+"\r\n");
 		File.WriteAllText(file, s);
 		
 	}

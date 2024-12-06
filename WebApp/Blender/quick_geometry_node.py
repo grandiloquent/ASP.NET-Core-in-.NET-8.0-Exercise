@@ -16,7 +16,7 @@ from bpy.types import Operator
 from bpy.types import Panel
 import mathutils
 
-_index =0
+_index =1
 def shader(name):
     g = bpy.data.node_groups[_index]
     nodes = g.nodes
@@ -388,6 +388,422 @@ class GeometryNodeAlignNY(Operator):
             y=nodes[i].location.y+nodes[i].dimensions.y+offset
         return {'FINISHED'}
     
+class GeometryNodeMeshIcoSphere(Operator):
+    """ GeometryNodeMeshIcoSphere """
+    bl_idname = "geometrynode.meshicosphere"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('GeometryNodeMeshIcoSphere')
+        return {'FINISHED'}
+class GeometryNodeInputSceneTime(Operator):
+    """ GeometryNodeInputSceneTime """
+    bl_idname = "geometrynode.inputscenetime"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('GeometryNodeInputSceneTime')
+        return {'FINISHED'}
+class GeometryNodeShaderNodeCombineXYZ(Operator):
+    """ GeometryNodeShaderNodeCombineXYZ """
+    bl_idname = "geometrynode.shadernodecombinexyz"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('ShaderNodeCombineXYZ')
+        return {'FINISHED'}
+class GeometryNodeCaptureAttribute(Operator):
+    """ GeometryNodeCaptureAttribute """
+    bl_idname = "geometrynode.captureattribute"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('GeometryNodeCaptureAttribute')
+        return {'FINISHED'}
+class GeometryNodeShaderNodeVectorMath(Operator):
+    """ GeometryNodeShaderNodeVectorMath """
+    bl_idname = "geometrynode.shadernodevectormath"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('ShaderNodeVectorMath')
+        return {'FINISHED'}
+class GeometryNodeSetMaterial(Operator):
+    """ GeometryNodeSetMaterial """
+    bl_idname = "geometrynode.setmaterial"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('GeometryNodeSetMaterial')
+        return {'FINISHED'}
+class ShaderNodeMath(Operator):
+    """ GeometryNodeShaderNodeMath """
+    bl_idname = "geometrynode.shadernodemath"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('ShaderNodeMath')
+        return {'FINISHED'}
+class ShaderNodeSeparateXYZ(Operator):
+    """ GeometryNodeShaderNodeSeparateXYZ """
+    bl_idname = "geometrynode.shadernodeseparatexyz"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('ShaderNodeSeparateXYZ')
+        return {'FINISHED'}
+class ShaderNodeMapRange(Operator):
+    """ GeometryNodeShaderNodeMapRange """
+    bl_idname = "geometrynode.shadernodemaprange"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('ShaderNodeMapRange')
+        return {'FINISHED'}
+class ShaderNodeValue(Operator):
+    """ GeometryNodeShaderNodeValue """
+    bl_idname = "geometrynode.shadernodevalue"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('ShaderNodeValue')
+        return {'FINISHED'}
+class GeometryNodeRealizeInstances(Operator):
+    """ GeometryNodeGeometryNodeRealizeInstances """
+    bl_idname = "geometrynode.realizeinstances"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('GeometryNodeRealizeInstances')
+        return {'FINISHED'}
+class GeometryNodeSetShadeSmooth(Operator):
+    """ GeometryNodeGeometryNodeSetShadeSmooth """
+    bl_idname = "geometrynode.setshadesmooth"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('GeometryNodeSetShadeSmooth')
+        return {'FINISHED'}
+class GeometryNodeCollectionInfo(Operator):
+    """ GeometryNodeGeometryNodeCollectionInfo """
+    bl_idname = "geometrynode.collectioninfo"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('GeometryNodeCollectionInfo')
+        return {'FINISHED'}
+class GeometryNodeSampleNearest(Operator):
+    """ GeometryNodeGeometryNodeSampleNearest """
+    bl_idname = "geometrynode.samplenearest"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('GeometryNodeSampleNearest')
+        return {'FINISHED'}
+class GeometryNodeSampleIndex(Operator):
+    """ GeometryNodeGeometryNodeSampleIndex """
+    bl_idname = "geometrynode.sampleindex"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('GeometryNodeSampleIndex')
+        return {'FINISHED'}
+class GeometryNodeInputNormal(Operator):
+    """ GeometryNodeGeometryNodeInputNormal """
+    bl_idname = "geometrynode.inputnormal"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('GeometryNodeInputNormal')
+        return {'FINISHED'}
+class GeometryNodeProximity(Operator):
+    """ GeometryNodeGeometryNodeProximity """
+    bl_idname = "geometrynode.proximity"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('GeometryNodeProximity')
+        return {'FINISHED'}
+class ShaderNodeMix(Operator):
+    """ GeometryNodeShaderNodeMix """
+    bl_idname = "geometrynode.shadernodemix"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('ShaderNodeMix')
+        return {'FINISHED'}
+class GeometryNodeCurveSetHandles(Operator):
+    """ GeometryNodeGeometryNodeCurveSetHandles """
+    bl_idname = "geometrynode.curvesethandles"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('GeometryNodeCurveSetHandles')
+        return {'FINISHED'}
+class GeometryNodeSetCurveHandlePositions(Operator):
+    """ GeometryNodeGeometryNodeSetCurveHandlePositions """
+    bl_idname = "geometrynode.setcurvehandlepositions"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('GeometryNodeSetCurveHandlePositions')
+        return {'FINISHED'}
+class GeometryNodeCurveSplineType(Operator):
+    """ GeometryNodeGeometryNodeCurveSplineType """
+    bl_idname = "geometrynode.curvesplinetype"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('GeometryNodeCurveSplineType')
+        return {'FINISHED'}
+class NodeGroupInput(Operator):
+    """ GeometryNodeNodeGroupInput """
+    bl_idname = "geometrynode.nodegroupinput"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('NodeGroupInput')
+        return {'FINISHED'}
+class GeometryNodeDeleteGeometry(Operator):
+    """ GeometryNodeGeometryNodeDeleteGeometry """
+    bl_idname = "geometrynode.deletegeometry"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('GeometryNodeDeleteGeometry')
+        return {'FINISHED'}
+class GeometryNodeCurveToPoints(Operator):
+    """ GeometryNodeGeometryNodeCurveToPoints """
+    bl_idname = "geometrynode.curvetopoints"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('GeometryNodeCurveToPoints')
+        return {'FINISHED'}
+class GeometryNodeTransform(Operator):
+    """ GeometryNodeGeometryNodeTransform """
+    bl_idname = "geometrynode.transform"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('GeometryNodeTransform')
+        return {'FINISHED'}
+class FunctionNodeRotationToEuler(Operator):
+    """ GeometryNodeFunctionNodeRotationToEuler """
+    bl_idname = "geometrynode.functionnoderotationtoeuler"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('FunctionNodeRotationToEuler')
+        return {'FINISHED'}
+class GeometryNodeInputIndex(Operator):
+    """ GeometryNodeGeometryNodeInputIndex """
+    bl_idname = "geometrynode.inputindex"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('GeometryNodeInputIndex')
+        return {'FINISHED'}
+class FunctionNodeRotateEuler(Operator):
+    """ GeometryNodeFunctionNodeRotateEuler """
+    bl_idname = "geometrynode.functionnoderotateeuler"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('FunctionNodeRotateEuler')
+        return {'FINISHED'}
+class ShaderNodeTexGradient(Operator):
+    """ GeometryNodeShaderNodeTexGradient """
+    bl_idname = "geometrynode.shadernodetexgradient"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('ShaderNodeTexGradient')
+        return {'FINISHED'}
+class GeometryNodeInputPosition(Operator):
+    """ GeometryNodeGeometryNodeInputPosition """
+    bl_idname = "geometrynode.inputposition"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('GeometryNodeInputPosition')
+        return {'FINISHED'}
+class ShaderNodeVectorRotate(Operator):
+    """ GeometryNodeShaderNodeVectorRotate """
+    bl_idname = "geometrynode.shadernodevectorrotate"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('ShaderNodeVectorRotate')
+        return {'FINISHED'}
+class GeometryNodeScaleInstances(Operator):
+    """ GeometryNodeGeometryNodeScaleInstances """
+    bl_idname = "geometrynode.scaleinstances"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        shader('GeometryNodeScaleInstances')
+        return {'FINISHED'}
 #1
 class _align(Panel):
     """Shader"""
@@ -403,49 +819,86 @@ class _align(Panel):
         row.operator(GeometryNodeAlignY.bl_idname, text="Y")
         row.operator(GeometryNodeAlignNY.bl_idname, text="-Y")
 
+#4
         row = self.layout.row(align=True)
         row.operator(GeometryNodeFunctionNodeAlignEulerToVector.bl_idname, text="AlignEulerToVector")
         row.operator(GeometryNodeFunctionNodeAlignRotationToVector.bl_idname, text="AlignRotationToVector")
-
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeCaptureAttribute.bl_idname, text="CaptureAttribute")
+        row.operator(GeometryNodeCollectionInfo.bl_idname, text="CollectionInfo")
         row = self.layout.row(align=True)
         row.operator(GeometryNodeShaderNodeValToRGB.bl_idname, text="ColorRamp")
+        row.operator(GeometryNodeShaderNodeCombineXYZ.bl_idname, text="CombineXYZ")
+        row = self.layout.row(align=True)
         row.operator(GeometryNodeCurvePrimitiveCircle.bl_idname, text="CurveCircle")
-
-        row = self.layout.row(align=True)
         row.operator(GeometryNodeCurvePrimitiveLine.bl_idname, text="CurveLine")
+        row = self.layout.row(align=True)
         row.operator(GeometryNodeInputTangent.bl_idname, text="CurveTangent")
-
-        row = self.layout.row(align=True)
         row.operator(GeometryNodeCurveToMesh.bl_idname, text="CurveToMesh")
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeCurveToPoints.bl_idname, text="CurveToPoints")
+        row.operator(GeometryNodeDeleteGeometry.bl_idname, text="DeleteGeometry")
+        row = self.layout.row(align=True)
         row.operator(GeometryNodeDistributePointsOnFaces.bl_idname, text="DistributePointsOnFaces")
-
-        row = self.layout.row(align=True)
         row.operator(GeometryNodeCurveEndpointSelection.bl_idname, text="EndpointSelection")
-        row.operator(GeometryNodeInstanceOnPoints.bl_idname, text="InstanceOnPoints")
-
         row = self.layout.row(align=True)
+        row.operator(GeometryNodeProximity.bl_idname, text="Geometry Proximity")
+        row.operator(ShaderNodeTexGradient.bl_idname, text="Gradient")
+        row = self.layout.row(align=True)
+        row.operator(NodeGroupInput.bl_idname, text="GroupInput")
+        row.operator(GeometryNodeInputIndex.bl_idname, text="Index")
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeInstanceOnPoints.bl_idname, text="InstanceOnPoints")
         row.operator(GeometryNodeJoinGeometry.bl_idname, text="JoinGeometry")
+        row = self.layout.row(align=True)
+        row.operator(ShaderNodeMapRange.bl_idname, text="MapRange")
+        row.operator(ShaderNodeMath.bl_idname, text="Math")
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeMeshIcoSphere.bl_idname, text="MeshIcoSphere")
+        row.operator(ShaderNodeMix.bl_idname, text="Mix")
+        row = self.layout.row(align=True)
         row.operator(GeometryNodeShaderNodeTexNoise.bl_idname, text="Noise")
-
+        row.operator(GeometryNodeInputNormal.bl_idname, text="Normal")
         row = self.layout.row(align=True)
         row.operator(GeometryNodeObjectInfo.bl_idname, text="ObjectInfo")
+        row.operator(GeometryNodeInputPosition.bl_idname, text="Position")
+        row = self.layout.row(align=True)
         row.operator(GeometryNodeFunctionNodeRandomValue.bl_idname, text="RandomValue")
-
+        row.operator(GeometryNodeRealizeInstances.bl_idname, text="RealizeInstances")
         row = self.layout.row(align=True)
         row.operator(GeometryNodeResampleCurve.bl_idname, text="ResampleCurve")
-        row.operator(GeometryNodeRotateInstances.bl_idname, text="RotateInstances")
-
+        row.operator(FunctionNodeRotateEuler.bl_idname, text="RotateEuler")
         row = self.layout.row(align=True)
+        row.operator(GeometryNodeRotateInstances.bl_idname, text="RotateInstances")
+        row.operator(FunctionNodeRotationToEuler.bl_idname, text="RotationToEuler")
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeSampleIndex.bl_idname, text="SampleIndex")
+        row.operator(GeometryNodeSampleNearest.bl_idname, text="SampleNearest")
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeScaleInstances.bl_idname, text="ScaleInstances")
+        row.operator(GeometryNodeInputSceneTime.bl_idname, text="SceneTime")
+        row = self.layout.row(align=True)
+        row.operator(ShaderNodeSeparateXYZ.bl_idname, text="SeparateXYZ")
         row.operator(GeometryNodeSetCurveRadius.bl_idname, text="SetCurveRadius")
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeSetCurveHandlePositions.bl_idname, text="SetHandlePositions")
+        row.operator(GeometryNodeCurveSetHandles.bl_idname, text="SetHandlesType")
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeSetMaterial.bl_idname, text="SetMaterial")
         row.operator(GeometryNodeSetPosition.bl_idname, text="SetPosition")
-
+        row = self.layout.row(align=True)
+        row.operator(GeometryNodeSetShadeSmooth.bl_idname, text="SetShadeSmooth")
+        row.operator(GeometryNodeCurveSplineType.bl_idname, text="SetSplineType")
         row = self.layout.row(align=True)
         row.operator(GeometryNodeSplineParameter.bl_idname, text="SplineParameter")
-        row.operator(GeometryNodeTrimCurve.bl_idname, text="TrimCurve")
-
+        row.operator(GeometryNodeTransform.bl_idname, text="Transform")
         row = self.layout.row(align=True)
+        row.operator(GeometryNodeTrimCurve.bl_idname, text="TrimCurve")
+        row = self.layout.row(align=True)
+        row.operator(ShaderNodeValue.bl_idname, text="Value")
         row.operator(GeometryNodeShaderNodeVectorMath.bl_idname, text="VectorMath")
-
+        row = self.layout.row(align=True)
+        row.operator(ShaderNodeVectorRotate.bl_idname, text="VectorRotate")
 #2
 classes = [
     _align,
@@ -475,7 +928,37 @@ classes = [
     GeometryNodeRotateInstances,
     GeometryNodeAlignY,
     GeometryNodeAlignNY,
-#3
+    GeometryNodeMeshIcoSphere,
+    GeometryNodeInputSceneTime,
+    GeometryNodeShaderNodeCombineXYZ,
+    GeometryNodeCaptureAttribute,
+    GeometryNodeSetMaterial,
+    ShaderNodeMath,
+    ShaderNodeSeparateXYZ,
+    ShaderNodeMapRange,
+    ShaderNodeValue,
+    GeometryNodeRealizeInstances,
+    GeometryNodeSetShadeSmooth,
+    GeometryNodeCollectionInfo,
+    GeometryNodeSampleNearest,
+    GeometryNodeSampleIndex,
+    GeometryNodeInputNormal,
+    GeometryNodeProximity,
+    ShaderNodeMix,
+    GeometryNodeCurveSetHandles,
+    GeometryNodeSetCurveHandlePositions,
+    GeometryNodeCurveSplineType,
+    NodeGroupInput,
+    GeometryNodeDeleteGeometry,
+    GeometryNodeCurveToPoints,
+    GeometryNodeTransform,
+    FunctionNodeRotationToEuler,
+    GeometryNodeInputIndex,
+    FunctionNodeRotateEuler,
+    ShaderNodeTexGradient,
+    GeometryNodeInputPosition,
+    ShaderNodeVectorRotate,
+    GeometryNodeScaleInstances#3
 ]
 
 def register():

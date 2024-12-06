@@ -259,7 +259,7 @@ public static class Android
 			} else if (arg.KeyCode == Keys.Q) {
 				var line = ClipboardShare.GetText();
 				
-				if (line!=null&&Regex.IsMatch(line,"type=\"(GeometryNode|ShaderNode|FunctionNode)")) {
+				if (line!=null&&Regex.IsMatch(line,"type=\"(GeometryNode|ShaderNode|FunctionNode|Node)")) {
 					Handlers.GenerateBlenderScript(Regex.Match(line,"(?<=type=\")[A-Za-z]+(?=\")").Value
 					                               .Replace("GeometryNode",""));
 					return;
