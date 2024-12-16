@@ -566,4 +566,24 @@ else if (TaskUtils.checkIf{0}(this, bitmap)) {{
 		o.Close();
 		
 	}
+	
+	
+	public static string AndroidSqlite(string s){
+		var matches=Regex.Matches(s,"(?<=\\\\\")[a-zA-Z_0-9-]+(?=\\\\\")").Cast<Match>().Select(x=>x.Value);
+		var list=new List<string>();
+		var i=0;
+		foreach (var element in matches) {
+			list.Add(string.Format("values.put(\"{0}\", jsonObject.getString(\"{0}\"));",element));
+			list.Add(string.Format("jsonObject.put(\"{0}\", cursor.getString({1}));",element,i++));
+			
+			 
+		}
+		return string.Join(Environment.NewLine,list.OrderBy(x=>x));
+	}
+	
+	public static string IncreaseNumber(string s,bool isIncrease){
+		return Regex.Replace(s,"(?<=[a-zA-Z])\\d+\\b",m=>{
+		                     	return (int.Parse(m.Value)+(isIncrease?1:-1)).ToString();
+		                     });
+	}
 }

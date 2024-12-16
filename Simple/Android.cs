@@ -215,7 +215,7 @@ public static class Android
 //				ClipboardShare.SetText(textBox.Text.Substring(start, end - start + 1).Trim());
 //			} else 
 				
-				if (arg.KeyCode == Keys.F) {
+			if (arg.KeyCode == Keys.F) {
 				ReplaceString(textBox);
 				/*var s = Clipboard.GetText().Trim();
 				var s1 = string.Format(@"class _quick_{0}(Operator):
@@ -256,23 +256,37 @@ public static class Android
 				Process.Start(
 					parts.SubstringBefore(' '), parts.SubstringAfter(' ')
 				);
+			} else if (arg.KeyCode == Keys.D) {
+				var s = textBox.Text.Trim();
+				var first = s.SubstringBefore('\n').Trim();
+				var array = first.Split(' ');
+				//if (array.Length > 1)
+				//	textBox.Text = first;
+
+				ClipboardShare.SetText(ClipboardShare.GetText().Replace(
+					array[0], array[1]
+			
+				).Replace(
+					array[0].Capitalize(), array[1].Capitalize()
+			
+				));
 			} else if (arg.KeyCode == Keys.Q) {
 				var line = ClipboardShare.GetText();
 				
-				if (line!=null&&Regex.IsMatch(line,"type=\"(GeometryNode|ShaderNode|FunctionNode|Node)")) {
-					Handlers.GenerateBlenderScript(Regex.Match(line,"(?<=type=\")[A-Za-z]+(?=\")").Value
-					                               .Replace("GeometryNode",""));
+				if (line != null && Regex.IsMatch(line, "type=\"(GeometryNode|ShaderNode|FunctionNode|Node)")) {
+					Handlers.GenerateBlenderScript(Regex.Match(line, "(?<=type=\")[A-Za-z]+(?=\")").Value
+					                               .Replace("GeometryNode", ""));
 					return;
 				}
-				line=Utils.GetCurrentLine(textBox);
+				line = Utils.GetCurrentLine(textBox);
 				if (line.StartsWith("dot")) {
 					Process.Start(new ProcessStartInfo {
-					              FileName="cmd",
-					              Arguments="/C dotnet run",
-					              WorkingDirectory=@"C:\Users\Administrator\Desktop\视频\Net\WebApp",
-					              WindowStyle=ProcessWindowStyle.Hidden
+						FileName = "cmd",
+						Arguments = "/C dotnet run",
+						WorkingDirectory = @"C:\Users\Administrator\Desktop\视频\Net\WebApp",
+						WindowStyle = ProcessWindowStyle.Hidden
 					});
-				}else if(line.StartsWith("sb")){
+				} else if (line.StartsWith("sb")) {
 					Handlers.BlenderScript(line.Substring(2));
 				} else if (Regex.IsMatch(line, "^package:")) {
 //					Process.Start(new ProcessStartInfo {
@@ -618,17 +632,15 @@ if (TaskUtils.checkIf{0}(this, bitmap)) {{
 			var parts = first.TrimStart('8').Trim().Split('|');
 			Handlers.Download(parts[0], "https://www.shadertoy.com" + parts[1]
 			                  .SubstringBeforeLast("\"").SubstringAfterLast('"').Replace("\\", ""));
-		} else if (first.StartsWith("s")) {
+		} else if (first.StartsWith("sh")) {
 			Handlers.ShaderToys();
-		} else {
-			var array = first.Split(' ');
-			if (array.Length > 1)
-				textBox.Text = first + "\r\n" + second.Replace(
-					array[0], array[1]
-			
-				);
+		}else if(first.StartsWith("sq")){
+			ClipboardShare.SetText(Handlers.AndroidSqlite(ClipboardShare.GetText()));
+		}else if(first.StartsWith("si")){
+			ClipboardShare.SetText(Handlers.IncreaseNumber(ClipboardShare.GetText(),true));
+		}else if(first.StartsWith("sd")){
+			ClipboardShare.SetText(Handlers.IncreaseNumber(ClipboardShare.GetText(),false));
 		}
-		
 	}
 	private static void CreateFile(TextBox textBox)
 	{
