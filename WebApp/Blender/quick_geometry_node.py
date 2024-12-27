@@ -16,7 +16,7 @@ from bpy.types import Operator
 from bpy.types import Panel
 import mathutils
 
-_index =1
+_index = 0
 def shader(name):
     g = bpy.data.node_groups[_index]
     nodes = g.nodes

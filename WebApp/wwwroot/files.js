@@ -88,8 +88,3 @@ window.addEventListener("popstate", function (e) {
 ////////////////////////////////////////////////////////////////
 bind();
 initializeDropZone();
-
-// fetch(`http://192.168.8.55:3000/api/files/size?path=/storage/emulated/0/Download`).then(res => res.text())
-//     .then(res => {
-//         console.log(humanFileSize(parseInt(res)));
-//     })

@@ -192,5 +192,5 @@ string GetLocalIPAddress()
 
     throw new Exception("No network adapters with an IPv4 address in the system!");
 }
-
-app.Run($"http://{GetLocalIPAddress()}:8080");
+// {GetLocalIPAddress()}
+app.Run($"http://0.0.0.0:8080");

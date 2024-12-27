@@ -29,24 +29,29 @@ namespace Android
 			var f = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "1.txt");
 			if (File.Exists(f))
 				textBox1.Text = File.ReadAllText(f);
+			DuplicateFiles();
+		}
+		private void CreateFiles()
+		{
+			var dir = @"C:\blender\resources\web";
+			dir.CreateDirectoryIfNotExists();
+			(new string[]{ "js", "css", "html" }).ToList()
+						.ForEach(y => {
+				(new string[]{ "article" }).ToList()
+						.ForEach(x => {
+					var f = Path.Combine(dir, x + "." + y);
+					if (!File.Exists(f)) {
+						File.WriteAllText(f, string.Empty);
+					}
+				});
+			});
 		}
 		void TextBox1KeyUp(object sender, KeyEventArgs e)
 		{
 			if (e.Control) {
 				
 				if (e.KeyCode == Keys.Q) {
-//					var dir = @"C:\blender\resources\web";
-//					dir.CreateDirectoryIfNotExists();
-//					(new string[]{"js","css","html" }).ToList()
-//						.ForEach(y => {
-//						         	(new string[]{"index","books","models","articles" }).ToList()
-//						.ForEach(x => {
-//						         	var f = Path.Combine(dir, x+"."+y);
-//						if (!File.Exists(f)) {
-//							File.WriteAllText(f, string.Empty);
-//						}
-//						         		         });
-//					});
+
 					var name = GetCurrentLine(textBox1).Trim();
 					GenerateJavaScript(name);
 				} else if (e.KeyCode == Keys.W) {
@@ -92,17 +97,21 @@ namespace Android
 				} else if (e.KeyCode == Keys.D) {
 					var str = ClipboardShare.GetText();
 					GenerateJavaScript(str);
-				}else if(e.KeyCode==Keys.P){
-					VsCode();
+				} else if (e.KeyCode == Keys.P) {
+					var name = GetCurrentLine(textBox1).Trim();
+					if (name.StartsWith("1"))
+						VsCode(name.Substring(1));
+					else
+						VsCode();
 				}
 			}
 		}
-		public static void VsCode()
+		public static void VsCode(string fileName = "javascript")
 		{
-			var file = @"C:\Users\Administrator\AppData\Roaming\Code\User\snippets\javascript.json";
+			var file = @"C:\Users\Administrator\AppData\Roaming\Code\User\snippets\" + fileName + ".json";
 			
-			var res =File.Exists(file)? JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(File.ReadAllText(file))
-				:JsonConvert.DeserializeObject<Dictionary<string, dynamic>>("{}");
+			var res = File.Exists(file) ? JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(File.ReadAllText(file))
+				: JsonConvert.DeserializeObject<Dictionary<string, dynamic>>("{}");
 			var str = ClipboardShare.GetText().Trim();
 			var obj = new Dictionary<string, dynamic>();
 			var body = new Dictionary<string, List<string>>();
@@ -116,7 +125,7 @@ namespace Android
 				res.Add(name, obj);
 			var text = JsonConvert.SerializeObject(res, Formatting.Indented);
 			
-			File.WriteAllText(file,text);
+			File.WriteAllText(file, text);
 		}
 		public static void RefactorJavaScript(string name, string contents)
 		{
@@ -146,12 +155,10 @@ async function {1}(){{
 		public static void GenerateJavaScript(string name)
 		{
 			var s = string.Format(@"
-/*
+
 const {1} = document.querySelector('.{0}');
 {1}.addEventListener('click', evt => {{
     evt.stopPropagation();
-    evt.preventDefault();
-    evt.stopImmediatePropagation();
     
 }})
 
@@ -161,21 +168,6 @@ document.querySelectorAll('.{0}')
             evt.stopPropagation();
         }})
     }});
- 
-*/
-function {1}() {{
-    const points = getLine();
-    const s = textarea.value.substring(
-        points[0],
-        points[1]
-    ).trim();
-    textarea.setRangeText('', points[0], points[1]);
-/*
-document.getElementById('{0}').addEventListener('click', evt => {{
-        {1}();
-    }})
-*/
-}}
 ", name, name.Camel());
 			ClipboardShare.SetText(s);
 			//var file =_file;
@@ -243,6 +235,33 @@ document.getElementById('{0}').addEventListener('click', evt => {{
 			var f = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "1.txt");
 			 
 			File.WriteAllText(f, textBox1.Text);
+		}
+		
+		private static void DuplicateFiles()
+		{
+			var dir = @"C:\blender\resources\web";
+			var find = "book";
+			var replace = "article";
+			var baseFileName = "books";
+			var extensions = new string[]{ "css", "js", "html" };
+			
+			foreach (var element in extensions) {
+				var f = Path.Combine(dir,
+						       baseFileName.Replace(find, replace) + "." + element
+					       );
+				if (File.Exists(f)) {
+				continue;
+				}
+				if (element == "css") {
+						File.Copy(Path.Combine(dir, baseFileName + "." + element), f);
+				 
+				}else{
+					var contents=File.ReadAllText(Path.Combine(dir, baseFileName + "." + element));
+					contents=contents.Replace(find,replace)
+						.Replace(find.Camel().Capitalize(),replace.Camel().Capitalize());
+					File.WriteAllText(f,contents);
+				}
+			}
 		}
 	}
 }

@@ -20,6 +20,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web", "..\Web\Web.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebChat", "..\WebChat\WebChat.csproj", "{42A97712-DD25-4EC3-B07E-E789FF814693}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blender", "..\Blender\Blender.csproj", "{D8C46088-6AB0-4B73-A406-1AF9F4141E41}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -58,5 +60,9 @@ Global
 		{42A97712-DD25-4EC3-B07E-E789FF814693}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42A97712-DD25-4EC3-B07E-E789FF814693}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42A97712-DD25-4EC3-B07E-E789FF814693}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8C46088-6AB0-4B73-A406-1AF9F4141E41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8C46088-6AB0-4B73-A406-1AF9F4141E41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8C46088-6AB0-4B73-A406-1AF9F4141E41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8C46088-6AB0-4B73-A406-1AF9F4141E41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

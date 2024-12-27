@@ -33,13 +33,13 @@ public class Handlers
 		str = str.SubstringBefore("&").SubstringAfterLast('=');
 		Process.Start(new ProcessStartInfo {
 			FileName = "yt-dlp_x86.exe",
-			Arguments = "--proxy http://127.0.0.1:10809  -f 137 https://www.youtube.com/watch?v=" +
+			Arguments = "--proxy http://127.0.0.1:10808  -f 137 https://www.youtube.com/watch?v=" +
 			str,
 			WorkingDirectory = @"C:\Users\Administrator\Desktop\视频"
 		});
 		Process.Start(new ProcessStartInfo {
 			FileName = "yt-dlp_x86.exe",
-			Arguments = "--proxy http://127.0.0.1:10809  -f 299 https://www.youtube.com/watch?v=" + str,
+			Arguments = "--proxy http://127.0.0.1:10808  -f 299 https://www.youtube.com/watch?v=" + str,
 			WorkingDirectory = @"C:\Users\Administrator\Desktop\视频"
 		});
 	}

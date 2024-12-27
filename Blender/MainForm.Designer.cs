@@ -52,7 +52,6 @@ namespace Android
 			this.textBox1.Size = new System.Drawing.Size(618, 267);
 			this.textBox1.TabIndex = 0;
 			this.textBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBox1KeyDown);
-			this.textBox1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBox1KeyUp);
 			// 
 			// MainForm
 			// 
@@ -63,7 +62,7 @@ namespace Android
 			this.Font = new System.Drawing.Font("微软雅黑", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
 			this.Margin = new System.Windows.Forms.Padding(9, 10, 9, 10);
 			this.Name = "MainForm";
-			this.Text = "Android";
+			this.Text = "Blender";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormFormClosing);
 			this.ResumeLayout(false);
 			this.PerformLayout();

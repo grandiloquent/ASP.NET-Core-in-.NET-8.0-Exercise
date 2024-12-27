@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>格式</title>
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        textarea {
+            outline: 0;
+            border: 1px solid #dadce0;
+            flex-grow: 1;
+            font-size: 16px;
+            padding: 8px;
+        }
+
+        button {
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <textarea></textarea>
+    <button>确认</button>
+</body>
+<script>
+
+    // fetch(`http://192.168.8.55:3000/api/files/size?path=/storage/emulated/0/Download`).then(res => res.text())
+    //     .then(res => {
+    //         console.log(humanFileSize(parseInt(res)));
+    //     })
+    async function readText() {
+        // const textarea = document.createElement("textarea");
+        // textarea.style.position = 'fixed';
+        // textarea.style.right = '100%';
+        // document.body.appendChild(textarea);
+        // textarea.value = message;
+        // textarea.select();
+        // document.execCommand('paste');
+        // return textarea.value;
+        let strings;
+        if (typeof NativeAndroid !== 'undefined') {
+            strings = NativeAndroid.readText()
+        } else {
+            strings = await navigator.clipboard.readText()
+        }
+        return strings
+    }
+    function writeText(message) {
+        const textarea = document.createElement("textarea");
+        textarea.style.position = 'fixed';
+        textarea.style.right = '100%';
+        document.body.appendChild(textarea);
+        textarea.value = message;
+        textarea.select();
+        document.execCommand('copy');
+        textarea.remove();
+    }
+
+    function substring(strings, prefix, suffix) {
+        let start = strings.indexOf(prefix);
+        if (start === -1) {
+            return [0, 0]
+        }
+        start += prefix.length;
+        let end = strings.indexOf(suffix, start);
+        if (end === -1) {
+            return [0, 0]
+        }
+        return [start, end]
+    }
+
+    function substringAfter(string, delimiter, missingDelimiterValue) {
+        const index = string.indexOf(delimiter);
+        if (index === -1) {
+            return missingDelimiterValue || string;
+        } else {
+            return string.substring(index + delimiter.length);
+        }
+    }
+
+    function substringAfterLast(string, delimiter, missingDelimiterValue) {
+        const index = string.lastIndexOf(delimiter);
+        if (index === -1) {
+            return missingDelimiterValue || string;
+        } else {
+            return string.substring(index + delimiter.length);
+        }
+    }
+
+    function substringBefore(string, delimiter, missingDelimiterValue) {
+        const index = string.indexOf(delimiter);
+        if (index === -1) {
+            return missingDelimiterValue || string;
+        } else {
+            return string.substring(0, index);
+        }
+    }
+
+    function substringBeforeLast(string, delimiter, missingDelimiterValue) {
+        const index = string.lastIndexOf(delimiter);
+        if (index === -1) {
+            return missingDelimiterValue || string;
+        } else {
+            return string.substring(0, index);
+        }
+    }
+
+    const textarea = document.querySelector('textarea');
+
+    document.querySelector('button').addEventListener('click', evt => {
+         const buffer=[];
+        for (let index = 1; index <13; index++) {
+            /*
+            else if (e.KeyCode == Keys.F${index}) {
+             KeyF${index}Pressed();
+            }
+            */
+            buffer.push(`private void KeyF${index}Pressed(){
+            }`)
+            
+        }
+        textarea.value=buffer.join('\n');
+        writeText(textarea.value)
+    });
+</script>
+
+</html>

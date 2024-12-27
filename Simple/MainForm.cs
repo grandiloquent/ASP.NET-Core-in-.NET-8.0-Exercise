@@ -219,14 +219,14 @@ public partial class MainForm : Form
 					}
 				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F9") {
 					try {
-							Images.Ocr(this, textBox1,124,120,60);
+							Images.Ocr(this, textBox1,124,160,60);
 						
 					} catch {
 						
 					}
 				} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F10") {
 					try {
-						Images.Ocr(this, textBox1,84,120,60);
+						Images.Ocr(this, textBox1,84,160,60);
 						
 					} catch {
 						

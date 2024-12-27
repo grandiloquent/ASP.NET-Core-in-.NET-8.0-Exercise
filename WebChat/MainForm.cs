@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Text;
@@ -76,9 +77,37 @@ namespace Android
 					ClipboardShare.SetText(string.Join(Environment.NewLine,list));
 				}else if(e.KeyCode==Keys.D){
 					CreatePage(ClipboardShare.GetText().Trim());
+				} else if (e.KeyCode == Keys.P) {
+					var name = GetCurrentLine(textBox1).Trim();
+					if (name.StartsWith("1"))
+						VsCode(name.Substring(1));
+					else
+						VsCode();
 				}
 			}
 		}
+		public static void VsCode(string fileName = "javascript")
+		{
+			var file = @"C:\Users\Administrator\AppData\Roaming\Code\User\snippets\" + fileName + ".json";
+			
+			var res = File.Exists(file) ? JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(File.ReadAllText(file))
+				: JsonConvert.DeserializeObject<Dictionary<string, dynamic>>("{}");
+			var str = ClipboardShare.GetText().Trim();
+			var obj = new Dictionary<string, dynamic>();
+			var body = new Dictionary<string, List<string>>();
+			var name = str.SubstringBefore("\n").Trim();
+			obj.Add("prefix", name);
+			obj.Add("body", str.SubstringAfter("\n").Trim().Split(new char[] { '\n' }).Select(i => i.TrimEnd()).ToList());
+ 
+			if (res.ContainsKey(name)) {
+				res[name] = obj;
+			} else
+				res.Add(name, obj);
+			var text = JsonConvert.SerializeObject(res, Formatting.Indented);
+			
+			File.WriteAllText(file, text);
+		}
+	
 			public static void CreatePage(string name)
 		{
 			var baseDir = @"C:\blender";
@@ -193,6 +222,10 @@ module.exports = () => {{
 			var f = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "1.txt");
 			 
 			File.WriteAllText(f, textBox1.Text);
+		}
+		void TextBox1KeyDown(object sender, KeyEventArgs e)
+		{
+	
 		}
 	}
 }
