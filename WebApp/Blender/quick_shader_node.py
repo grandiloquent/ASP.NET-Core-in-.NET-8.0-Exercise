@@ -160,15 +160,14 @@ class ShaderNodeLinkNodes(Operator):
         nodes = bpy.context.view_layer.objects.active.active_material.node_tree.nodes
         node =  [n for n in nodes if n.select][0]
         links = [l for l in node.inputs if len(l.links)>0]
-        x=node.location.x - node.dimensions.x
-        y=node.location.y
         offset = 60
+        x=node.location.x
+        y=node.location.y
         #[0].from_node
         while len(links)>0:
-            x = x-offset;
             node = links[0].links[0].from_node
+            x = x - node.dimensions.x-offset
             node.location=mathutils.Vector((x,y))
-            x = x - node.dimensions.x
             links = [l for l in node.inputs if len(l.links)>0]
              
         return {'FINISHED'}
