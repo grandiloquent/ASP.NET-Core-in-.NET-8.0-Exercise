@@ -50,8 +50,12 @@ namespace Android
 		private void KeyEPressed()
 		{
 		}
+
+		
+
 		private void KeyFPressed()
 		{
+			ReplaceStrig();
 		}
 		private void KeyGPressed()
 		{
@@ -225,6 +229,22 @@ namespace Android
 		}
 		private void KeyF12Pressed()
 		{
+		}
+		void ReplaceStrig()
+		{
+			var line = GetCurrentLine(textBox1);
+			var parts = line.Split(" ".ToArray(), StringSplitOptions.RemoveEmptyEntries);
+			var s = ClipboardShare.GetText();
+			for (int i = 0; i < parts.Length; i += 2) {
+				if (i + 1 < parts.Length) {
+					s = s.Replace(
+						parts[i], parts[i + 1]
+					).Replace(
+						parts[i].Camel().Decapitalize(), parts[i + 1].Camel().Decapitalize()
+					);
+				}
+			}
+			ClipboardShare.SetText(s);
 		}
 		Screenshot.POINT _p3 = new Screenshot.POINT();
 		Screenshot.POINT _p4 = new Screenshot.POINT();

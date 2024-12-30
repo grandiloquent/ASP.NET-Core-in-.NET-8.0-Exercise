@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+html {
+            height: 100%;
+        }
+
+        body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        svg {
+            width: 720px;
+            height: 720px;
+        }
+    </style>
+</head>
+
+<body>
+    <svg viewBox="0 0 720 720">
+        <g opacity="0">
+            <animate id="g01" begin="1s" attributeName="opacity" dur=".25s" values="0;1" fill="freeze" />
+            <animate id="g02" begin="g01.end+1s" attributeName="opacity" dur=".25s" values="1;0" fill="freeze" />
+        </g>
+    </svg>
+</body>
+
+</html>

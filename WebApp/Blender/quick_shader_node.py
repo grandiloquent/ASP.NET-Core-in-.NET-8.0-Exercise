@@ -26,71 +26,6 @@ def shader(name):
     bpy.context.view_layer.objects.active.active_material.node_tree.links.new(node.outputs[0],new.inputs[0])
     #nodes.active = [n for n in bpy.context.view_layer.objects.active.active_material.node_tree.nodes if n.select][1]
 
-class ShaderNodeMixRGB(Operator):
-    """ ShaderNodeMixRGB """
-    bl_idname = "shadernode.mixrgb"
-    bl_label = ""
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return True
-
-    def execute(self, context):
-        shader('ShaderNodeMixRGB')
-        return {'FINISHED'}
-class ShaderNodeValToRGB(Operator):
-    """ ShaderNodeValToRGB """
-    bl_idname = "shadernode.valtorgb"
-    bl_label = ""
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return True
-
-    def execute(self, context):
-        shader('ShaderNodeValToRGB')
-        return {'FINISHED'}
-class ShaderNodeTexNoise(Operator):
-    """ ShaderNodeTexNoise """
-    bl_idname = "shadernode.texnoise"
-    bl_label = ""
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return True
-
-    def execute(self, context):
-        shader('ShaderNodeTexNoise')
-        return {'FINISHED'}
-class ShaderNodeTexVoronoi(Operator):
-    """ ShaderNodeTexVoronoi """
-    bl_idname = "shadernode.texvoronoi"
-    bl_label = ""
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return True
-
-    def execute(self, context):
-        shader('ShaderNodeTexVoronoi')
-        return {'FINISHED'}
-class ShaderNodeTexMusgrave(Operator):
-    """ ShaderNodeTexMusgrave """
-    bl_idname = "shadernode.texmusgrave"
-    bl_label = ""
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return True
-
-    def execute(self, context):
-        shader('ShaderNodeTexMusgrave')
-        return {'FINISHED'}
 class ShaderNodeBump(Operator):
     """ ShaderNodeBump """
     bl_idname = "shadernode.bump"
@@ -102,124 +37,70 @@ class ShaderNodeBump(Operator):
         return True
 
     def execute(self, context):
-        shader('ShaderNodeBump')
-        return {'FINISHED'}
-class ShaderNodeTexImage(Operator):
-    """ ShaderNodeTexImage """
-    bl_idname = "shadernode.teximage"
-    bl_label = ""
-    bl_options = {"REGISTER", "UNDO"}
+        node_tree = bpy.context.view_layer.objects.active.active_material.node_tree
+        nodes = node_tree.nodes
+        links = node_tree.links
+        offset = 60
+        x = 0
+        y = 0
 
-    @classmethod
-    def poll(cls, context):
-        return True
+        
 
-    def execute(self, context):
-        shader('ShaderNodeTexImage')
-        return {'FINISHED'}
-class ShaderNodeTexGradient(Operator):
-    """ ShaderNodeTexGradient """
-    bl_idname = "shadernode.texgradient"
-    bl_label = ""
-    bl_options = {"REGISTER", "UNDO"}
+        texCoord = nodes.new('ShaderNodeTexCoord')
+        mapping = nodes.new('ShaderNodeMapping')
+        x=texCoord.location.x+texCoord.dimensions.x+offset
+        mapping.location=mathutils.Vector((x,y))
+        links.new(texCoord.outputs[3],mapping.inputs[0])
 
-    @classmethod
-    def poll(cls, context):
-        return True
+        texNoise = nodes.new('ShaderNodeTexNoise')
+        x=mapping.location.x+mapping.dimensions.x+offset
+        texNoise.location=mathutils.Vector((x,y))
+        links.new(mapping.outputs[0],texNoise.inputs[0])
 
-    def execute(self, context):
-        shader('ShaderNodeTexGradient')
-        return {'FINISHED'}
-class ShaderNodeMixShader(Operator):
-    """ ShaderNodeMixShader """
-    bl_idname = "shadernode.mixshader"
-    bl_label = ""
-    bl_options = {"REGISTER", "UNDO"}
 
-    @classmethod
-    def poll(cls, context):
-        return True
+        valToRGB = nodes.new('ShaderNodeValToRGB')
+        x=texNoise.location.x+texNoise.dimensions.x+offset
+        valToRGB.location=mathutils.Vector((x,y))
+        links.new(texNoise.outputs[0],valToRGB.inputs[0])
 
-    def execute(self, context):
-        shader('ShaderNodeMixShader')
-        return {'FINISHED'}
-class ShaderNodeMath(Operator):
-    """ ShaderNodeMath """
-    bl_idname = "shadernode.math"
-    bl_label = ""
-    bl_options = {"REGISTER", "UNDO"}
 
-    @classmethod
-    def poll(cls, context):
-        return True
+        mix = nodes.new('ShaderNodeMix')
+        mix.data_type = 'RGBA'
+        x=valToRGB.location.x+valToRGB.dimensions.x+offset
+        mix.location=mathutils.Vector((x,y))
+        links.new(valToRGB.outputs[0],mix.inputs[0])
 
-    def execute(self, context):
-        shader('ShaderNodeMath')
-        return {'FINISHED'}
-class ShaderNodeMapRange(Operator):
-    """ ShaderNodeMapRange """
-    bl_idname = "shadernode.maprange"
-    bl_label = ""
-    bl_options = {"REGISTER", "UNDO"}
 
-    @classmethod
-    def poll(cls, context):
-        return True
+        bsdf = [n for n in nodes if n.type=='BSDF_PRINCIPLED'][0]
+        outMaterial = [n for n in nodes if n.type=='OUTPUT_MATERIAL'][0]
+        links.new(mix.outputs[2],bsdf.inputs[0])
+        links.new(bsdf.outputs[0],outMaterial.inputs[0])
 
-    def execute(self, context):
-        shader('ShaderNodeMapRange')
-        return {'FINISHED'}
-class ShaderNodeLayerWeight(Operator):
-    """ ShaderNodeLayerWeight """
-    bl_idname = "shadernode.layerweight"
-    bl_label = ""
-    bl_options = {"REGISTER", "UNDO"}
+        mapping = [n for n in nodes if n.type=='MAPPING'][0]
 
-    @classmethod
-    def poll(cls, context):
-        return True
+        texNoise = nodes.new('ShaderNodeTexNoise')
+        x=mapping.location.x+mapping.dimensions.x+offset
+        links.new(mapping.outputs[0],texNoise.inputs[0])
 
-    def execute(self, context):
-        shader('ShaderNodeLayerWeight')
-        return {'FINISHED'}
-class ShaderNodeEmission(Operator):
-    """ ShaderNodeEmission """
-    bl_idname = "shadernode.emission"
-    bl_label = ""
-    bl_options = {"REGISTER", "UNDO"}
+        displacement = nodes.new('ShaderNodeDisplacement')
+        x=texNoise.location.x+texNoise.dimensions.x+offset
+        displacement.location=mathutils.Vector((x,y))
+        links.new(texNoise.outputs[0],displacement.inputs[0])
 
-    @classmethod
-    def poll(cls, context):
-        return True
+        links.new(displacement.outputs[0],outMaterial.inputs[2])
 
-    def execute(self, context):
-        shader('ShaderNodeEmission')
-        return {'FINISHED'}
-class ShaderNodeSeparateXYZ(Operator):
-    """ ShaderNodeSeparateXYZ """
-    bl_idname = "shadernode.separatexyz"
-    bl_label = ""
-    bl_options = {"REGISTER", "UNDO"}
+        bpy.context.object.active_material.displacement_method = 'BOTH'
 
-    @classmethod
-    def poll(cls, context):
-        return True
+        texNoise = nodes.new('ShaderNodeTexNoise')
+        x=mapping.location.x+mapping.dimensions.x+offset
+        links.new(mapping.outputs[0],texNoise.inputs[0])
 
-    def execute(self, context):
-        shader('ShaderNodeSeparateXYZ')
-        return {'FINISHED'}
-class ShaderNodeCombineXYZ(Operator):
-    """ ShaderNodeCombineXYZ """
-    bl_idname = "shadernode.combinexyz"
-    bl_label = ""
-    bl_options = {"REGISTER", "UNDO"}
+        bump = nodes.new('ShaderNodeBump')
+        x=texNoise.location.x+texNoise.dimensions.x+offset
+        bump.location=mathutils.Vector((x,y))
+        links.new(texNoise.outputs[0],bump.inputs[2])
+        links.new(bump.outputs[0],bsdf.inputs[5])
 
-    @classmethod
-    def poll(cls, context):
-        return True
-
-    def execute(self, context):
-        shader('ShaderNodeCombineXYZ')
         return {'FINISHED'}
 class ShaderNodesAlignX(Operator):
     """ ShaderNodesAlignX """
@@ -274,48 +155,24 @@ class ShaderNodeLinkNodes(Operator):
         return True
 
     def execute(self, context):
-        nodes = [n for n in bpy.context.view_layer.objects.active.active_material.node_tree.nodes if n.select]
-        bpy.context.view_layer.objects.active.active_material.node_tree.links.new(nodes[0].outputs[0],nodes[1].inputs[0])
+        # nodes = [n for n in bpy.context.view_layer.objects.active.active_material.node_tree.nodes if n.select]
+        # bpy.context.view_layer.objects.active.active_material.node_tree.links.new(nodes[0].outputs[0],nodes[1].inputs[0])
+        nodes = bpy.context.view_layer.objects.active.active_material.node_tree.nodes
+        node =  [n for n in nodes if n.select][0]
+        links = [l for l in node.inputs if len(l.links)>0]
+        x=node.location.x - node.dimensions.x
+        y=node.location.y
+        offset = 60
+        #[0].from_node
+        while len(links)>0:
+            x = x-offset;
+            node = links[0].links[0].from_node
+            node.location=mathutils.Vector((x,y))
+            x = x - node.dimensions.x
+            links = [l for l in node.inputs if len(l.links)>0]
+             
         return {'FINISHED'}
-class ShaderNodeMapping(Operator):
-    """ ShaderNodeMapping """
-    bl_idname = "shadernode.mapping"
-    bl_label = ""
-    bl_options = {"REGISTER", "UNDO"}
 
-    @classmethod
-    def poll(cls, context):
-        return True
-
-    def execute(self, context):
-        shader('ShaderNodeMapping')
-        return {'FINISHED'}
-class ShaderNodeInvert(Operator):
-    """ ShaderNodeInvert """
-    bl_idname = "shadernode.invert"
-    bl_label = ""
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return True
-
-    def execute(self, context):
-        shader('ShaderNodeInvert')
-        return {'FINISHED'}
-class ShaderNodeBsdfPrincipled(Operator):
-    """ ShaderNodeBsdfPrincipled """
-    bl_idname = "shadernode.bsdfprincipled"
-    bl_label = ""
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return True
-
-    def execute(self, context):
-        shader('ShaderNodeBsdfPrincipled')
-        return {'FINISHED'}
 class ShaderNodeTNC(Operator):
     """ ShaderNodeTNC """
     bl_idname = "shadernode.tnc"
@@ -328,7 +185,7 @@ class ShaderNodeTNC(Operator):
 
     def execute(self, context):
         texCoord = bpy.context.view_layer.objects.active.active_material.node_tree.nodes.new('ShaderNodeTexCoord')
-        texNoise = texNoise=bpy.context.view_layer.objects.active.active_material.node_tree.nodes.new('ShaderNodeTexNoise')
+        texNoise=bpy.context.view_layer.objects.active.active_material.node_tree.nodes.new('ShaderNodeTexNoise')
         valToRGB=bpy.context.view_layer.objects.active.active_material.node_tree.nodes.new('ShaderNodeValToRGB')
         bpy.context.view_layer.objects.active.active_material.node_tree.links.new(texCoord.outputs[3],texNoise.inputs[0])
         bpy.context.view_layer.objects.active.active_material.node_tree.links.new(texNoise.outputs[0],valToRGB.inputs[0])
@@ -451,6 +308,19 @@ class Render(Operator):
         bpy.context.scene.render.image_settings.color_mode = 'RGBA'
         bpy.context.scene.render.film_transparent = True
         return {'FINISHED'}
+class ShaderNodeDisplacement(Operator):
+    """ ShaderNodeShaderNodeDisplacement """
+    bl_idname = "shadernode.shadernodedisplacement"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        bpy.ops.node.duplicate_move_keep_inputs()
+        return {'FINISHED'}
 #1
 class _align(Panel):
     """Shader"""
@@ -462,68 +332,28 @@ class _align(Panel):
     def draw(self, context):
 #4
         row = self.layout.row(align=True)
-        row.operator(AreaLight.bl_idname, text="AreaLight")
-        row.operator(ShaderNodeBump.bl_idname, text="Bump")
-        row = self.layout.row(align=True)
-        row.operator(ShaderNodeValToRGB.bl_idname, text="ColorRamp")
-        row.operator(ShaderNodeCombineXYZ.bl_idname, text="CombineXYZ")
-        row = self.layout.row(align=True)
-        row.operator(ShaderNodeEmission.bl_idname, text="Emission")
-        row.operator(ShaderNodeTexGradient.bl_idname, text="Gradient")
-        row = self.layout.row(align=True)
-        row.operator(ShaderNodeTexImage.bl_idname, text="Image")
-        row.operator(ShaderNodeInvert.bl_idname, text="Invert")
-        row = self.layout.row(align=True)
-        row.operator(ShaderNodeLayerWeight.bl_idname, text="LayerWeight")
-        row.operator(ShaderNodeMapping.bl_idname, text="Mapping")
-        row = self.layout.row(align=True)
-        row.operator(ShaderNodeMapRange.bl_idname, text="MapRange")
-        row.operator(ShaderNodeMath.bl_idname, text="Math")
-        row = self.layout.row(align=True)
-        row.operator(ShaderNodeMixRGB.bl_idname, text="Mix")
-        row.operator(ShaderNodeMixShader.bl_idname, text="MixShader")
-        row = self.layout.row(align=True)
-        row.operator(ShaderNodeTexMusgrave.bl_idname, text="Musgrave")
-        row.operator(ShaderNodeTexNoise.bl_idname, text="Noise")
-        row = self.layout.row(align=True)
-        row.operator(ShaderNodeBsdfPrincipled.bl_idname, text="Principled")
-        row.operator(Render.bl_idname, text="渲染")
-        row = self.layout.row(align=True)
-        row.operator(ShaderNodeSeparateXYZ.bl_idname, text="SeparateXYZ")
-        row.operator(ShaderNodeTexVoronoi.bl_idname, text="Voronoi")
+        row.operator(AreaLight.bl_idname, text="区域灯")
+        row.operator(ShaderNodeDisplacement.bl_idname, text="复制")
         row = self.layout.row(align=True)
         row.operator(ShaderNodesAlignX.bl_idname, text="横对齐")
-        row.operator(ShaderNodeLinkNodes.bl_idname, text="连接")
+        row.operator(ShaderNodeLinkNodes.bl_idname, text="连接") 
         row = self.layout.row(align=True)
         row.operator(ShaderNodesAlignY.bl_idname, text="竖对齐")
+        row.operator(Render.bl_idname, text="渲染")
+        row = self.layout.row(align=True)
+        row.operator(ShaderNodeBump.bl_idname, text="杂色")
         row.operator(ShaderNodeTNC.bl_idname, text="坐标杂色映射")
 #2
 classes = [
     _align,
-    ShaderNodeMixRGB,
-    ShaderNodeValToRGB,
-    ShaderNodeTexNoise,
-    ShaderNodeTexVoronoi,
-    ShaderNodeTexMusgrave,
-    ShaderNodeBump,
-    ShaderNodeTexImage,
-    ShaderNodeTexGradient,
-    ShaderNodeMixShader,
-    ShaderNodeMath,
-    ShaderNodeMapRange,
-    ShaderNodeLayerWeight,
-    ShaderNodeEmission,
-    ShaderNodeSeparateXYZ,
-    ShaderNodeCombineXYZ,
-    ShaderNodesAlignX,
+    ShaderNodeTNC,
     ShaderNodesAlignY,
     ShaderNodeLinkNodes,
-    ShaderNodeMapping,
-    ShaderNodeInvert,
-    ShaderNodeBsdfPrincipled,
-    ShaderNodeTNC,
+    ShaderNodesAlignX,
+    ShaderNodeBump,
     AreaLight,
-    Render#3
+    Render,
+    ShaderNodeDisplacement#3
 ]
 
 def register():

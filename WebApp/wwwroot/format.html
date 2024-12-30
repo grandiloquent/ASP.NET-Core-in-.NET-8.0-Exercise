@@ -125,20 +125,57 @@
     const textarea = document.querySelector('textarea');
 
     document.querySelector('button').addEventListener('click', evt => {
-         const buffer=[];
-        for (let index = 1; index <13; index++) {
-            /*
-            else if (e.KeyCode == Keys.F${index}) {
-             KeyF${index}Pressed();
-            }
-            */
-            buffer.push(`private void KeyF${index}Pressed(){
-            }`)
-            
-        }
-        textarea.value=buffer.join('\n');
-        writeText(textarea.value)
+        //  const buffer=[];
+        // for (let index = 1; index <13; index++) {
+        //     /*
+        //     else if (e.KeyCode == Keys.F${index}) {
+        //      KeyF${index}Pressed();
+        //     }
+        //     */
+        //     buffer.push(`private void KeyF${index}Pressed(){
+        //     }`)
+
+        // }
+        // textarea.value=buffer.join('\n');
+        writeText(shader(textarea.value))
     });
+
+    function shader(s) {
+        const buffer = [];
+        let array = s.split(/\s/g).filter(x => x.trim());
+        console.log(array)
+        for (let index = 0; index < array.length; index++) {
+            if (index + 1 >= array.length) continue;
+
+            const n1 = array[index];
+            const nn1 = decap(n1.replace('ShaderNode', ''))
+            const n2 = array[index + 1];
+            const nn2 = decap(n2.replace('ShaderNode', ''))
+            buffer.push((index === 0 ? `${nn1} = nodes.new('${n1}')
+` : '' )+ `${nn2} = nodes.new('${n2}')
+x=${nn1}.location.x+${nn1}.dimensions.x+offset
+${nn2}.location=mathutils.Vector((x,y))
+links.new(${nn1}.outputs[0],${nn2}.inputs[0])
+
+`)
+
+        }
+        return `import mathutils
+import bpy
+node_tree = bpy.context.view_layer.objects.active.active_material.node_tree
+nodes = node_tree.nodes
+links = node_tree.links
+offset = 60
+x = 0
+y = 0
+
+${buffer.join('\n')}
+`;
+    }
+
+    function decap(s) {
+        return s[0].toLowerCase() + s.substring(1);
+    }
 </script>
 
 </html>
