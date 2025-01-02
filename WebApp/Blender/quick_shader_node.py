@@ -355,14 +355,30 @@ classes = [
     ShaderNodeDisplacement#3
 ]
 
+addon_key_maps: dict[bpy.types.KeyMap, list[bpy.types.KeyMapItem]] = {}
+
 def register():
     for c in classes:
         bpy.utils.register_class(c)
+    addon_key_config = bpy.context.window_manager.keyconfigs.addon
+    if not addon_key_config:
+        return
+
+    key_map = addon_key_config.keymaps.new(name='Window')
+    addon_key_maps[key_map] = []
+
+    key_map_item = key_map.keymap_items.new(idname=ShaderNodeLinkNodes.bl_idname, type='F1', value='PRESS', shift=False)
+
+    addon_key_maps[key_map].append(key_map_item)
 
 
 def unregister():
     for c in classes:
         bpy.utils.unregister_class(c)
+    
+    for key_map, key_map_items in addon_key_maps.items():
+        for item in key_map_items:
+            key_map.keymap_items.remove(item)
 
 if __name__ == '__main__':
     register()

@@ -492,18 +492,26 @@ public static class Images
 	}
 	static string ProcessValue(string s)
 	{
-		var number = Regex.Match(s, "[.\\d-]+");
+		var number = Regex.Match(s, "[\\dA-Z]{6}");
 		if (number.Success) {
+ 
+			ClipboardShare.SetText(number.Value);
+			 
+		 
+		} else {
+			number = Regex.Match(s, "[.\\d-]+");
+			if (number.Success) {
 //			try {
 //				Clipboard.SetText(float.Parse(number.Value).ToString());
 //			} catch {
-			var str = number.Value;
-			if (str.StartsWith("0") && !str.StartsWith("0.")) {
-				ClipboardShare.SetText("0." + str.Substring(1));
-			} else
-				ClipboardShare.SetText(number.Value);
+				var str = number.Value;
+				if (str.StartsWith("0") && !str.StartsWith("0.")) {
+					ClipboardShare.SetText("0." + str.Substring(1));
+				} else
+					ClipboardShare.SetText(number.Value);
 			 
-			//}
+				//}
+			}
 		}
 		return s;
 	}

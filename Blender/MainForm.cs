@@ -59,6 +59,9 @@ namespace Android
 		}
 		private void KeyGPressed()
 		{
+			var value =	Translate(GetCurrentLine(textBox1));
+		
+			textBox1.SelectedText = value;
 		}
 		private void KeyHPressed()
 		{
@@ -94,22 +97,11 @@ namespace Android
 			else
 				VsCode();
 		}
+
+		
 		private void KeyQPressed()
 		{
-			var line = GetCurrentLine(textBox1);
-			
-			if (line.StartsWith("dot")) {
-				Process.Start(new ProcessStartInfo {
-					FileName = "cmd",
-					Arguments = "/C dotnet run",
-					WorkingDirectory = @"C:\Users\Administrator\Desktop\视频\Net\WebApp",
-					WindowStyle = ProcessWindowStyle.Hidden
-				});
-			} else if (line.StartsWith("b")) {
-				RunBlender(
-					Regex.IsMatch(line, "\\d+") ? int.Parse(Regex.Match(line, "\\d+").Value) : 1
-				);//EscapeCPlusPluse(textBox.Text.TrimStart('b'));
-			}
+			RunWebServer();
 		}
 		
 		private void KeyRPressed()
@@ -230,6 +222,24 @@ namespace Android
 		private void KeyF12Pressed()
 		{
 		}
+		void RunWebServer()
+		{
+			var line = GetCurrentLine(textBox1);
+			
+			if (line.StartsWith("dot")) {
+				Process.Start(new ProcessStartInfo {
+					FileName = "cmd",
+					Arguments = "/C dotnet run",
+					WorkingDirectory = @"C:\Users\Administrator\Desktop\视频\Net\WebApp",
+					WindowStyle = ProcessWindowStyle.Hidden
+				});
+			} else if (line.StartsWith("b")) {
+				RunBlender(
+					Regex.IsMatch(line, "\\d+") ? int.Parse(Regex.Match(line, "\\d+").Value) : 1
+				);//EscapeCPlusPluse(textBox.Text.TrimStart('b'));
+			}
+		}
+
 		void ReplaceStrig()
 		{
 			var line = GetCurrentLine(textBox1);
