@@ -493,12 +493,12 @@ public static class Images
 	static string ProcessValue(string s)
 	{
 		var number = Regex.Match(s, "[\\dA-Z]{6}");
-		if (number.Success) {
- 
-			ClipboardShare.SetText(number.Value);
-			 
-		 
-		} else {
+//		if (number.Success) {
+// 
+//			ClipboardShare.SetText(number.Value);
+//			 
+//		 
+//		} else {
 			number = Regex.Match(s, "[.\\d-]+");
 			if (number.Success) {
 //			try {
@@ -512,7 +512,7 @@ public static class Images
 			 
 				//}
 			}
-		}
+		//}
 		return s;
 	}
 	static TesseractEngine _engine;

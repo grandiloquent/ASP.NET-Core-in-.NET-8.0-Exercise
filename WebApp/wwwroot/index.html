@@ -51,24 +51,26 @@
         insertLinks(document.getElementById('x10'),
             `
 笔记
-http://192.168.8.101:8500/
+http://192.168.70.143:8500/
 文档
 http://192.168.8.101:8090/
 代码
 http://192.168.8.101:8100/
 程序
-http://192.168.150.143:8500/app.html
+http://192.168.17.143:8500/app.html
 云
-http://192.168.150.143:9000/index.html
+http://192.168.17.143:9000/index.html
+云
+http://192.168.17.143:9000/app.html
 `.split('\n').filter(x => x.trim())
         );
         insertLinks(document.getElementById('k30'),
             `
 
 程序
-http://192.168.226.39:8500/app.html
+http://192.168.114.142:8500/app.html
 截图
-http://192.168.226.39:8500/files.html?path=%2Fstorage%2Femulated%2F0%2FPictures%2FScreenshots&size=0
+http://192.168.114.142:8500/files.html?path=%2Fstorage%2Femulated%2F0%2FPictures%2FScreenshots&size=0
 `.split('\n').filter(x => x.trim())
         );
         insertLinks(document.getElementById('p'),
@@ -112,6 +114,13 @@ https://www.youtube.com/watch?v=YMSSJr4LWcs
             return `<a href="${x}">${x}</a>`
 
         }).join('\n');
+
+        fetch("search.php?mod=portal&searchsubmit=yes&api=1&kw=刘德华", {
+            method: 'GET',
+            headers: {
+                "domain": "1"
+            }
+        })
     </script>
 </body>
 
