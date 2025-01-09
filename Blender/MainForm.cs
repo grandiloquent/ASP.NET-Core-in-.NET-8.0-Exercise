@@ -182,9 +182,15 @@ namespace Android
 		}
 		private void KeyF1Pressed()
 		{
+			var f = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "2.txt");
+			if (File.Exists(f))
+				ClipboardShare.SetText( File.ReadAllText(f));
 		}
 		private void KeyF2Pressed()
 		{
+			var f = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), "3.txt");
+			if (File.Exists(f))
+				ClipboardShare.SetText( File.ReadAllText(f));
 		}
 		private void KeyF3Pressed()
 		{

@@ -543,6 +543,7 @@ class Init(Operator):
         bpy.context.scene.cycles.samples = 512
         bpy.context.scene.cycles.denoiser = 'OPTIX'
         bpy.context.scene.render.film_transparent = True
+        bpy.context.scene.view_settings.view_transform = 'Filmic'
         bpy.context.scene.view_settings.look = 'Very High Contrast'
         bpy.context.scene.render.resolution_x = 1920
         bpy.context.scene.render.resolution_y = 1920
