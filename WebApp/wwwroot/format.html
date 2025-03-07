@@ -124,7 +124,7 @@
 
     const textarea = document.querySelector('textarea');
 
-    document.querySelector('button').addEventListener('click', evt => {
+    document.querySelector('button').addEventListener('click',async evt => {
         //  const buffer=[];
         // for (let index = 1; index <13; index++) {
         //     /*
@@ -137,9 +137,37 @@
 
         // }
         // textarea.value=buffer.join('\n');
-        writeText(shader(textarea.value))
+        // shader(textarea.value)
+        writeText(await replaceString())
+        //writeText(android())
     });
 
+    async function replaceString() {
+        let value = await readText();
+        // x y width height left top right bottom
+
+        const array = "link note url content 2 5".split(' ');
+        for (let index = 0; index < array.length; index += 2) {
+            if (index + 1 >= array.length) continue;
+            const element = array[index];
+            value = value.replaceAll(array[index], array[index + 1])
+                .replaceAll(cap(camel(array[index])), cap(camel(array[index + 1])));
+        }
+
+        return value
+    }
+    function android() {
+        // width height 
+        const array = "left top right bottom"
+            .split(' ');
+        const buffer = [];
+        for (let index = 0; index < array.length; index++) {
+            const element = array[index];
+            // private int 
+            buffer.push(`m${cap(camel(element))} = mOrigin${cap(camel(element))};`)
+        }
+        return buffer.join('\n')
+    }
     function shader(s) {
         const buffer = [];
         let array = s.split(/\s/g).filter(x => x.trim());
@@ -152,7 +180,7 @@
             const n2 = array[index + 1];
             const nn2 = decap(n2.replace('ShaderNode', ''))
             buffer.push((index === 0 ? `${nn1} = nodes.new('${n1}')
-` : '' )+ `${nn2} = nodes.new('${n2}')
+` : '') + `${nn2} = nodes.new('${n2}')
 x=${nn1}.location.x+${nn1}.dimensions.x+offset
 ${nn2}.location=mathutils.Vector((x,y))
 links.new(${nn1}.outputs[0],${nn2}.inputs[0])
@@ -175,6 +203,12 @@ ${buffer.join('\n')}
 
     function decap(s) {
         return s[0].toLowerCase() + s.substring(1);
+    }
+    function cap(s) {
+        return s[0].toUpperCase() + s.substring(1);
+    }
+    function camel(s) {
+        return s.replaceAll(/_([a-z])/g, m => m[1].toUpperCase())
     }
 </script>
 

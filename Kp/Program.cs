@@ -225,13 +225,13 @@ namespace Kb
 			
 			//RegisterHotKey(IntPtr.Zero, 68, 0, 68);//D
 			//RegisterHotKey(IntPtr.Zero, 70, 0, 70);//F
-			RegisterHotKey(IntPtr.Zero, (int)Keys.W, 0, (int)Keys.W);
+//			RegisterHotKey(IntPtr.Zero, (int)Keys.W, 0, (int)Keys.W);
 			RegisterHotKey(IntPtr.Zero, (int)Keys.Q, 0, (int)Keys.Q);
-			RegisterHotKey(IntPtr.Zero, (int)Keys.E, 0, (int)Keys.E);
+//			RegisterHotKey(IntPtr.Zero, (int)Keys.E, 0, (int)Keys.E);
 			
-			RegisterHotKey(IntPtr.Zero, (int)Keys.F1, 0, (int)Keys.F1);
-			RegisterHotKey(IntPtr.Zero, (int)Keys.F2, 0, (int)Keys.F2);
-			RegisterHotKey(IntPtr.Zero, (int)Keys.F3, 0, (int)Keys.F3);
+//			RegisterHotKey(IntPtr.Zero, (int)Keys.F1, 0, (int)Keys.F1);
+//			RegisterHotKey(IntPtr.Zero, (int)Keys.F2, 0, (int)Keys.F2);
+//			RegisterHotKey(IntPtr.Zero, (int)Keys.F3, 0, (int)Keys.F3);
 			
 			//RegisterHotKey(IntPtr.Zero, (int)Keys.W, 0, (int)Keys.W);
 			//RegisterHotKey(IntPtr.Zero, (int)Keys.E, 0, (int)Keys.E);
@@ -260,8 +260,21 @@ namespace Kb
 //						keybd_event((int)VK.ENTER, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
 //						keybd_event((int)VK.ENTER, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release  
 			
-
-						BlenderMoveXY();
+ 
+						keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press  
+						Thread.Sleep(20);
+						keybd_event((int)VK.A, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press
+						Thread.Sleep(20);
+						keybd_event((int)VK.A, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+						Thread.Sleep(20);
+						keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release
+						Thread.Sleep(20);
+						keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+						Thread.Sleep(20);
+						keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+					
+				
+						//BlenderMoveXY();
 					} else if (id == (int)Keys.W) {
 //						keybd_event((int)VK.L, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
 //						keybd_event((int)VK.L, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release

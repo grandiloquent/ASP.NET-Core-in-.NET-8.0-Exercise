@@ -15,7 +15,7 @@ namespace ShaderToy
 	public class ShaderToy
 	{
 	
-		public static void Fetch(string dir,string uri)
+		public static void Fetch(string dir, string uri)
 		{
 			if (!uri.Contains("shadertoy.com")) {
 				return;
@@ -31,14 +31,36 @@ namespace ShaderToy
 			req.GetRequestStream().Write(bytes, 0, bytes.Length);
 			using (var reader = new StreamReader(req.GetResponse().GetResponseStream())) {
 				var s = reader.ReadToEnd();
-				s=File.ReadAllText(
-					Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location),"1.txt")
-				).Replace("{{0}}",s);
-				File.WriteAllText(Path.Combine(dir,id + ".txt"),s);
-				
+//				s=File.ReadAllText(
+//					Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location),"1.txt")
+//				).Replace("{{0}}",s);
+//				File.WriteAllText(Path.Combine(dir,id + ".txt"),s);
+			
+			
+				ClipboardShare.SetText(string.Format("ShaderToy\n\n{0}", s));
 				
 			}
 		
+		}
+		private static void PostData(string s)
+		{
+			
+			var req = (HttpWebRequest)WebRequest.Create("http://192.168.35.56:8100/svg");
+			req.Method = "POST";
+			req.ContentType = "application/x-www-form-urlencoded";
+			req.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+
+			var bytes = new UTF8Encoding(false).GetBytes("s=%7B%20%22shaders%22%20%3A%20%5B%22" + id + "%22%5D%20%7D&nt=1&nl=1&np=1");
+			req.GetRequestStream().Write(bytes, 0, bytes.Length);
+			using (var reader = new StreamReader(req.GetResponse().GetResponseStream())) {
+				var s = reader.ReadToEnd();
+//				s=File.ReadAllText(
+//					Path.Combine(Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location),"1.txt")
+//				).Replace("{{0}}",s);
+//				File.WriteAllText(Path.Combine(dir,id + ".txt"),s);
+			
+			
+			}
 		}
 	}
 	class Program
@@ -53,10 +75,10 @@ namespace ShaderToy
 				clipboardWatcher.Start();
 				clipboardWatcher.OnClipboardModified += (s, e) => {
 					try {
-						//ShaderToy.Fetch(@"C:\Users\Administrator\Desktop",e.Data.ToString());
+						ShaderToy.Fetch(@"C:\Users\Administrator\Desktop", e.Data.ToString());
 					
 						Console.WriteLine(e.Data.ToString());
-					} catch(Exception ex) {
+					} catch (Exception ex) {
 						Console.WriteLine(ex);
 						Console.WriteLine(e.Data.ToString());
 					}
