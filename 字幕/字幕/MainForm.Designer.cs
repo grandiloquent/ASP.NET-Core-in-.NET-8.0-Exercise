@@ -15,6 +15,7 @@ namespace 字幕
 		/// </summary>
 		private System.ComponentModel.IContainer components = null;
 		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.Button button2;
 		
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -38,6 +39,7 @@ namespace 字幕
 		private void InitializeComponent()
 		{
 			this.button1 = new System.Windows.Forms.Button();
+			this.button2 = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// button1
@@ -50,11 +52,22 @@ namespace 字幕
 			this.button1.UseVisualStyleBackColor = true;
 			this.button1.Click += new System.EventHandler(this.Button1Click);
 			// 
+			// button2
+			// 
+			this.button2.Location = new System.Drawing.Point(13, 42);
+			this.button2.Name = "button2";
+			this.button2.Size = new System.Drawing.Size(75, 23);
+			this.button2.TabIndex = 1;
+			this.button2.Text = "button2";
+			this.button2.UseVisualStyleBackColor = true;
+			this.button2.Click += new System.EventHandler(this.Button2Click);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(120, 53);
+			this.ClientSize = new System.Drawing.Size(120, 83);
+			this.Controls.Add(this.button2);
 			this.Controls.Add(this.button1);
 			this.Name = "MainForm";
 			this.Text = "字幕";

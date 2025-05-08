@@ -3,7 +3,7 @@ import { transformSrtTracks } from './main.js';
 // ==============================================================================
 
 async function playVideo(video, path) {
-    document.title = substringAfterLast(path, "/");
+    document.title = substringAfterLast(path, "\\");
     toast.setAttribute('message', document.title);
     video.load();
     video.src = `/file?path=${encodeURIComponent(path)}`;
@@ -370,37 +370,37 @@ previous.addEventListener('click', evt => {
 
 window.addEventListener('keydown', async evt => {
 
-    if (evt.key === 'n') {
+    if (evt.key === 'a') {
         evt.preventDefault();
         if (!seeking) {
             video.currentTime -= 1;
         }
-    } else if (evt.key === 'm') {
+    } else if (evt.key === 'd') {
         evt.preventDefault();
         if (!seeking) {
             video.currentTime += 1;
         }
-    } else if (evt.key === 'j') {
+    } else if (evt.key === 's') {
         evt.preventDefault();
         if (!seeking) {
             video.currentTime -= 5 / fps;
         }
-    } else if (evt.key === 'l') {
+    } else if (evt.key === 'f') {
         evt.preventDefault();
         if (!seeking) {
             video.currentTime += 5 / fps;
         }
-    } else if (evt.key === 'i') {
+    } else if (evt.key === 'q') {
         evt.preventDefault();
         if (!seeking) {
             video.currentTime -= 1 / fps;
         }
-    } else if (evt.key === 'p') {
+    } else if (evt.key === 'e') {
         evt.preventDefault();
         if (!seeking) {
             video.currentTime += 1 / fps;
         }
-    } else if (evt.key === 'k') {
+    } else if (evt.key === 'w') {
         evt.preventDefault();
         if (fullscreen.dataset.state === '1') {
             adjustSize(video);

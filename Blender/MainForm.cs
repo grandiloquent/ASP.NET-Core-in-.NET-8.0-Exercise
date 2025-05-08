@@ -186,9 +186,10 @@ namespace Android
 //				} catch {
 //				}
 //			}
-			var dir=@"D:\搜索\新建文件夹\Procedural Maze Building - Unity 6 and Blender Compatible";
-			Do1(dir);
-			Do2(dir);
+//			Do1(dir);
+//			Do2(dir);
+
+		
 		}
 		 
 		 
@@ -389,8 +390,21 @@ namespace Android
 						
 			}
 		}
+
+		void CreateFile()
+		{
+			var dir = Clipboard.GetText().Trim();
+			if (dir.IndexOf('.') != -1 && !File.Exists(dir)) {
+				File.Create(dir).Dispose();
+			} else if (!Directory.Exists(dir)) {
+				Directory.CreateDirectory(dir);
+			}
+		}
+	 
+
 		private void KeyF10Pressed()
 		{
+			CreateFile();
 		}
 		private void KeyF11Pressed()
 		{
@@ -502,12 +516,13 @@ namespace Android
 //				Arguments = "--proxy http://127.0.0.1:10808  -f 137 https://www.youtube.com/watch?v=" +
 //				str,
 //				WorkingDirectory = @"C:\Users\Administrator\Desktop\视频"
-//			});299--cookies cookies.txt 
-			Process.Start(new ProcessStartInfo {
-				FileName = "yt-dlp_x86.exe",
-				Arguments = "--proxy http://127.0.0.1:10808  -f 299 https://www.youtube.com/watch?v=" + str,
+//			});299--cookies cookies.txt --list-formats
+		 	Process.Start(new ProcessStartInfo {
+				FileName = "cmd",
+				Arguments = "/K yt-dlp_x86.exe --cookies \""+"6.txt".GetEntryPath()+"\" --proxy http://127.0.0.1:10808  -f 299 https://www.youtube.com/watch?v=" + str,
 				WorkingDirectory = @"C:\Users\Administrator\Desktop\视频"
 			});
+		 
 		}
 		public static void RunBlender(int start = 1, string dir = @"C:\Users\Administrator\Desktop\.Folder\099")
 		{
