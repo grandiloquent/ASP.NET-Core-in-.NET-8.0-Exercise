@@ -1,4 +1,3 @@
-
 bl_info = {
 
 "name" : "Shader",
@@ -47,43 +46,24 @@ def alignNodesParent(node):
         ty=0;
         while True:
                 x=x-tnode.dimensions.x
-                tnode.location=mathutils.Vector((x,y))
-                x=x-offset
+                
+
                 if tnode.dimensions.y>ty:
                     ty=tnode.dimensions.y
                 inputs = [l for l in tnode.inputs if len(l.links)>0]
-                if len(inputs)>0 and (node.parent == tnode.parent):
-                    print(f'{len(tnode.inputs)} {len(tnode.inputs[0].links)}')
-                    tnode=inputs[0].links[0].from_node
+                if len(inputs)>0:
+                    if tnode.parent is not None and node.parent == tnode.parent:
+                        
+                        print(f'{x}x{y} {node.name} = {node.parent.name} = {tnode.name} = {tnode.parent}')
+                        tnode.location=mathutils.Vector((x,y))
+                        tnode=inputs[0].links[0].from_node
+                        x=x-offset
+                    else:
+                        break
+                        
                 else:
                     break
         y=y-ty-offset
-
-class SortNodesInFrameBack(Operator):
-    """ ShaderNode连接 """
-    bl_idname = "sn.sortoutputparent"
-    bl_label = ""
-    bl_options = {"REGISTER", "UNDO"}
-
-    @classmethod
-    def poll(cls, context):
-        return True
-
-    def execute(self, context):
-
-        global _y
-        _y=0
-        if _s:
-                nms = [m for m in bpy.context.active_object.modifiers if m.type=='NODES']
-                nodes = [n for n in nms[0].node_group.nodes if n.select]
-                node=nodes[0]
-                alignOutputParent(node);
-        else:
-                nodes = bpy.context.view_layer.objects.active.active_material.node_tree.nodes
-                node =  [n for n in nodes if n.select][0]                 
-                alignOutputParent(node);
-             
-        return {'FINISHED'}
 
 
 class SortNodesInFrame(Operator):
@@ -113,7 +93,6 @@ class SortNodesInFrame(Operator):
         return {'FINISHED'}
 
 classes = [
-    SortNodesInFrameBack,
     SortNodesInFrame
 ]
 from typing import Dict,List
@@ -130,7 +109,6 @@ def register():
     addon_key_maps[key_map] = []
 
     key_map_item = key_map.keymap_items.new(idname=SortNodesInFrame.bl_idname, type='F1', value='PRESS', shift=False)
-    key_map_item = key_map.keymap_items.new(idname=SortNodesInFrameBack.bl_idname, type='F2', value='PRESS', shift=False)
 
     addon_key_maps[key_map].append(key_map_item)
 
