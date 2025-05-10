@@ -507,6 +507,8 @@ namespace Dir
 				using (var img = Pix.LoadFromMemory(buf)) {
 					using (var page = _engine.Process(img)) {
 						var text = page.GetText();
+						if(text==null)
+							return;
 //						Console.WriteLine("Mean confidence: {0}", page.GetMeanConfidence());
 //
 //						Console.WriteLine("Text (GetText): \r\n{0}", text);
@@ -531,9 +533,10 @@ namespace Dir
 						}));
 					}
 				}
-			} catch(Exception e) {
+			} catch (Exception e) {
 			
-				_engine = new TesseractEngine("./traineddata".GetEntryPath(), "eng", EngineMode.Default);
+				throw e;
+				//_engine = new TesseractEngine("./traineddata".GetEntryPath(), "eng", EngineMode.Default);
 			}
 		}
 

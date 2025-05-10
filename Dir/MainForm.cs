@@ -262,15 +262,24 @@ namespace Dir
 					 
 					 
 					if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F9") {
+					 
+							Images.Ocr(this, textBox1, 110, 120, 30);
+							//  124, 160, 60\
+							// 88, 160, 60
+						
+					  
+					} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F10") {
 						try {
-							Images.Ocr(this, textBox1, 124, 160, 60);
+							Images.Ocr(this, textBox1, 120, 110, 30);
+							//  124, 160, 60\
+							// 88, 160, 60
 						
 						} catch {
 						
 						}
-					} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "D1") {
+					} else  if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "D1") {
 						if (_shortkey) {
-							ShiftA();
+							//ShiftA();
 //							Invoke(new Action(() => {
 //								ShiftA();
 //							}));

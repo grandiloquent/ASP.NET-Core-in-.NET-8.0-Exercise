@@ -36,6 +36,7 @@ def alignOutputParent(node):
             alignOutputParent(tnode)
 
 def alignNodesParent(node):
+    print("alignNodesParent")
     offset = 40
     inputs = [l for l in node.inputs if len(l.links)>0]
 
@@ -51,21 +52,53 @@ def alignNodesParent(node):
                 if tnode.dimensions.y>ty:
                     ty=tnode.dimensions.y
                 inputs = [l for l in tnode.inputs if len(l.links)>0]
-                if len(inputs)>0:
-                    if tnode.parent is not None and node.parent == tnode.parent:
+                
+                if tnode.parent is not None and node.parent == tnode.parent:
                         
-                        print(f'{x}x{y} {node.name} = {node.parent.name} = {tnode.name} = {tnode.parent}')
-                        tnode.location=mathutils.Vector((x,y))
+                    print(f'{x}x{y} {node.name} = {node.parent.name} = {tnode.name} = {tnode.parent}')
+                    tnode.location=mathutils.Vector((x,y))
+                    if len(inputs)>0:
                         tnode=inputs[0].links[0].from_node
-                        x=x-offset
                     else:
                         break
-                        
+                    x=x-offset
                 else:
                     break
+                
         y=y-ty-offset
 
 
+def alignNodes(node):
+    offset = 40
+    inputs = [l for l in node.inputs if len(l.links)>0]
+
+    y=node.location.y
+    for i in inputs:
+        tnode = i.links[0].from_node
+        x=node.location.x-offset
+        ty=0;
+        while True:
+                x=x-tnode.dimensions.x
+                
+
+                if tnode.dimensions.y>ty:
+                    ty=tnode.dimensions.y
+                inputs = [l for l in tnode.inputs if len(l.links)>0]
+                
+                if tnode.parent is None:
+                        
+                    #print(f'{x}x{y} {node.name} = {node.parent.name} = {tnode.name} = {tnode.parent}')
+                    tnode.location=mathutils.Vector((x,y))
+                    if len(inputs)>0:
+                        tnode=inputs[0].links[0].from_node
+                    else:
+                        break
+                    x=x-offset
+                else:
+                    break
+                
+        y=y-ty-offset
+        
 class SortNodesInFrame(Operator):
     """ ShaderNode连接 """
     bl_idname = "sn.sortoutputparent"
@@ -77,6 +110,7 @@ class SortNodesInFrame(Operator):
         return True
 
     def execute(self, context):
+        print("SortNodesInFrame")
 
         global _y
         _y=0
@@ -84,6 +118,9 @@ class SortNodesInFrame(Operator):
                 nms = [m for m in bpy.context.active_object.modifiers if m.type=='NODES']
                 nodes = [n for n in nms[0].node_group.nodes if n.select]
                 node=nodes[0]
+                while node.type=="GROUP":
+                    nodes = [n for n in node.node_tree.nodes if n.select]
+                    node=nodes[0]
                 alignNodesParent(node);
         else:
                 nodes = bpy.context.view_layer.objects.active.active_material.node_tree.nodes
@@ -91,9 +128,41 @@ class SortNodesInFrame(Operator):
                 alignNodesParent(node);
              
         return {'FINISHED'}
+    
+class SortNodes(Operator):
+    """ ShaderNode连接 """
+    bl_idname = "sn.sortnodes"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
 
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        
+        global _y
+        _y=0
+        if _s:
+                nms = [m for m in bpy.context.active_object.modifiers if m.type=='NODES']
+                nodes = [n for n in nms[0].node_group.nodes if n.select]
+                node=nodes[0]
+                while node.type=="GROUP":
+                    nodes = [n for n in node.node_tree.nodes if n.select]
+                    node=nodes[0]
+                print(node.type)
+                alignNodes(node);
+        else:
+                nodes = bpy.context.view_layer.objects.active.active_material.node_tree.nodes
+                node =  [n for n in nodes if n.select][0]                 
+                alignNodes(node);
+             
+        return {'FINISHED'}
+    
 classes = [
-    SortNodesInFrame
+    SortNodesInFrame,
+    SortNodes
+    
 ]
 from typing import Dict,List
 addon_key_maps: Dict[bpy.types.KeyMap, List[bpy.types.KeyMapItem]] = {}
@@ -109,6 +178,7 @@ def register():
     addon_key_maps[key_map] = []
 
     key_map_item = key_map.keymap_items.new(idname=SortNodesInFrame.bl_idname, type='F1', value='PRESS', shift=False)
+    key_map_item = key_map.keymap_items.new(idname=SortNodes.bl_idname, type='F3', value='PRESS', shift=False)
 
     addon_key_maps[key_map].append(key_map_item)
 

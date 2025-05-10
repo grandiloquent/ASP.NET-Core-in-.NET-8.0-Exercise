@@ -97,7 +97,7 @@ namespace Dir
 			this.toolStripButton7});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(386, 25);
+			this.toolStrip1.Size = new System.Drawing.Size(334, 25);
 			this.toolStrip1.TabIndex = 0;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
@@ -218,35 +218,35 @@ namespace Dir
 			// 运行ToolStripMenuItem
 			// 
 			this.运行ToolStripMenuItem.Name = "运行ToolStripMenuItem";
-			this.运行ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.运行ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
 			this.运行ToolStripMenuItem.Text = "运行";
 			this.运行ToolStripMenuItem.Click += new System.EventHandler(this.运行ToolStripMenuItemClick);
 			// 
 			// 代码段ToolStripMenuItem
 			// 
 			this.代码段ToolStripMenuItem.Name = "代码段ToolStripMenuItem";
-			this.代码段ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.代码段ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
 			this.代码段ToolStripMenuItem.Text = "代码段";
 			this.代码段ToolStripMenuItem.Click += new System.EventHandler(this.代码段ToolStripMenuItemClick);
 			// 
 			// 保存代码段ToolStripMenuItem
 			// 
 			this.保存代码段ToolStripMenuItem.Name = "保存代码段ToolStripMenuItem";
-			this.保存代码段ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.保存代码段ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
 			this.保存代码段ToolStripMenuItem.Text = "保存代码段";
 			this.保存代码段ToolStripMenuItem.Click += new System.EventHandler(this.保存代码段ToolStripMenuItemClick);
 			// 
 			// toolStripMenuItem2
 			// 
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(136, 22);
 			this.toolStripMenuItem2.Text = "3";
 			this.toolStripMenuItem2.Click += new System.EventHandler(this.ToolStripMenuItem2Click);
 			// 
 			// toolStripMenuItem3
 			// 
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(136, 22);
 			this.toolStripMenuItem3.Text = "4";
 			this.toolStripMenuItem3.Click += new System.EventHandler(this.ToolStripMenuItem3Click);
 			// 
@@ -288,7 +288,7 @@ namespace Dir
 			this.textBox1.Multiline = true;
 			this.textBox1.Name = "textBox1";
 			this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-			this.textBox1.Size = new System.Drawing.Size(386, 296);
+			this.textBox1.Size = new System.Drawing.Size(334, 97);
 			this.textBox1.TabIndex = 1;
 			this.textBox1.DragDrop += new System.Windows.Forms.DragEventHandler(this.TextBox1DragDrop);
 			this.textBox1.DragEnter += new System.Windows.Forms.DragEventHandler(this.TextBox1DragEnter);
@@ -298,11 +298,12 @@ namespace Dir
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(386, 321);
+			this.ClientSize = new System.Drawing.Size(334, 122);
 			this.Controls.Add(this.textBox1);
 			this.Controls.Add(this.toolStrip1);
 			this.Name = "MainForm";
 			this.Text = "Dir";
+			this.TopMost = true;
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainFormFormClosing);
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
