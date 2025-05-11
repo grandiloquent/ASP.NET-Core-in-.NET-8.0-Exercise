@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App", "..\App\App.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dir", "..\Dir\Dir.csproj", "{6DE203F3-74E0-4FA4-AEF9-087E55E0D698}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeometryNode", "..\GeometryNode\GeometryNode.csproj", "{8B90FBAF-93DB-471E-B77E-50E820A2953B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,5 +78,9 @@ Global
 		{6DE203F3-74E0-4FA4-AEF9-087E55E0D698}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DE203F3-74E0-4FA4-AEF9-087E55E0D698}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DE203F3-74E0-4FA4-AEF9-087E55E0D698}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8B90FBAF-93DB-471E-B77E-50E820A2953B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8B90FBAF-93DB-471E-B77E-50E820A2953B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8B90FBAF-93DB-471E-B77E-50E820A2953B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8B90FBAF-93DB-471E-B77E-50E820A2953B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -189,7 +189,7 @@ namespace Dir
 		string _file;
 		string _fav;
 		string _snippet;
-		bool _shortkey=true;
+		bool _shortkey = true;
 
 		void ShiftA()
 		{
@@ -263,9 +263,9 @@ namespace Dir
 					 
 					if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F9") {
 					 
-							Images.Ocr(this, textBox1, 110, 120, 30);
-							//  124, 160, 60\
-							// 88, 160, 60
+						Images.Ocr(this, textBox1, 110, 120, 30);
+						//  124, 160, 60\
+						// 88, 160, 60
 						
 					  
 					} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F10") {
@@ -277,7 +277,7 @@ namespace Dir
 						} catch {
 						
 						}
-					} else  if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "D1") {
+					} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "D1") {
 						if (_shortkey) {
 							//ShiftA();
 //							Invoke(new Action(() => {
@@ -627,6 +627,12 @@ namespace Dir
 				Arguments = "\"" + f + "\"",
 				WorkingDirectory = dir
 			});
+		}
+		void GeometryNodeToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			var f = new Form2();
+			f.TopMost = true;
+			f.Show();
 		}
 	 
 	}

@@ -28,7 +28,7 @@ namespace Dir
 		private System.Windows.Forms.ToolStripMenuItem 代码段ToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem 保存代码段ToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem 文件列表ToolStripMenuItem;
-		private System.Windows.Forms.ToolStripButton toolStripButton5;
+		private System.Windows.Forms.ToolStripSplitButton toolStripButton5;
 		private System.Windows.Forms.ToolStripMenuItem 文件名排序ToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem 快速删除ToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem 删除剪切板ToolStripMenuItem;
@@ -36,6 +36,8 @@ namespace Dir
 		private System.Windows.Forms.ToolStripButton toolStripButton7;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
+		private System.Windows.Forms.ToolStripMenuItem 剪切板ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem geometryNodeToolStripMenuItem;
 		
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -77,10 +79,12 @@ namespace Dir
 			this.保存代码段ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton7 = new System.Windows.Forms.ToolStripButton();
 			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.toolStripButton5 = new System.Windows.Forms.ToolStripSplitButton();
+			this.剪切板ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.geometryNodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -250,16 +254,6 @@ namespace Dir
 			this.toolStripMenuItem3.Text = "4";
 			this.toolStripMenuItem3.Click += new System.EventHandler(this.ToolStripMenuItem3Click);
 			// 
-			// toolStripButton5
-			// 
-			this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
-			this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButton5.Name = "toolStripButton5";
-			this.toolStripButton5.Size = new System.Drawing.Size(48, 22);
-			this.toolStripButton5.Text = "剪切板";
-			this.toolStripButton5.Click += new System.EventHandler(this.ToolStripButton5Click);
-			// 
 			// toolStripButton6
 			// 
 			this.toolStripButton6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -276,7 +270,7 @@ namespace Dir
 			this.toolStripButton7.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton7.Image")));
 			this.toolStripButton7.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton7.Name = "toolStripButton7";
-			this.toolStripButton7.Size = new System.Drawing.Size(23, 22);
+			this.toolStripButton7.Size = new System.Drawing.Size(23, 20);
 			this.toolStripButton7.Text = "toolStripButton7";
 			this.toolStripButton7.Click += new System.EventHandler(this.ToolStripButton7Click);
 			// 
@@ -293,6 +287,33 @@ namespace Dir
 			this.textBox1.DragDrop += new System.Windows.Forms.DragEventHandler(this.TextBox1DragDrop);
 			this.textBox1.DragEnter += new System.Windows.Forms.DragEventHandler(this.TextBox1DragEnter);
 			this.textBox1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBox1KeyUp);
+			// 
+			// toolStripButton5
+			// 
+			this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButton5.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.剪切板ToolStripMenuItem,
+			this.geometryNodeToolStripMenuItem});
+			this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
+			this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton5.Name = "toolStripButton5";
+			this.toolStripButton5.Size = new System.Drawing.Size(60, 22);
+			this.toolStripButton5.Text = "剪切板";
+			this.toolStripButton5.ButtonClick += new System.EventHandler(this.ToolStripButton5Click);
+			// 
+			// 剪切板ToolStripMenuItem
+			// 
+			this.剪切板ToolStripMenuItem.Name = "剪切板ToolStripMenuItem";
+			this.剪切板ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+			this.剪切板ToolStripMenuItem.Text = "剪切板";
+			this.剪切板ToolStripMenuItem.Click += new System.EventHandler(this.ToolStripButton5Click);
+			// 
+			// geometryNodeToolStripMenuItem
+			// 
+			this.geometryNodeToolStripMenuItem.Name = "geometryNodeToolStripMenuItem";
+			this.geometryNodeToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+			this.geometryNodeToolStripMenuItem.Text = "GeometryNode";
+			this.geometryNodeToolStripMenuItem.Click += new System.EventHandler(this.GeometryNodeToolStripMenuItemClick);
 			// 
 			// MainForm
 			// 

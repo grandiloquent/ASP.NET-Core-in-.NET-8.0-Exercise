@@ -710,6 +710,7 @@ public partial class MainForm : Form
 			
 		}
 	}
+	
 	void ComboBox1KeyUp(object sender, KeyEventArgs e)
 	{
 		if (e.KeyCode == Keys.Enter) {
