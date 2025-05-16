@@ -244,13 +244,13 @@ function onMenu(evt) {
         url.searchParams.set('size', "0");
         window.location = url;
     });
-    addContextMenuItem(bottomSheet, '合并图片', () => {
+    addContextMenuItem(bottomSheet, '打开', () => {
         bottomSheet.remove();
-        if (typeof NativeAndroid !== 'undefined') {
-            const url = new URL(window.location);
-            const path = url.searchParams.get('path');
-            NativeAndroid.combineImages(path, 400, null)
-        }
+
+        const url = new URL(window.location);
+        const path = url.searchParams.get('path');
+        fetch(`/open?path=${encodeURIComponent(path)}`)
+
     });
     addContextMenuItem(bottomSheet, '创建PDF', () => {
         bottomSheet.remove();
@@ -264,7 +264,7 @@ function onMenu(evt) {
 }
 
 async function addFavorite(path) {
-    const res = await fetch(`${baseUri}/fav/insert?path=${path}`);
+    const res = await fetch(`${baseUri}/fav?path=${path}`, { method: 'PUT' });
     toast.setAttribute('message', '成功');
 }
 

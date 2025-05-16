@@ -2,12 +2,14 @@
 using System;
 using System.Data;
 using System.Data.SQLite;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using System.Linq;
 
 namespace GeometryNode
 {
@@ -16,6 +18,53 @@ namespace GeometryNode
 	/// </summary>
 	public partial class MainForm : Form
 	{
+		
+		// Import the necessary functions from user32.dll
+		[DllImport("user32.dll")]
+		[return: MarshalAs(UnmanagedType.Bool)]
+		static extern bool SetForegroundWindow(IntPtr hWnd);
+
+		[DllImport("user32.dll")]
+		static extern IntPtr GetForegroundWindow();
+
+		[DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+		static extern int GetWindowThreadProcessId(IntPtr handle, out int processId);
+
+		[DllImport("kernel32.dll")]
+		static extern uint GetCurrentThreadId();
+
+		[DllImport("user32.dll")]
+		static extern bool AttachThreadInput(uint idAttach, uint idAttachTo, bool fAttach);
+		static void BringAppToForeground(IntPtr hWnd)
+		{
+			// Get the ID of the thread that created the window.
+			int targetThreadId;
+			GetWindowThreadProcessId(hWnd, out targetThreadId);
+			uint currentThreadId = GetCurrentThreadId();
+
+			// Attach the current thread to the thread of the window to be activated.  This is often necessary
+			// to bypass restrictions that prevent a background process from stealing focus.
+			if (currentThreadId != targetThreadId) {
+				AttachThreadInput(currentThreadId, (uint)targetThreadId, true);
+			}
+
+			// Try to set the foreground window.
+			bool result = SetForegroundWindow(hWnd);
+
+			// Detach the current thread from the other thread.  This is important to maintain system stability.
+			if (currentThreadId != targetThreadId) {
+				AttachThreadInput(currentThreadId, (uint)targetThreadId, false);
+			}
+
+			if (!result) {
+				// If SetForegroundWindow fails, it might be due to restrictions in newer Windows versions.
+				// Consider alternative methods if necessary, but they may require more privileges or
+				// might not work reliably in all situations.  For example, you could try sending
+				// window messages, but that's beyond the scope of this basic example.
+				Console.WriteLine("SetForegroundWindow failed. The application may be running with higher privileges.");
+			}
+		}
+		
 		SQLiteConnection conn;
 		public MainForm()
 		{
@@ -57,13 +106,29 @@ namespace GeometryNode
 			
 				using (var reader = cmd.ExecuteReader()) {
 					while (reader.Read()) {
-									listBox2.Items.Add(reader.GetString(0));
+						listBox2.Items.Add(reader.GetString(0));
 					
 					}
 				}
 			}
-			RegisterHotKey(this.Handle, (int)Keys.F7, 0, (int)Keys.F7);
+			RegisterHotKey(this.Handle, (int)Keys.F5, 0, (int)Keys.F5);
+			RegisterHotKey(this.Handle, (int)Keys.F4, 0, (int)Keys.F4);
 		}
+
+		IntPtr[] _processes;
+		int _i;
+		void SwitchBlender()
+		{
+			if(_processes==null)
+				_processes=Process.GetProcessesByName("blender")
+					.Select(x=>x.MainWindowHandle).ToArray();
+			if(_i>1)
+				_i=0;
+			BringAppToForeground(_processes[_i++]);
+			
+			
+		}
+
 		protected override void WndProc(ref Message m)
 		{
 			if (m.Msg == 0x0312) {
@@ -72,8 +137,12 @@ namespace GeometryNode
         Keys key = (Keys)( ( (int)m.LParam >> 16 ) & 0xFFFF );
         Modifiers mods = (Modifiers)( (int)m.LParam & 0xFFFF );*/
 				ushort id = (ushort)m.WParam;
-				if (id == (ushort)Keys.F7) {
-					ShiftA();
+				if (id == (ushort)Keys.F5) {
+					//ShiftA();
+					SwitchBlender();
+				} else if (id == (ushort)Keys.F4) {
+					//ShiftA();
+				ShiftA();
 				} 
 				
 				
@@ -167,17 +236,18 @@ namespace GeometryNode
 //			Thread.Sleep(20);
 //			keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
 			
-			keybd_event((int)Keys.Space, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press
-			Thread.Sleep(20);
-			keybd_event((int)Keys.Space, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
-			Thread.Sleep(20);
-			keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press
-			Thread.Sleep(20);
-			keybd_event((int)VK.V, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press
-			Thread.Sleep(20);
-			keybd_event((int)VK.V, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
-			Thread.Sleep(20);
-			keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release
+//			keybd_event((int)Keys.Space, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press
+//			Thread.Sleep(20);
+//			keybd_event((int)Keys.Space, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+//			Thread.Sleep(20);
+//			keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press
+//			Thread.Sleep(20);
+//			keybd_event((int)VK.V, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press
+//			Thread.Sleep(20);
+//			keybd_event((int)VK.V, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+//			Thread.Sleep(20);
+//			keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release
+//		
 		}
 
 		[DllImport("user32.dll", SetLastError = true)]
@@ -383,6 +453,30 @@ namespace GeometryNode
 		void ListBox2SelectedIndexChanged(object sender, EventArgs e)
 		{
 	
+		}
+		void 新建ToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			var s = Clipboard.GetText().Trim();
+			if (s.Length > 0) {
+				var pieces = s.Split(new char[]{ '\n' }, 2);
+			
+				if (pieces.Length > 1) {
+					//var key = pieces[0].Trim();
+//				if (_snippets.ContainsKey(key))
+//					_snippets[key] = pieces[1].Trim();
+//				else
+//					_snippets.Add(key, pieces[1].Trim());
+//				File.WriteAllText(_fileName1, JsonConvert.SerializeObject(_snippets));
+					using (var cmd = (SQLiteCommand)conn.CreateCommand()) {
+						cmd.CommandText = @"insert into GeometryNode(Title,Name) values(@Title,@Name)";
+					
+						cmd.Parameters.Add("Title", DbType.String).Value = pieces[0].Trim();
+						cmd.Parameters.Add("Name", DbType.String).Value = pieces[1].Trim();
+						cmd.ExecuteNonQuery();
+					}
+				 
+				}
+			}
 		}
 
 	}

@@ -1,13 +1,13 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Text.Json;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.FileProviders;
 using WebApp;
 using System.Diagnostics;
-
+using Microsoft.Data.Sqlite;
+using System.Reflection;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,11 +70,20 @@ app.MapGet("/open", ([FromQuery(Name = "path")] string path) =>
 {
     if (File.Exists(path))
     {
-       Process.Start(new System.Diagnostics. ProcessStartInfo(){
-		FileName="explorer.exe",
-		Arguments=$"\"{path}\""
-		});
+        Process.Start(new System.Diagnostics.ProcessStartInfo()
+        {
+            FileName = "explorer.exe",
+            Arguments = $"\"{path}\""
+        });
         return Results.Ok();
+    }
+    else if (Directory.Exists(path))
+    {
+       Process.Start(new System.Diagnostics.ProcessStartInfo()
+        {
+            FileName = "explorer.exe",
+            Arguments = $"\"{path}\""
+        });
     }
 
     return Results.NotFound();
@@ -115,12 +124,13 @@ app.MapPost("/file/move", async (HttpRequest request, string dst) =>
     }
 });
 
- 
+
 app.MapGet("/movevideo", (string path) =>
 {
-    var dst=Path.Combine("D:\\Blender",Path.GetFileName(path));
-    File.Copy(path,dst);
-    if(File.Exists(dst)){
+    var dst = Path.Combine("D:\\Blender", Path.GetFileName(path));
+    File.Copy(path, dst);
+    if (File.Exists(dst))
+    {
         File.Delete(path);
     }
     return File.Exists(dst) ? Results.Ok() : Results.NotFound();
@@ -143,13 +153,16 @@ app.MapGet("/file/new_dir", (string path) =>
         Directory.CreateDirectory(path);
     return Directory.Exists(path) ? Results.Ok() : Results.NotFound();
 });
-app.MapGet("/file/new_file", (string path,string? uri) =>
+app.MapGet("/file/new_file", (string path, string? uri) =>
 {
-    if(uri!=null){
-         Process.Start(new System.Diagnostics. ProcessStartInfo(){
-		FileName="aria2c.exe",
-		Arguments=$"-c \"{uri}\"",WorkingDirectory=path
-		});
+    if (uri != null)
+    {
+        Process.Start(new System.Diagnostics.ProcessStartInfo()
+        {
+            FileName = "aria2c.exe",
+            Arguments = $"-c \"{uri}\"",
+            WorkingDirectory = path
+        });
         return Results.Ok();
     }
     if (!File.Exists(path))
@@ -192,5 +205,69 @@ string GetLocalIPAddress()
 
     throw new Exception("No network adapters with an IPv4 address in the system!");
 }
+SqliteConnection connection = null;
+void InitializeDatabase()
+{
+    string executableLocation = Assembly.GetExecutingAssembly().Location;
+    string? projectRoot = Directory.GetParent(Directory.GetParent(executableLocation)?.ToString())?.ToString();
+
+    Console.WriteLine(projectRoot);
+    if (projectRoot == null)
+    {
+        return;
+    }
+    string connectionString = $"Data Source={projectRoot}\\fav.db";
+    connection = new SqliteConnection(connectionString);
+    connection.Open();
+    using (SqliteCommand command = connection.CreateCommand())
+    {
+        command.CommandText = "CREATE TABLE IF NOT EXISTS Fav (Id INTEGER PRIMARY KEY AUTOINCREMENT, Name TEXT not null unique,Views integer DEFAULT 0,CreateAt datetime default (datetime('now','localtime')),UpdateAt datetime default (datetime('now','localtime')));";
+        command.ExecuteNonQuery(); // For non-query operations like CREATE, INSERT, UPDATE, DELETE
+    }
+}
+InitializeDatabase();
+app.MapGet("/fav", () =>
+{
+    using (SqliteCommand command = connection.CreateCommand())
+    {
+        command.CommandText = "SELECT Id, Name,Views FROM Fav";
+        using (SqliteDataReader reader = command.ExecuteReader())
+        {
+            var list = new List<Dictionary<string, dynamic>>();
+            while (reader.Read())
+            {
+                var dic = new Dictionary<string, dynamic>();
+                int id = reader.GetInt32(0);
+                string name = reader.GetString(1);
+                int views = reader.GetInt32(2);
+
+                dic.Add(nameof(id), id);
+                dic.Add(nameof(name), name);
+                dic.Add(nameof(views), views);
+                list.Add(dic);
+            }
+            return list;
+        }
+    }
+});
+app.MapPut("/fav", async (string path) =>
+{
+    // var reader = new StreamReader(context.Request.Body, Encoding.UTF8);
+    // var body = await reader.ReadToEndAsync();
+    using (SqliteCommand command = connection.CreateCommand())
+    {
+        command.CommandText = "INSERT INTO Fav (Name) VALUES (@name)";
+        command.Parameters.AddWithValue("@name", path);
+        command.ExecuteNonQuery();
+    }
+    // Process the plain text body
+    //await context.Response.WriteAsync($"Received plain text: {body}");
+    return true;
+});
 // {GetLocalIPAddress()}
 app.Run($"http://0.0.0.0:8080");
+
+
+// dotnet publish MyProject.csproj -r win-x64 -o bin/publish/win-x64 /p:PublishSingleFile=true /p:AssemblyName=MyApp
+// dotnet publish MyProject.csproj -r win-x64 -o bin/publish/win-x64 /p:AssemblyName=MyApp
+// dotnet run

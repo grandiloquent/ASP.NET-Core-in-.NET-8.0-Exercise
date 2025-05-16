@@ -96,7 +96,7 @@ async function render(path) {
 
                 queryElementByPath(item.parentNode.dataset.path).remove();
             } else {
-               // renameFile(item.parentNode.dataset.path)
+                // renameFile(item.parentNode.dataset.path)
                 deleteFile(item.parentNode.dataset.path);
                 //const buf = (localStorage.getItem("paths") && JSON.parse(localStorage.getItem("paths"))) || [];
             }
@@ -251,17 +251,10 @@ close
 
 async function onShowFavorites() {
     const bottomSheet = document.createElement('custom-bottom-sheet');
-    //const res = await fetch(`${baseUri}/fav/list`);
-    [
-        "C:\\Users\\Administrator\\Downloads",
-        "C:\\Users\\Administrator\\Desktop\\文档",
-        "C:\\Users\\Administrator\\Desktop\\视频",
-        "C:\\Users\\Administrator\\Desktop\\视频\\文件",
-        "D:\\文档",
-        "D:\\文档\\书籍\\.PDF",
-        "C:\\blender\\resources\\Blender"
-    ].forEach(p => {
-        addFavoriteItem(bottomSheet, p);
+    const res = await fetch(`${baseUri}/fav`);
+    const items=await res.json();
+    items.forEach(p => {
+        addFavoriteItem(bottomSheet, p.name);
     })
     document.body.appendChild(bottomSheet);
 }

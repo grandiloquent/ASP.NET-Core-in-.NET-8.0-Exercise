@@ -21,7 +21,6 @@ namespace Dir
 	/// </summary>
 	public partial class MainForm : Form
 	{
-		 
 		
 		[DllImport("user32.dll", SetLastError = true)]
 		private static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc);
@@ -254,39 +253,69 @@ namespace Dir
 //					Directory.Delete(x);
 //				}
 //			});
-			using (var eventHookFactory = new EventHook.EventHookFactory()) {
-				 
-				var keyboardWatcher = eventHookFactory.GetKeyboardWatcher();
-				keyboardWatcher.Start();
-				keyboardWatcher.OnKeyInput += (s, e) => {
-					 
-					 
-					if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F9") {
-					 
-						Images.Ocr(this, textBox1, 110, 120, 30);
-						//  124, 160, 60\
-						// 88, 160, 60
-						
-					  
-					} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F10") {
-						try {
-							Images.Ocr(this, textBox1, 120, 110, 30);
-							//  124, 160, 60\
-							// 88, 160, 60
-						
-						} catch {
-						
-						}
-					} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "D1") {
-						if (_shortkey) {
-							//ShiftA();
-//							Invoke(new Action(() => {
-//								ShiftA();
-//							}));
-						}
-					}
-				};
+//			using (var eventHookFactory = new EventHook.EventHookFactory()) {
+//				 
+//				var keyboardWatcher = eventHookFactory.GetKeyboardWatcher();
+//				keyboardWatcher.Start();
+//				keyboardWatcher.OnKeyInput += (s, e) => {
+//					 
+//					 
+//					if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F9") {
+//					 
+//						
+//						//  124, 160, 60\
+//						// 88, 160, 60
+//						
+//					  
+//					} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "F10") {
+//						try {
+//							
+//							//  124, 160, 60\
+//							// 88, 160, 60
+//						
+//						} catch {
+//						
+//						}
+//					} else if (e.KeyData.EventType == EventHook.KeyEvent.up && e.KeyData.Keyname == "D1") {
+//						if (_shortkey) {
+//							//ShiftA();
+////							Invoke(new Action(() => {
+////								ShiftA();
+////							}));
+//						}
+//					}
+//				};
+//			}
+			RegisterHotKey(this.Handle, (int)Keys.F5, 0, (int)Keys.F5);
+			RegisterHotKey(this.Handle, (int)Keys.F6, 0, (int)Keys.F6);
+			RegisterHotKey(this.Handle, (int)Keys.F7, 0, (int)Keys.F7);
+			RegisterHotKey(this.Handle, (int)Keys.F4, 0, (int)Keys.F4);
+		}
+		protected override void WndProc(ref Message m)
+		{
+			if (m.Msg == 0x0312) {
+				/*
+				  ushort id = (ushort)m.WParam;
+        Keys key = (Keys)( ( (int)m.LParam >> 16 ) & 0xFFFF );
+        Modifiers mods = (Modifiers)( (int)m.LParam & 0xFFFF );*/
+				ushort id = (ushort)m.WParam;
+				if (id == (ushort)Keys.F5) {
+					//ShiftA();
+					Images.Ocr(this, textBox1, 126, 110, 30);
+				} else if (id == (ushort)Keys.F6) {
+					//ShiftA();
+					Images.Ocr(this, textBox1, 128, 110, 30);
+				} else if (id == (ushort)Keys.F7) {
+					//ShiftA();
+					Images.Ocr(this, textBox1, 124, 110, 30);
+				} else if (id == (ushort)Keys.F4) {
+					//ShiftA();
+					Images.Ocr(this, textBox1, 80, 220, 60);
+				} 
+				
+				
 			}
+			base.WndProc(ref m);
 		}
 		void ToolStripButton1ButtonClick(object sender, EventArgs e)
 		{
@@ -403,7 +432,7 @@ namespace Dir
 					CreateFile();
 					break;
 				case Keys.F4:
-					CopyLine();
+					//CopyLine();
 					break;
 				case Keys.F6:
 					SetDirectory();
@@ -411,7 +440,7 @@ namespace Dir
 					break;
 			
 				case Keys.F5:
-					QuickDelete();
+					//QuickDelete();
 					break;
 				case Keys.C:
 					if (e.Control) {
@@ -433,6 +462,13 @@ namespace Dir
 				try {
 					Directory.Delete(p, true);
 				} catch {
+				}
+			} else if (File.Exists(p)) {
+				try {
+					File.Delete(p);
+				} catch {
+					
+				
 				}
 			}
 		}
@@ -634,6 +670,70 @@ namespace Dir
 			f.TopMost = true;
 			f.Show();
 		}
+		void SocketToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			var s = Clipboard.GetText();
+			var v = File.ReadAllText("socket.txt".GetEntryPath());
+			Clipboard.SetText(string.Format(v, 
+				"\"" + string.Join("\",\"", s.Split(Environment.NewLine.ToArray(), StringSplitOptions.RemoveEmptyEntries)) + "\""
+			));
+		}
+		void NodeSocketToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			var s = Clipboard.GetText();
+			var v = File.ReadAllText("socket_node.txt".GetEntryPath());
+			Clipboard.SetText(string.Format(v, s));
+		}
+		void 翻译ToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			textBox1.Text += Environment.NewLine + Translate();
+		}
+		public static string Translate(string s = "", int mode = 1)
+		{
+			//string q
+			// http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=%s&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=
+			// en
+			// http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=
+			var l = "en";
+			s = s == "" ? Clipboard.GetText() : s;
+		
+			var isChinese = Regex.IsMatch(s, "[\u4e00-\u9fa5]");
+			if (!isChinese) {
+				l = "zh";
+				s = Regex.Replace(Regex.Replace(s, "[\r\n]+", " "), "- ", "");
+			}
+			var req = WebRequest.Create(
+				          "http://translate.google.com/translate_a/single?client=gtx&sl=auto&tl=" + l + "&dt=t&dt=bd&ie=UTF-8&oe=UTF-8&dj=1&source=icon&q=" +
+				          s);
+			//req.Proxy = new WebProxy("127.0.0.1", 10809);
+			var res = req.GetResponse();
+			using (var reader = new StreamReader(res.GetResponseStream())) {
+				//var obj =
+				//  (JsonElement)JsonSerializer.Deserialize<Dictionary<String, dynamic>>(reader.ReadToEnd())["sentences"];
+				var obj = JsonConvert.DeserializeObject<JObject>(reader.ReadToEnd())["sentences"].ToObject<JArray>();
+				var sb = new StringBuilder();
+				for (int i = 0; i < obj.Count; i++) {
+					sb.Append(obj[i]["trans"]).Append(' ');
+				}
+				// Regex.Replace(sb.ToString().Trim(), "[ ](?=[a-zA-Z0-9])", m => "_").ToLower();
+				// std::string {0}(){{\n}}
+				//return string.Format("{0}", Regex.Replace(sb.ToString().Trim(), " ([a-zA-Z0-9])", m => m.Groups[1].Value.ToUpper()).Decapitalize());
+				//return  sb.ToString().Trim();
+				/*
+			 sb.ToString().Trim();
+			 .Trim().Camel().Capitalize()
+			 */
+				return isChinese ? (mode == 0 ? sb.ToString().Trim().Camel().Capitalize() : sb.ToString().Trim().Camel().Decapitalize()) : sb.ToString();
+			}
+			//Clipboard.SetText(string.Format(@"{0}", TransAPI.Translate(Clipboard.GetText())));
+		}
+		void 打开ToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			if (Directory.Exists(_dir)) {
+				Process.Start(_dir);
+			}
+		}
+	
 	 
 	}
 	

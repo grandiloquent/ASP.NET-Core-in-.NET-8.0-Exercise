@@ -383,12 +383,12 @@ window.addEventListener('keydown', async evt => {
     } else if (evt.key === 's') {
         evt.preventDefault();
         if (!seeking) {
-            video.currentTime -= 5 / fps;
+            video.currentTime -= 10 / fps;
         }
     } else if (evt.key === 'f') {
         evt.preventDefault();
         if (!seeking) {
-            video.currentTime += 5 / fps;
+            video.currentTime += 10 / fps;
         }
     } else if (evt.key === 'q') {
         evt.preventDefault();

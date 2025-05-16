@@ -37,7 +37,10 @@ namespace Dir
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
 		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
 		private System.Windows.Forms.ToolStripMenuItem 剪切板ToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem geometryNodeToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem socketToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem nodeSocketToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem 翻译ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem 打开ToolStripMenuItem;
 		
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -79,12 +82,15 @@ namespace Dir
 			this.保存代码段ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripButton5 = new System.Windows.Forms.ToolStripSplitButton();
+			this.剪切板ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.socketToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.nodeSocketToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.翻译ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton7 = new System.Windows.Forms.ToolStripButton();
 			this.textBox1 = new System.Windows.Forms.TextBox();
-			this.toolStripButton5 = new System.Windows.Forms.ToolStripSplitButton();
-			this.剪切板ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.geometryNodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.打开ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -109,6 +115,7 @@ namespace Dir
 			// 
 			this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
 			this.toolStripButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.打开ToolStripMenuItem,
 			this.删除ToolStripMenuItem,
 			this.收藏夹ToolStripMenuItem,
 			this.保存收藏夹ToolStripMenuItem,
@@ -124,35 +131,35 @@ namespace Dir
 			// 删除ToolStripMenuItem
 			// 
 			this.删除ToolStripMenuItem.Name = "删除ToolStripMenuItem";
-			this.删除ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+			this.删除ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.删除ToolStripMenuItem.Text = "删除";
 			this.删除ToolStripMenuItem.Click += new System.EventHandler(this.删除ToolStripMenuItemClick);
 			// 
 			// 收藏夹ToolStripMenuItem
 			// 
 			this.收藏夹ToolStripMenuItem.Name = "收藏夹ToolStripMenuItem";
-			this.收藏夹ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+			this.收藏夹ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.收藏夹ToolStripMenuItem.Text = "收藏夹";
 			this.收藏夹ToolStripMenuItem.Click += new System.EventHandler(this.收藏夹ToolStripMenuItemClick);
 			// 
 			// 保存收藏夹ToolStripMenuItem
 			// 
 			this.保存收藏夹ToolStripMenuItem.Name = "保存收藏夹ToolStripMenuItem";
-			this.保存收藏夹ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+			this.保存收藏夹ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.保存收藏夹ToolStripMenuItem.Text = "保存收藏夹";
 			this.保存收藏夹ToolStripMenuItem.Click += new System.EventHandler(this.保存收藏夹ToolStripMenuItemClick);
 			// 
 			// 快速删除ToolStripMenuItem
 			// 
 			this.快速删除ToolStripMenuItem.Name = "快速删除ToolStripMenuItem";
-			this.快速删除ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+			this.快速删除ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.快速删除ToolStripMenuItem.Text = "快速删除";
 			this.快速删除ToolStripMenuItem.Click += new System.EventHandler(this.快速删除ToolStripMenuItemClick);
 			// 
 			// 删除剪切板ToolStripMenuItem
 			// 
 			this.删除剪切板ToolStripMenuItem.Name = "删除剪切板ToolStripMenuItem";
-			this.删除剪切板ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+			this.删除剪切板ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.删除剪切板ToolStripMenuItem.Text = "删除剪切板";
 			this.删除剪切板ToolStripMenuItem.Click += new System.EventHandler(this.删除剪切板ToolStripMenuItemClick);
 			// 
@@ -254,6 +261,49 @@ namespace Dir
 			this.toolStripMenuItem3.Text = "4";
 			this.toolStripMenuItem3.Click += new System.EventHandler(this.ToolStripMenuItem3Click);
 			// 
+			// toolStripButton5
+			// 
+			this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButton5.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.剪切板ToolStripMenuItem,
+			this.socketToolStripMenuItem,
+			this.nodeSocketToolStripMenuItem,
+			this.翻译ToolStripMenuItem});
+			this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
+			this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton5.Name = "toolStripButton5";
+			this.toolStripButton5.Size = new System.Drawing.Size(60, 22);
+			this.toolStripButton5.Text = "剪切板";
+			this.toolStripButton5.ButtonClick += new System.EventHandler(this.ToolStripButton5Click);
+			// 
+			// 剪切板ToolStripMenuItem
+			// 
+			this.剪切板ToolStripMenuItem.Name = "剪切板ToolStripMenuItem";
+			this.剪切板ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+			this.剪切板ToolStripMenuItem.Text = "剪切板";
+			this.剪切板ToolStripMenuItem.Click += new System.EventHandler(this.ToolStripButton5Click);
+			// 
+			// socketToolStripMenuItem
+			// 
+			this.socketToolStripMenuItem.Name = "socketToolStripMenuItem";
+			this.socketToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+			this.socketToolStripMenuItem.Text = "Socket";
+			this.socketToolStripMenuItem.Click += new System.EventHandler(this.SocketToolStripMenuItemClick);
+			// 
+			// nodeSocketToolStripMenuItem
+			// 
+			this.nodeSocketToolStripMenuItem.Name = "nodeSocketToolStripMenuItem";
+			this.nodeSocketToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+			this.nodeSocketToolStripMenuItem.Text = "NodeSocket";
+			this.nodeSocketToolStripMenuItem.Click += new System.EventHandler(this.NodeSocketToolStripMenuItemClick);
+			// 
+			// 翻译ToolStripMenuItem
+			// 
+			this.翻译ToolStripMenuItem.Name = "翻译ToolStripMenuItem";
+			this.翻译ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+			this.翻译ToolStripMenuItem.Text = "翻译";
+			this.翻译ToolStripMenuItem.Click += new System.EventHandler(this.翻译ToolStripMenuItemClick);
+			// 
 			// toolStripButton6
 			// 
 			this.toolStripButton6.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -288,32 +338,12 @@ namespace Dir
 			this.textBox1.DragEnter += new System.Windows.Forms.DragEventHandler(this.TextBox1DragEnter);
 			this.textBox1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBox1KeyUp);
 			// 
-			// toolStripButton5
+			// 打开ToolStripMenuItem
 			// 
-			this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.toolStripButton5.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.剪切板ToolStripMenuItem,
-			this.geometryNodeToolStripMenuItem});
-			this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
-			this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButton5.Name = "toolStripButton5";
-			this.toolStripButton5.Size = new System.Drawing.Size(60, 22);
-			this.toolStripButton5.Text = "剪切板";
-			this.toolStripButton5.ButtonClick += new System.EventHandler(this.ToolStripButton5Click);
-			// 
-			// 剪切板ToolStripMenuItem
-			// 
-			this.剪切板ToolStripMenuItem.Name = "剪切板ToolStripMenuItem";
-			this.剪切板ToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
-			this.剪切板ToolStripMenuItem.Text = "剪切板";
-			this.剪切板ToolStripMenuItem.Click += new System.EventHandler(this.ToolStripButton5Click);
-			// 
-			// geometryNodeToolStripMenuItem
-			// 
-			this.geometryNodeToolStripMenuItem.Name = "geometryNodeToolStripMenuItem";
-			this.geometryNodeToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
-			this.geometryNodeToolStripMenuItem.Text = "GeometryNode";
-			this.geometryNodeToolStripMenuItem.Click += new System.EventHandler(this.GeometryNodeToolStripMenuItemClick);
+			this.打开ToolStripMenuItem.Name = "打开ToolStripMenuItem";
+			this.打开ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.打开ToolStripMenuItem.Text = "打开";
+			this.打开ToolStripMenuItem.Click += new System.EventHandler(this.打开ToolStripMenuItemClick);
 			// 
 			// MainForm
 			// 
