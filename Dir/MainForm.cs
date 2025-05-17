@@ -435,8 +435,8 @@ namespace Dir
 					//CopyLine();
 					break;
 				case Keys.F6:
-					SetDirectory();
-					LoadDirectories();
+					//SetDirectory();
+					//LoadDirectories();
 					break;
 			
 				case Keys.F5:

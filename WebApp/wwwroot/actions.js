@@ -252,13 +252,12 @@ function onMenu(evt) {
         fetch(`/open?path=${encodeURIComponent(path)}`)
 
     });
-    addContextMenuItem(bottomSheet, '创建PDF', () => {
+    addContextMenuItem(bottomSheet, '打开终端', () => {
         bottomSheet.remove();
-        if (typeof NativeAndroid !== 'undefined') {
-            const url = new URL(window.location);
-            const path = url.searchParams.get('path');
-            NativeAndroid.createPdfFromImages(path)
-        }
+
+        const url = new URL(window.location);
+        const path = url.searchParams.get('path');
+        fetch(`/open?path=${encodeURIComponent(path)}&type=0`)
     });
     document.body.appendChild(bottomSheet);
 }

@@ -66,7 +66,7 @@ app.MapGet("/file", ([FromQuery(Name = "path")] string path) =>
 
     return Results.NotFound();
 });
-app.MapGet("/open", ([FromQuery(Name = "path")] string path) =>
+app.MapGet("/open", ([FromQuery(Name = "path")] string path, [FromQuery(Name = "type")] int? t) =>
 {
     if (File.Exists(path))
     {
@@ -79,11 +79,25 @@ app.MapGet("/open", ([FromQuery(Name = "path")] string path) =>
     }
     else if (Directory.Exists(path))
     {
-       Process.Start(new System.Diagnostics.ProcessStartInfo()
+        if (t != null)
         {
-            FileName = "explorer.exe",
-            Arguments = $"\"{path}\""
-        });
+            // For Windows, open cmd.exe in the specified directory
+            Process.Start(new ProcessStartInfo
+            {
+                FileName = "cmd.exe",
+                WorkingDirectory = path,
+                UseShellExecute = true // Required to open a new window
+            });
+        }
+        else
+        {
+            Process.Start(new System.Diagnostics.ProcessStartInfo()
+            {
+                FileName = "explorer.exe",
+                Arguments = $"\"{path}\""
+            });
+        }
+
     }
 
     return Results.NotFound();
