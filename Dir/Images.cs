@@ -475,18 +475,18 @@ namespace Dir
 		}
 		static string ProcessValue(string s)
 		{
-			var number = Regex.Match(s, "[.\\d-]+");
+			var number = Regex.Match(s, "[.\\d, -]+");
 			if (number.Success) {
 //			try {
 //				Clipboard.SetText(float.Parse(number.Value).ToString());
 //			} catch {
-				var str = number.Value;
-				if (str.StartsWith("0") && !str.StartsWith("0.")) {
-					Clipboard.SetText("0." + str.Substring(1));
-				} else
-					Clipboard.SetText(number.Value);
-			 
-				//}
+				var str = number.Value.Trim();
+				if (Regex.IsMatch(str, "^0([0-9]|\\s+[0-9])")) {
+					str = "0." + str.Substring(1);
+				} else if (Regex.IsMatch(str, "^[0-9]\\s+[0-9]")) {
+					str = Regex.Replace(str, "\\s+", ".");
+				}
+				Clipboard.SetText( Regex.Replace(str.Replace(",","."),"\\s+",""));
 			}
 			return s;
 		}
@@ -507,7 +507,7 @@ namespace Dir
 				using (var img = Pix.LoadFromMemory(buf)) {
 					using (var page = _engine.Process(img)) {
 						var text = page.GetText();
-						if(text==null)
+						if (text == null)
 							return;
 //						Console.WriteLine("Mean confidence: {0}", page.GetMeanConfidence());
 //
@@ -535,7 +535,7 @@ namespace Dir
 				}
 			} catch (Exception e) {
 			
-				throw e;
+				//throw e;
 				//_engine = new TesseractEngine("./traineddata".GetEntryPath(), "eng", EngineMode.Default);
 			}
 		}

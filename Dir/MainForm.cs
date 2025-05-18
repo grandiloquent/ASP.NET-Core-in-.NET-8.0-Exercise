@@ -184,11 +184,7 @@ namespace Dir
 		[return: MarshalAs(UnmanagedType.Bool)]
 		static extern bool GetCursorPos(out POINT point);
 
-		string _dir;
 		string _file;
-		string _fav;
-		string _snippet;
-		bool _shortkey = true;
 
 		void ShiftA()
 		{
@@ -212,14 +208,9 @@ namespace Dir
 			// The InitializeComponent() call is required for Windows Forms designer support.
 			//
 			InitializeComponent();
-			textBox1.AllowDrop = true; // Crucial step!
-			var config = "config".GetEntryPath();
-			if (File.Exists(config)) {
-				_dir = File.ReadAllText(config);
-			}
+			
 			_file = "1.txt".GetEntryPath();
-			_fav = "fav.txt".GetEntryPath();
-			_snippet = "snippet".GetEntryPath();
+			
 			if (File.Exists(_file)) {
 				textBox1.Text = File.ReadAllText(_file);
 			}
@@ -290,6 +281,12 @@ namespace Dir
 			RegisterHotKey(this.Handle, (int)Keys.F6, 0, (int)Keys.F6);
 			RegisterHotKey(this.Handle, (int)Keys.F7, 0, (int)Keys.F7);
 			RegisterHotKey(this.Handle, (int)Keys.F4, 0, (int)Keys.F4);
+//			RegisterHotKey(this.Handle, (int)Keys.D4, 0, (int)Keys.D4);
+//			RegisterHotKey(this.Handle, (int)Keys.D5, 0, (int)Keys.D5);
+//			RegisterHotKey(this.Handle, (int)Keys.D6, 0, (int)Keys.D6);
+//			RegisterHotKey(this.Handle, (int)Keys.D7, 0, (int)Keys.D7);
+//			RegisterHotKey(this.Handle, (int)Keys.D8, 0, (int)Keys.D8);
+//			RegisterHotKey(this.Handle, (int)Keys.D9, 0, (int)Keys.D9);
 		}
 		protected override void WndProc(ref Message m)
 		{
@@ -310,88 +307,148 @@ namespace Dir
 					Images.Ocr(this, textBox1, 124, 110, 30);
 				} else if (id == (ushort)Keys.F4) {
 					//ShiftA();
-					Images.Ocr(this, textBox1, 80, 220, 60);
-				} 
-				
-				
+					//Images.Ocr(this, textBox1, 80, 220, 60);
+					//Images.Ocr(this, textBox1, 96  ,110, 30);
+					Images.Ocr(this, textBox1, 124, 110, 30);
+				} else if (id == (ushort)Keys.D1) {
+					
+//					keybd_event((int)VK.G, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+//					Thread.Sleep(20);
+//					keybd_event((int)VK.G, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+//					Thread.Sleep(20);
+//					keybd_event((int)VK.X, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+//					Thread.Sleep(20);
+//					keybd_event((int)VK.X, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+//					Thread.Sleep(20);
+					keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press  
+					Thread.Sleep(20);
+					keybd_event((int)VK.V, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press
+					Thread.Sleep(20);
+					keybd_event((int)VK.V, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+					Thread.Sleep(20);
+					keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release
+					Thread.Sleep(20);
+				} else if (id == (ushort)Keys.D4) {
+					
+//					keybd_event((int)VK.G, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+//					Thread.Sleep(20);
+//					keybd_event((int)VK.G, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+//					Thread.Sleep(20);
+//					keybd_event((int)VK.X, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+//					Thread.Sleep(20);
+//					keybd_event((int)VK.X, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+//					Thread.Sleep(20);
+					keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press  
+					Thread.Sleep(20);
+					keybd_event((int)VK.V, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press
+					Thread.Sleep(20);
+					keybd_event((int)VK.V, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+					Thread.Sleep(20);
+					keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release
+					Thread.Sleep(20);
+				}else if (id == (ushort)Keys.D5) {
+					
+					keybd_event((int)VK.G, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+					Thread.Sleep(20);
+					keybd_event((int)VK.G, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+					Thread.Sleep(20);
+					keybd_event((int)VK.Y, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+					Thread.Sleep(20);
+					keybd_event((int)VK.Y, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+					Thread.Sleep(20);
+					keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press  
+					Thread.Sleep(20);
+					keybd_event((int)VK.V, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press
+					Thread.Sleep(20);
+					keybd_event((int)VK.V, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+					Thread.Sleep(20);
+					keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release
+					Thread.Sleep(20);
+				}else if (id == (ushort)Keys.D6) {
+					
+					keybd_event((int)VK.G, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+					Thread.Sleep(20);
+					keybd_event((int)VK.G, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+					Thread.Sleep(20);
+					keybd_event((int)VK.Z, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+					Thread.Sleep(20);
+					keybd_event((int)VK.Z, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+					Thread.Sleep(20);
+					keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press  
+					Thread.Sleep(20);
+					keybd_event((int)VK.V, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press
+					Thread.Sleep(20);
+					keybd_event((int)VK.V, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+					Thread.Sleep(20);
+					keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release
+					Thread.Sleep(20);
+				}
+				else if (id == (ushort)Keys.D7) {
+					
+					keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+					Thread.Sleep(20);
+					keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+					Thread.Sleep(20);
+					keybd_event((int)VK.X, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+					Thread.Sleep(20);
+					keybd_event((int)VK.X, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+					Thread.Sleep(20);
+					keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press  
+					Thread.Sleep(20);
+					keybd_event((int)VK.V, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press
+					Thread.Sleep(20);
+					keybd_event((int)VK.V, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+					Thread.Sleep(20);
+					keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release
+					Thread.Sleep(20);
+				}else if (id == (ushort)Keys.D8) {
+					
+					keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+					Thread.Sleep(20);
+					keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+					Thread.Sleep(20);
+					keybd_event((int)VK.Y, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+					Thread.Sleep(20);
+					keybd_event((int)VK.Y, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+					Thread.Sleep(20);
+					keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press  
+					Thread.Sleep(20);
+					keybd_event((int)VK.V, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press
+					Thread.Sleep(20);
+					keybd_event((int)VK.V, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+					Thread.Sleep(20);
+					keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release
+					Thread.Sleep(20);
+				}else if (id == (ushort)Keys.D9) {
+					
+					keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+					Thread.Sleep(20);
+					keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+					Thread.Sleep(20);
+					keybd_event((int)VK.Z, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+					Thread.Sleep(20);
+					keybd_event((int)VK.Z, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+					Thread.Sleep(20);
+					keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), 0, 0); //Alt Press  
+					Thread.Sleep(20);
+					keybd_event((int)VK.V, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press
+					Thread.Sleep(20);
+					keybd_event((int)VK.V, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+					Thread.Sleep(20);
+					keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release
+					Thread.Sleep(20);
+				}
 			}
 			base.WndProc(ref m);
 		}
-		void ToolStripButton1ButtonClick(object sender, EventArgs e)
-		{
-			var dir = Clipboard.GetText();
-			if (Directory.Exists(dir)) {
-				_dir = dir;
-				File.WriteAllText("config".GetEntryPath(), _dir);
-			}
-		}
-
-		void LoadDirectories()
-		{
-			var list = Directory.GetDirectories(_dir);
-			var buf = new List<KeyValuePair<string,long>>();
-			foreach (var element in list) {
-				long length = 0;
-				try {
-					length = Extensions.GetDirectorySize(element);
-				} catch (Exception) {
-					
-				}
-				buf.Add(new KeyValuePair<string, long>(Path.GetFileName(element),
-					length));
-			}
-			var s = buf.OrderByDescending(x => x.Value).Select(x => x.Key + " | " + Extensions.GetBytesReadable(x.Value));
-			textBox1.Text = string.Join(Environment.NewLine, s);
-		}
-
-		void ToolStripButton2Click(object sender, EventArgs e)
-		{
-			LoadDirectories();
-		}
+		
 		void MainFormFormClosing(object sender, FormClosingEventArgs e)
 		{
 			
 			File.WriteAllText("1.txt".GetEntryPath(), textBox1.Text);
 		}
 
-		void OpenPath()
-		{
-			var line = Extensions.GetCurrentLine(textBox1);
-			if (line.Contains("|")) {
-				line = line.SubstringBefore('|').Trim();
-			}
-			var p = line.Contains("\\") ? line : Path.Combine(_dir, line);
-			if (Directory.Exists(p) || File.Exists(p)) {
-				Process.Start(p);
-			} else if (p.StartsWith("http://") || p.StartsWith("https://")) {
-				Process.Start("chrome", "\"" + p + "\"");
-			}
-		}
-
-		void CreateDirectory()
-		{
-			var line = Extensions.GetCurrentLine(textBox1);
-			if (line.Contains("|")) {
-				line = line.SubstringBefore('|').Trim();
-			}
-			var p = Path.Combine(_dir, line);
-			if (!Directory.Exists(p)) {
-				Directory.CreateDirectory(p);
-			}
-		}
-
-		void CreateFile()
-		{
-			var line = Extensions.GetCurrentLine(textBox1);
-			if (line.Contains("|")) {
-				line = line.SubstringBefore('|').Trim();
-			}
-			var p = Path.Combine(_dir, line);
-			if (!File.Exists(p)) {
-				File.WriteAllText(p, string.Empty);
-			}
-		}
-
+		
 		void CopyLine()
 		{
 			if (textBox1.SelectedText.Length == 0) {
@@ -402,34 +459,26 @@ namespace Dir
 			
 		}
 
-		void QuickDelete()
-		{
-			if (isQuickDelete) {
-				var line = Extensions.GetCurrentLine(textBox1);
-				if (line.Contains("|")) {
-					line = line.SubstringBefore('|').Trim();
-				}
-				var p = Path.Combine(_dir, line);
-				if (Directory.Exists(p)) {
-					try {
-						Directory.Delete(p, true);
-					} catch {
-					}
-				}
-			}
-		}
-
+	
 		void TextBox1KeyUp(object sender, KeyEventArgs e)
 		{
 			switch (e.KeyCode) {
 				case Keys.F1:
-					OpenPath();
+				//	OpenPath();
+					Clipboard.SetText(
+						"." + Clipboard.GetText()
+					);
 					break;
 				case Keys.F2:
-					CreateDirectory();
+					var str = Clipboard.GetText();
+					Clipboard.SetText(
+						str.Substring(0, 1) +	"." + str.Substring(1)
+					);
 					break;
 				case Keys.F3:
-					CreateFile();
+					Clipboard.SetText(
+						"-" + Clipboard.GetText()
+					);
 					break;
 				case Keys.F4:
 					//CopyLine();
@@ -451,67 +500,7 @@ namespace Dir
 			}
 			
 		}
-		void 删除ToolStripMenuItemClick(object sender, EventArgs e)
-		{
-			var line = Extensions.GetCurrentLine(textBox1);
-			if (line.Contains("|")) {
-				line = line.SubstringBefore('|').Trim();
-			}
-			var p = Path.Combine(_dir, line);
-			if (Directory.Exists(p)) {
-				try {
-					Directory.Delete(p, true);
-				} catch {
-				}
-			} else if (File.Exists(p)) {
-				try {
-					File.Delete(p);
-				} catch {
-					
-				
-				}
-			}
-		}
-
-		void SetDirectory()
-		{
-			var line = Extensions.GetCurrentLine(textBox1);
-			if (line.Contains("|")) {
-				line = line.SubstringBefore('|').Trim();
-			}
-			var p = Path.Combine(_dir, line);
-			if (Directory.Exists(p)) {
-				_dir = p;
-				File.WriteAllText("config".GetEntryPath(), _dir);
-			}
-		}
-
-		void ToolStripButton3Click(object sender, EventArgs e)
-		{
-			SetDirectory();
-			LoadDirectories();
-		}
-		void ToolStripButton4Click(object sender, EventArgs e)
-		{
-			var p = Path.GetDirectoryName(_dir);
-			if (Directory.Exists(p)) {
-				_dir = p;
-				File.WriteAllText("config".GetEntryPath(), _dir);
-			}
-		}
-		void 收藏夹ToolStripMenuItemClick(object sender, EventArgs e)
-		{
-			if (File.Exists(_fav)) {
-				textBox1.Text = File.ReadAllText(_fav);
-			}
-			
-		}
-		void 保存收藏夹ToolStripMenuItemClick(object sender, EventArgs e)
-		{
-			
-			File.WriteAllText(_fav, textBox1.Text);
-			
-		}
+		
 		void 运行ToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			Process.Start(new ProcessStartInfo {
@@ -521,119 +510,16 @@ namespace Dir
 				WindowStyle = ProcessWindowStyle.Hidden
 			});
 		}
-		void 代码段ToolStripMenuItemClick(object sender, EventArgs e)
-		{
-	
-			if (File.Exists(_snippet)) {
-				textBox1.Text = File.ReadAllText(_snippet);
-			}
-		}
-		void 保存代码段ToolStripMenuItemClick(object sender, EventArgs e)
-		{
-			File.WriteAllText(_snippet, textBox1.Text);
-		}
 		
-		void 文件列表ToolStripMenuItemClick(object sender, EventArgs e)
-		{
-			var dir = Clipboard.GetText();
-			if (Directory.Exists(dir)) {
-				_dir = dir;
-				File.WriteAllText("config".GetEntryPath(), _dir);
-			}
-			
-			var files = Directory.GetFiles(_dir).Select(x => Path.GetFileName(x));
-			textBox1.Text = string.Join(Environment.NewLine, files);
-			
-		}
+		
+		
 		void ToolStripButton5Click(object sender, EventArgs e)
 		{
 			var f = new Form1();
 			f.TopMost = true;
 			f.Show();
 		}
-		void 文件名排序ToolStripMenuItemClick(object sender, EventArgs e)
-		{
-			var list = Directory.GetDirectories(_dir);
-			var buf = new List<KeyValuePair<string,long>>();
-			foreach (var element in list) {
-				long length = 0;
-				try {
-					length = Extensions.GetDirectorySize(element);
-				} catch (Exception) {
-					
-				}
-				buf.Add(new KeyValuePair<string, long>(Path.GetFileName(element),
-					length));
-			}
-			var s = buf.OrderBy(x => x.Key).Select(x => x.Key + " | " + Extensions.GetBytesReadable(x.Value));
-			textBox1.Text = string.Join(Environment.NewLine, s);
-		}
-		bool isQuickDelete;
-		void 快速删除ToolStripMenuItemClick(object sender, EventArgs e)
-		{
-			isQuickDelete = true;
-		}
-		void 删除剪切板ToolStripMenuItemClick(object sender, EventArgs e)
-		{
-			var files = Clipboard.GetFileDropList();
-			if (files != null && files.Count > 0) {
-				foreach (var element in files) {
-					try {
-						if (Directory.Exists(element)) {
-							Directory.Delete(element, true);
-						} else {
-							File.Delete(element);
-						}
-					} catch (Exception) {
-						
-						 
-					}
-				}
-			}
-		}
-		void ToolStripButton6Click(object sender, EventArgs e)
-		{
-			if (File.Exists(_fav)) {
-				textBox1.Text = File.ReadAllText(_fav);
-			}
-		}
-		void ToolStripButton7Click(object sender, EventArgs e)
-		{
-			if (File.Exists(_snippet)) {
-				textBox1.Text = File.ReadAllText(_snippet);
-			}
-		}
-		void TextBox1DragEnter(object sender, DragEventArgs e)
-		{
-			if (e.Data.GetDataPresent(DataFormats.FileDrop)) {
-				e.Effect = DragDropEffects.Copy; // Show a "copy" cursor
-			}
-		}
-		void TextBox1DragDrop(object sender, DragEventArgs e)
-		{
-			string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-			if (files != null && files.Length > 0) {
-				// For simplicity, let's just display the first file path in the TextBox
-
-				// You can process multiple files here if needed
-				foreach (string file in files) {
-					var n = Path.Combine(
-						        @"D:\Knife", Path.GetFileName(file)
-					        );
-				 	
-					if (File.Exists(file) && !File.Exists(n)) {
-						File.Move(file, n);
-					} else if (Directory.Exists(file) && !Directory.Exists(n)) {
-						Directory.Move(file, n);
-					}
-				}
-			}
-		}
-		void ToolStripSplitButton1ButtonClick(object sender, EventArgs e)
-		{
-			_shortkey = !_shortkey;
-			
-		}
+		
 		void ToolStripMenuItem3Click(object sender, EventArgs e)
 		{
 			var dir = @"C:\blender\resources\Resource";
@@ -678,12 +564,7 @@ namespace Dir
 				"\"" + string.Join("\",\"", s.Split(Environment.NewLine.ToArray(), StringSplitOptions.RemoveEmptyEntries)) + "\""
 			));
 		}
-		void NodeSocketToolStripMenuItemClick(object sender, EventArgs e)
-		{
-			var s = Clipboard.GetText();
-			var v = File.ReadAllText("socket_node.txt".GetEntryPath());
-			Clipboard.SetText(string.Format(v, s));
-		}
+		
 		void 翻译ToolStripMenuItemClick(object sender, EventArgs e)
 		{
 			textBox1.Text += Environment.NewLine + Translate();
@@ -727,12 +608,47 @@ namespace Dir
 			}
 			//Clipboard.SetText(string.Format(@"{0}", TransAPI.Translate(Clipboard.GetText())));
 		}
-		void 打开ToolStripMenuItemClick(object sender, EventArgs e)
+		public static string ProcessTextWithRegex(string inputText)
+    {
+        if (string.IsNullOrEmpty(inputText))
+        {
+            return string.Empty;
+        }
+
+        string[] lines = inputText.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+
+        if (lines.Length < 2)
+        {
+            return inputText; // Or handle this case differently
+        }
+
+        string firstLine = lines[0];
+        string[] firstLineParts = firstLine.Split(new char[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+
+        if (firstLineParts.Length < 2)
+        {
+            return inputText; // Or handle this case differently
+        }
+
+        string firstPiece = Regex.Escape(firstLineParts[0]); // Escape for regex
+        string secondPiece = firstLineParts[1];
+
+        string[] remainingLines = lines.Skip(1).ToArray();
+        string joinedRemainingLines = string.Join(Environment.NewLine, remainingLines); // Join with original newlines
+
+        // Use Regex.Replace for whole word match
+        string pattern = @"\b"+firstPiece+@"\b";
+        string result = Regex.Replace(joinedRemainingLines, pattern, secondPiece);
+
+        return result;
+    }
+		void ToolStripSplitButton2ButtonClick(object sender, EventArgs e)
 		{
-			if (Directory.Exists(_dir)) {
-				Process.Start(_dir);
-			}
+			textBox1.Text= ProcessTextWithRegex(textBox1.Text.Trim());
+			
+			
 		}
+		
 	
 	 
 	}
