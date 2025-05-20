@@ -521,7 +521,7 @@ namespace Dir
 								_engine = new TesseractEngine("./traineddata".GetEntryPath(), "eng", EngineMode.Default);
 								return;
 							}
-							textBox1.SelectedText = Environment.NewLine + Environment.NewLine + text + Environment.NewLine;
+							textBox1.Text =  text + Environment.NewLine+textBox1.Text;
 							
 						
 							if (isNumber) {

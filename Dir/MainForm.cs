@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -277,6 +278,10 @@ namespace Dir
 //					}
 //				};
 //			}
+			RegisterHotKey(this.Handle, (int)Keys.F1, 0, (int)Keys.F1);
+			RegisterHotKey(this.Handle, (int)Keys.F2, 0, (int)Keys.F2);
+			RegisterHotKey(this.Handle, (int)Keys.F3, 0, (int)Keys.F3);
+			
 			RegisterHotKey(this.Handle, (int)Keys.F5, 0, (int)Keys.F5);
 			RegisterHotKey(this.Handle, (int)Keys.F6, 0, (int)Keys.F6);
 			RegisterHotKey(this.Handle, (int)Keys.F7, 0, (int)Keys.F7);
@@ -304,7 +309,8 @@ namespace Dir
 					Images.Ocr(this, textBox1, 128, 110, 30);
 				} else if (id == (ushort)Keys.F7) {
 					//ShiftA();
-					Images.Ocr(this, textBox1, 124, 110, 30);
+					//Images.Ocr(this, textBox1, 124, 110, 30);
+					ColorPicker();
 				} else if (id == (ushort)Keys.F4) {
 					//ShiftA();
 					//Images.Ocr(this, textBox1, 80, 220, 60);
@@ -346,7 +352,7 @@ namespace Dir
 					Thread.Sleep(20);
 					keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release
 					Thread.Sleep(20);
-				}else if (id == (ushort)Keys.D5) {
+				} else if (id == (ushort)Keys.D5) {
 					
 					keybd_event((int)VK.G, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
 					Thread.Sleep(20);
@@ -364,7 +370,7 @@ namespace Dir
 					Thread.Sleep(20);
 					keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release
 					Thread.Sleep(20);
-				}else if (id == (ushort)Keys.D6) {
+				} else if (id == (ushort)Keys.D6) {
 					
 					keybd_event((int)VK.G, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
 					Thread.Sleep(20);
@@ -382,8 +388,7 @@ namespace Dir
 					Thread.Sleep(20);
 					keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release
 					Thread.Sleep(20);
-				}
-				else if (id == (ushort)Keys.D7) {
+				} else if (id == (ushort)Keys.D7) {
 					
 					keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
 					Thread.Sleep(20);
@@ -401,7 +406,7 @@ namespace Dir
 					Thread.Sleep(20);
 					keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release
 					Thread.Sleep(20);
-				}else if (id == (ushort)Keys.D8) {
+				} else if (id == (ushort)Keys.D8) {
 					
 					keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
 					Thread.Sleep(20);
@@ -419,7 +424,7 @@ namespace Dir
 					Thread.Sleep(20);
 					keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release
 					Thread.Sleep(20);
-				}else if (id == (ushort)Keys.D9) {
+				} else if (id == (ushort)Keys.D9) {
 					
 					keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
 					Thread.Sleep(20);
@@ -437,7 +442,21 @@ namespace Dir
 					Thread.Sleep(20);
 					keybd_event((int)VK.CTRL, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release
 					Thread.Sleep(20);
+				} else if (id == (ushort)Keys.F1) {
+					Clipboard.SetText(
+						"." + Clipboard.GetText()
+					);
+				} else if (id == (ushort)Keys.F2) {
+					var str = Clipboard.GetText();
+					Clipboard.SetText(
+						str.Substring(0, 1) +	"." + str.Substring(1)
+					);
+				} else if (id == (ushort)Keys.F3) {
+					Clipboard.SetText(
+						"-" + Clipboard.GetText()
+					);
 				}
+					
 			}
 			base.WndProc(ref m);
 		}
@@ -602,53 +621,106 @@ namespace Dir
 				//return  sb.ToString().Trim();
 				/*
 			 sb.ToString().Trim();
-			 .Trim().Camel().Capitalize()
+			 .Trim().Camel().Capitalize().Camel().Capitalize().Trim().Camel().Decapitalize()
 			 */
-				return isChinese ? (mode == 0 ? sb.ToString().Trim().Camel().Capitalize() : sb.ToString().Trim().Camel().Decapitalize()) : sb.ToString();
+				return isChinese ? (mode == 0 ? sb.ToString().Trim() : sb.ToString()) : sb.ToString();
 			}
 			//Clipboard.SetText(string.Format(@"{0}", TransAPI.Translate(Clipboard.GetText())));
 		}
 		public static string ProcessTextWithRegex(string inputText)
-    {
-        if (string.IsNullOrEmpty(inputText))
-        {
-            return string.Empty;
-        }
+		{
+			if (string.IsNullOrEmpty(inputText)) {
+				return string.Empty;
+			}
 
-        string[] lines = inputText.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+			string[] lines = inputText.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
 
-        if (lines.Length < 2)
-        {
-            return inputText; // Or handle this case differently
-        }
+			if (lines.Length < 2) {
+				return inputText; // Or handle this case differently
+			}
 
-        string firstLine = lines[0];
-        string[] firstLineParts = firstLine.Split(new char[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+			string firstLine = lines[0];
+			string[] firstLineParts = firstLine.Split(new char[] {
+				' ',
+				'\t',
+				'\r',
+				'\n'
+			}, StringSplitOptions.RemoveEmptyEntries);
 
-        if (firstLineParts.Length < 2)
-        {
-            return inputText; // Or handle this case differently
-        }
+			if (firstLineParts.Length < 2) {
+				return inputText; // Or handle this case differently
+			}
 
-        string firstPiece = Regex.Escape(firstLineParts[0]); // Escape for regex
-        string secondPiece = firstLineParts[1];
+			string firstPiece = Regex.Escape(firstLineParts[0]); // Escape for regex
+			string secondPiece = firstLineParts[1];
 
-        string[] remainingLines = lines.Skip(1).ToArray();
-        string joinedRemainingLines = string.Join(Environment.NewLine, remainingLines); // Join with original newlines
+			string[] remainingLines = lines.Skip(1).ToArray();
+			string joinedRemainingLines = string.Join(Environment.NewLine, remainingLines); // Join with original newlines
 
-        // Use Regex.Replace for whole word match
-        string pattern = @"\b"+firstPiece+@"\b";
-        string result = Regex.Replace(joinedRemainingLines, pattern, secondPiece);
+			// Use Regex.Replace for whole word match
+			string pattern = @"\b" + firstPiece + @"\b";
+			string result = Regex.Replace(joinedRemainingLines, pattern, secondPiece);
 
-        return result;
-    }
+			return result;
+		}
 		void ToolStripSplitButton2ButtonClick(object sender, EventArgs e)
 		{
-			textBox1.Text= ProcessTextWithRegex(textBox1.Text.Trim());
+			textBox1.Text = ProcessTextWithRegex(textBox1.Text.Trim());
 			
 			
 		}
-		
+		static	int sampleSize = 5;
+		private static Bitmap GetSampleRegion(Screen screen, int mouseX, int mouseY)
+		{
+			var bmp = new Bitmap(sampleSize, sampleSize, PixelFormat.Format32bppArgb);
+			Graphics gfxScreenshot = Graphics.FromImage(bmp);
+			gfxScreenshot.CopyFromScreen(mouseX - sampleSize / 2, mouseY - sampleSize / 2, 0, 0, new Size(sampleSize, sampleSize));
+			gfxScreenshot.Save();
+			gfxScreenshot.Dispose();
+			return bmp;
+		}
+		public static void ColorPicker()
+		{
+			POINT p = new POINT();
+			GetCursorPos(out p);
+			int mouseX = p.X;
+			int mouseY = p.Y;
+			var screen = Screen.FromRectangle(new Rectangle(p.X, p.Y, 1, 1));
+			var	sampleBitmap = GetSampleRegion(screen, mouseX, mouseY);
+			Color sampleColor = sampleBitmap.GetPixel(sampleSize / 2, sampleSize / 2);
+			sampleBitmap.Dispose();
+//			string tmpR = (sampleColor.R / 255f).ToString("0.##f", CultureInfo.GetCultureInfo("en-us"));
+//			string tmpG = (sampleColor.G / 255f).ToString("0.##f", CultureInfo.GetCultureInfo("en-us"));
+//			string tmpB = (sampleColor.B / 255f).ToString("0.##f", CultureInfo.GetCultureInfo("en-us"));
+//			var s = string.Format("{0}, {1}, {2}", tmpR, tmpG, tmpB);
+			var s = ColorTranslator.ToHtml(sampleColor);
+			Clipboard.SetText(s.Substring(1));
+		}
+		void 插件ToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			var name = Clipboard.GetText().Trim().ToUpper();
+			var fileNames = new string[]{ "1", "2", "3" };
+			var f=@"C:\Users\Administrator\Desktop\视频\Net\WebApp\Blender\11.py";
+			var s = File.ReadAllText(f);
+			foreach (var element in fileNames) {
+				s = s.Replace("#" + element, File.ReadAllText(string.Format("#{0}.txt", element).GetEntryPath())
+				.Replace("{0}", name)+Environment.NewLine+"#"+element);
+			
+			}
+			File.WriteAllText(f,s);
+			
+		}
+		void 插件代码ToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			var s=Clipboard.GetText().Trim();
+			var def="def "+s.SubstringAfter("def ").SubstringBeforeLast("if __name__ == \"__main__\":");
+			var code=s.SubstringAfter("for obj in selected_objects:").SubstringBefore("else:").Trim();
+			var f=@"C:\Users\Administrator\Desktop\视频\Net\WebApp\Blender\11.py";
+			var ss = File.ReadAllText(f);
+			ss = ss.Replace("#5", def+Environment.NewLine+"#5");
+				File.WriteAllText(f,ss);
+			Clipboard.SetText(code);
+		}
 	
 	 
 	}

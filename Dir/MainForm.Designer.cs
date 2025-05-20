@@ -25,6 +25,8 @@ namespace Dir
 		private System.Windows.Forms.ToolStripMenuItem socketToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem 翻译ToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton2;
+		private System.Windows.Forms.ToolStripMenuItem 插件ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem 插件代码ToolStripMenuItem;
 		
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -57,8 +59,10 @@ namespace Dir
 			this.剪切板ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.socketToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.翻译ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.toolStripSplitButton2 = new System.Windows.Forms.ToolStripSplitButton();
+			this.插件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.textBox1 = new System.Windows.Forms.TextBox();
+			this.插件代码ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -90,21 +94,21 @@ namespace Dir
 			// 运行ToolStripMenuItem
 			// 
 			this.运行ToolStripMenuItem.Name = "运行ToolStripMenuItem";
-			this.运行ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.运行ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
 			this.运行ToolStripMenuItem.Text = "运行";
 			this.运行ToolStripMenuItem.Click += new System.EventHandler(this.运行ToolStripMenuItemClick);
 			// 
 			// toolStripMenuItem2
 			// 
 			this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-			this.toolStripMenuItem2.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem2.Size = new System.Drawing.Size(100, 22);
 			this.toolStripMenuItem2.Text = "3";
 			this.toolStripMenuItem2.Click += new System.EventHandler(this.ToolStripMenuItem2Click);
 			// 
 			// toolStripMenuItem3
 			// 
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-			this.toolStripMenuItem3.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItem3.Size = new System.Drawing.Size(100, 22);
 			this.toolStripMenuItem3.Text = "4";
 			this.toolStripMenuItem3.Click += new System.EventHandler(this.ToolStripMenuItem3Click);
 			// 
@@ -143,6 +147,26 @@ namespace Dir
 			this.翻译ToolStripMenuItem.Text = "翻译";
 			this.翻译ToolStripMenuItem.Click += new System.EventHandler(this.翻译ToolStripMenuItemClick);
 			// 
+			// toolStripSplitButton2
+			// 
+			this.toolStripSplitButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+			this.toolStripSplitButton2.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.插件ToolStripMenuItem,
+			this.插件代码ToolStripMenuItem});
+			this.toolStripSplitButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton2.Image")));
+			this.toolStripSplitButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripSplitButton2.Name = "toolStripSplitButton2";
+			this.toolStripSplitButton2.Size = new System.Drawing.Size(32, 22);
+			this.toolStripSplitButton2.Text = "toolStripSplitButton2";
+			this.toolStripSplitButton2.ButtonClick += new System.EventHandler(this.ToolStripSplitButton2ButtonClick);
+			// 
+			// 插件ToolStripMenuItem
+			// 
+			this.插件ToolStripMenuItem.Name = "插件ToolStripMenuItem";
+			this.插件ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.插件ToolStripMenuItem.Text = "插件";
+			this.插件ToolStripMenuItem.Click += new System.EventHandler(this.插件ToolStripMenuItemClick);
+			// 
 			// textBox1
 			// 
 			this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -155,15 +179,12 @@ namespace Dir
 			this.textBox1.TabIndex = 1;
 			this.textBox1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBox1KeyUp);
 			// 
-			// toolStripSplitButton2
+			// 插件代码ToolStripMenuItem
 			// 
-			this.toolStripSplitButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.toolStripSplitButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSplitButton2.Image")));
-			this.toolStripSplitButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripSplitButton2.Name = "toolStripSplitButton2";
-			this.toolStripSplitButton2.Size = new System.Drawing.Size(32, 22);
-			this.toolStripSplitButton2.Text = "toolStripSplitButton2";
-			this.toolStripSplitButton2.ButtonClick += new System.EventHandler(this.ToolStripSplitButton2ButtonClick);
+			this.插件代码ToolStripMenuItem.Name = "插件代码ToolStripMenuItem";
+			this.插件代码ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.插件代码ToolStripMenuItem.Text = "插件代码";
+			this.插件代码ToolStripMenuItem.Click += new System.EventHandler(this.插件代码ToolStripMenuItemClick);
 			// 
 			// MainForm
 			// 
