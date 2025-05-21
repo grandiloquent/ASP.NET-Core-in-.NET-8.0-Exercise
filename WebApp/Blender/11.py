@@ -93,7 +93,7 @@ def align_lowest_to_cursor_z(obj):
     translation = cursor_z - lowest_z
 
     # Apply the translation to the object
-    bpy.ops.object.transform(value=(0, 0, translation))
+    bpy.ops.transform.translate(value=(0, 0, translation))
 
     print(f"Lowest part of '{obj.name}' aligned to the 3D cursor's Z location ({cursor_z:.3f}).")
 
@@ -576,7 +576,7 @@ class TransformXYZClipboardPanel(bpy.types.Panel):
         op_rz = split.operator("object.translate_axis_clipboard_no_prop", text="16")
         op_rz.axis = 'Z'
         op_rz.transform_type = 'QUICK'
-        op_rz = split.operator("object.translate_axis_clipboard_no_prop", text="Z0")
+        op_rz = split.operator("object.translate_axis_clipboard_no_prop", text="复制")
         op_rz.axis = 'XYZ'
         op_rz.transform_type = 'QUICK'
 
@@ -627,7 +627,7 @@ class TransformXYZClipboardPanel(bpy.types.Panel):
         op_rz = split.operator("object.translate_axis_clipboard_no_prop", text="Z")
         op_rz.axis = 'Z'
         op_rz.transform_type = 'ALIGN_Y'
-        op_rz = split.operator("object.translate_axis_clipboard_no_prop", text="XYZ")
+        op_rz = split.operator("object.translate_axis_clipboard_no_prop", text="复制")
         op_rz.axis = 'XYZ'
         op_rz.transform_type = 'ALIGN_Y'
 
@@ -720,28 +720,7 @@ class TransformAxisClipboardOperator(bpy.types.Operator):
             return {'FINISHED'}
         
         
-        if self.transform_type == 'QUICK':
-                    
-            if self.axis == 'X':
-                bpy.ops.mesh.primitive_plane_add(enter_editmode=True)
 
-            elif self.axis == 'Y':
-                bpy.ops.mesh.primitive_cube_add(enter_editmode=True)
-
-            elif self.axis == 'Z':
-                bpy.ops.mesh.primitive_circle_add(vertices=16, enter_editmode=True)
-
-            elif self.axis == 'XYZ':
-                selected_objects = bpy.context.selected_objects
-
-                if not selected_objects:
-                    print("No objects selected. Please select one or more objects to align.")
-                else:
-                    for obj in selected_objects:
-                        align_lowest_to_cursor_z(obj)
-
-            return {'FINISHED'}
-        
         if self.transform_type == 'ROTATE':
                     
             if self.axis == 'X':
@@ -777,14 +756,13 @@ class TransformAxisClipboardOperator(bpy.types.Operator):
                     for obj in selected_objects:
                         align_rightest_y_to_cursor_y(obj)
             elif self.axis == 'XYZ':
-                selected_objects = bpy.context.selected_objects
+                bpy.ops.object.duplicate_move_linked()
+                s = bpy.context.selected_objects[len(bpy.context.selected_objects)-1]
+                for obj in bpy.context.selected_objects:
+                    obj.select_set(False)
 
-                if not selected_objects:
-                    print("No objects selected. Please select one or more objects to align.")
-                else:
-                    for obj in selected_objects:
-                        align_lowest_to_cursor_z(obj)
-
+                s.select_set(True)
+                bpy.context.view_layer.objects.active=s
             return {'FINISHED'}
 
         if self.transform_type == 'ALIGN_X':
@@ -853,71 +831,105 @@ class TransformAxisClipboardOperator(bpy.types.Operator):
 
             return {'FINISHED'}
 #3 
+        value=-1
         try:
             value = float(clipboard_text.split()[0])
-            obj = context.object
-            if obj and obj.type == 'MESH':
-                if self.transform_type == 'TRANSLATE':
-                    if self.axis == 'X':
-                        bpy.ops.transform.translate(value=(value, 0, 0))
-                        self.report({'INFO'}, f"Translated X by: {value:.3f}")
-                    elif self.axis == 'Y':
-                        bpy.ops.transform.translate(value=(0, value, 0))
-                        self.report({'INFO'}, f"Translated Y by: {value:.3f}")
-                    elif self.axis == 'Z':
-                        bpy.ops.transform.translate(value=(0, 0, value))
-                        self.report({'INFO'}, f"Translated Z by: {value:.3f}")
-                    elif self.axis == 'XYZ':
-                        bpy.ops.transform.translate(value=(value, value, value))
-                        self.report({'INFO'}, f"Translated Z by: {value:.3f}")
-                elif self.transform_type == 'SCALE':
-                    if self.axis == 'X':
-                        bpy.ops.transform.resize(value=(value, 1, 1))
-                        self.report({'INFO'}, f"Scaled X by: {value:.3f}")
-                    elif self.axis == 'Y':
-                        bpy.ops.transform.resize(value=(1, value, 1))
-                        self.report({'INFO'}, f"Scaled Y by: {value:.3f}")
-                    elif self.axis == 'Z':
-                        bpy.ops.transform.resize(value=(1, 1, value))
-                        self.report({'INFO'}, f"Scaled Z by: {value:.3f}")
-                    elif self.axis == 'XYZ':
-                        bpy.ops.transform.resize(value=(value, value, value))
-                        self.report({'INFO'}, f"Scaled Z by: {value:.3f}")
-                elif self.transform_type == 'EXTRUDE':
-                    radians = math.radians(value)
-                    if self.axis == 'X':
-                        bpy.ops.mesh.extrude_region_move()
-                        bpy.ops.transform.translate(value=(value, 0, 0))
-                        self.report({'INFO'}, f"Rotated X by: {value:.3f}°")
-                    elif self.axis == 'Y':
-                        bpy.ops.mesh.extrude_region_move()
-                        bpy.ops.transform.translate(value=( 0,value, 0))
-                        self.report({'INFO'}, f"Rotated Y by: {value:.3f}°")
-                    elif self.axis == 'Z':
-                        bpy.ops.mesh.extrude_region_move()
-                        bpy.ops.transform.translate(value=( 0, 0,value))
-                        self.report({'INFO'}, f"Rotated Z by: {value:.3f}°")
-                    elif self.axis == 'XYZ':
-                        bpy.ops.mesh.extrude_region_shrink_fatten(TRANSFORM_OT_shrink_fatten={"value":value, "use_even_offset":False})
-                        self.report({'INFO'}, f"Rotated Z by: {value:.3f}°")
-                elif self.transform_type == 'EDGES':
-                    
-                    if self.axis == 'X':
-                        bpy.ops.mesh.bevel(offset=value, segments=1, affect='EDGES')
-
-                    elif self.axis == 'Y':
-                        bpy.ops.mesh.bevel(offset=value, segments=2, affect='EDGES')
-
-                    elif self.axis == 'Z':
-                        bpy.ops.mesh.bevel(offset=value, segments=3, affect='EDGES')
-
-                    elif self.axis == 'XYZ':
-                        bpy.ops.mesh.bevel(offset=value, segments=5, affect='EDGES')
-                  
-            else:
-                self.report({'WARNING'}, "No mesh object selected.")
         except (ValueError, IndexError):
-            self.report({'ERROR'}, "Clipboard does not contain a valid float.")
+            value=-1
+
+        if self.transform_type == 'QUICK':
+                    
+            if self.axis == 'X':
+
+                bpy.ops.mesh.primitive_plane_add(enter_editmode=True)
+                if value!=-1:
+                    bpy.ops.transform.resize(value=(value, value, value))
+
+            elif self.axis == 'Y':
+                bpy.ops.mesh.primitive_cube_add(enter_editmode=True)
+                if value!=-1:
+                    bpy.ops.transform.resize(value=(value, value, value))
+
+            elif self.axis == 'Z':
+                if value==-1:
+                    value=16
+                bpy.ops.mesh.primitive_circle_add(vertices=int(value), enter_editmode=True)
+
+            elif self.axis == 'XYZ':
+                bpy.ops.mesh.duplicate_move()
+                s = bpy.context.selected_objects[len(bpy.context.selected_objects)-1]
+                for obj in bpy.context.selected_objects:
+                    obj.select_set(False)
+
+                s.select_set(True)
+                bpy.context.view_layer.objects.active=s
+            return {'FINISHED'}
+
+        obj = context.object
+        if obj and obj.type == 'MESH':
+            if self.transform_type == 'TRANSLATE':
+                if self.axis == 'X':
+                    bpy.ops.transform.translate(value=(value, 0, 0))
+                    self.report({'INFO'}, f"Translated X by: {value:.3f}")
+                elif self.axis == 'Y':
+                    bpy.ops.transform.translate(value=(0, value, 0))
+                    self.report({'INFO'}, f"Translated Y by: {value:.3f}")
+                elif self.axis == 'Z':
+                    bpy.ops.transform.translate(value=(0, 0, value))
+                    self.report({'INFO'}, f"Translated Z by: {value:.3f}")
+                elif self.axis == 'XYZ':
+                    bpy.ops.transform.translate(value=(value, value, value))
+                    self.report({'INFO'}, f"Translated Z by: {value:.3f}")
+            elif self.transform_type == 'SCALE':
+                if self.axis == 'X':
+                    bpy.ops.transform.resize(value=(value, 1, 1))
+                    self.report({'INFO'}, f"Scaled X by: {value:.3f}")
+                elif self.axis == 'Y':
+                    bpy.ops.transform.resize(value=(1, value, 1))
+                    self.report({'INFO'}, f"Scaled Y by: {value:.3f}")
+                elif self.axis == 'Z':
+                    bpy.ops.transform.resize(value=(1, 1, value))
+                    self.report({'INFO'}, f"Scaled Z by: {value:.3f}")
+                elif self.axis == 'XYZ':
+                    bpy.ops.transform.resize(value=(value, value, value))
+                    self.report({'INFO'}, f"Scaled Z by: {value:.3f}")
+            elif self.transform_type == 'EXTRUDE':
+                radians = math.radians(value)
+                if self.axis == 'X':
+                    bpy.ops.mesh.extrude_region_move()
+                    bpy.ops.transform.translate(value=(value, 0, 0))
+                    self.report({'INFO'}, f"Rotated X by: {value:.3f}°")
+                elif self.axis == 'Y':
+                    bpy.ops.mesh.extrude_region_move()
+                    bpy.ops.transform.translate(value=( 0,value, 0))
+                    self.report({'INFO'}, f"Rotated Y by: {value:.3f}°")
+                elif self.axis == 'Z':
+                    bpy.ops.mesh.extrude_region_move()
+                    bpy.ops.transform.translate(value=( 0, 0,value))
+                    self.report({'INFO'}, f"Rotated Z by: {value:.3f}°")
+                elif self.axis == 'XYZ':
+                    bpy.ops.mesh.extrude_region_shrink_fatten(TRANSFORM_OT_shrink_fatten={"value":value, "use_even_offset":False})
+                    self.report({'INFO'}, f"Rotated Z by: {value:.3f}°")
+            elif self.transform_type == 'EDGES':
+                
+                if self.axis == 'X':
+                    bpy.ops.mesh.bevel(offset=value, segments=1, affect='EDGES')
+
+                elif self.axis == 'Y':
+                    bpy.ops.mesh.bevel(offset=value, segments=2, affect='EDGES')
+
+                elif self.axis == 'Z':
+                    bpy.ops.mesh.bevel(offset=value, segments=3, affect='EDGES')
+
+                elif self.axis == 'XYZ':
+                    bpy.ops.mesh.bevel(offset=value, segments=5, affect='EDGES')
+ 
+
+            return {'FINISHED'}
+            
+        else:
+            self.report({'WARNING'}, "No mesh object selected.")
+
         return {'FINISHED'}
 
 def register():
