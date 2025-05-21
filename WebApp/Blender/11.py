@@ -818,7 +818,6 @@ class TransformAxisClipboardOperator(bpy.types.Operator):
                 else:
                     for obj in selected_objects:
                         align_lowest_to_cursor_z(obj)
-                        align_y_axis_center_to_cursor_y(obj)
 
             elif self.axis == 'XYZ':
                 selected_objects = bpy.context.selected_objects
