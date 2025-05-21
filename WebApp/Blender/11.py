@@ -471,6 +471,18 @@ def align_z_center_to_cursor_z(obj):
     print(f"Object '{obj.name}' Z-axis center aligned to cursor's Z-axis.")
 
 
+def recalculate_normals_selected():
+    """Recalculates the normals of all selected mesh objects."""
+    for obj in bpy.context.selected_objects:
+        if obj.type == 'MESH':
+            bpy.context.view_layer.objects.active = obj
+            bpy.ops.object.mode_set(mode='EDIT')
+            bpy.ops.mesh.select_all(action='SELECT')
+            bpy.ops.mesh.normals_make_consistent(inside=False)
+            bpy.ops.object.mode_set(mode='OBJECT')
+    print("Normals recalculated for all selected mesh objects.")
+
+
 #5
 
   
@@ -644,7 +656,7 @@ class TransformXYZClipboardPanel(bpy.types.Panel):
         op_rz = split.operator("object.translate_axis_clipboard_no_prop", text="Z")
         op_rz.axis = 'Z'
         op_rz.transform_type = 'ALIGN_X'
-        op_rz = split.operator("object.translate_axis_clipboard_no_prop", text="XYZ")
+        op_rz = split.operator("object.translate_axis_clipboard_no_prop", text="计算")
         op_rz.axis = 'XYZ'
         op_rz.transform_type = 'ALIGN_X'
 
@@ -786,14 +798,7 @@ class TransformAxisClipboardOperator(bpy.types.Operator):
                         align_rightest_x_to_cursor_x(obj)
 
             elif self.axis == 'XYZ':
-                selected_objects = bpy.context.selected_objects
-
-                if not selected_objects:
-                    print("No objects selected. Please select one or more objects to align.")
-                else:
-                    for obj in selected_objects:
-                        align_lowest_to_cursor_z(obj)
-
+                recalculate_normals_selected()
             return {'FINISHED'}
 
         if self.transform_type == 'ALIGN_Z':
@@ -930,14 +935,107 @@ class TransformAxisClipboardOperator(bpy.types.Operator):
             self.report({'WARNING'}, "No mesh object selected.")
 
         return {'FINISHED'}
+class RecalculateNormals(bpy.types.Operator):
+    bl_idname = "rn.selected"
+    bl_label = "Recalculate Normals"
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+
+        recalculate_normals_selected();
+             
+        return {'FINISHED'}
+
+class SimpleSaveOperator(bpy.types.Operator):
+    """Simple operator to save the current Blender file."""
+    bl_idname = "wm.simple_save"
+    bl_label = "Simple Save"
+
+    filepath: bpy.props.StringProperty(
+        name="File Path",
+        description="Path to save the Blender file",
+        default="",
+        subtype='FILE_PATH',
+    )
+    use_relative_path: bpy.props.BoolProperty(
+        name="Relative Path",
+        description="Save with relative path",
+        default=False,
+    )
+    check_existing: bpy.props.BoolProperty(
+        name="Check Existing",
+        description="Check and warn on overwriting existing files",
+        default=True,
+    )
+    copy: bpy.props.BoolProperty(
+        name="Save Copy",
+        description="Save a copy instead of overwriting",
+        default=False,
+    )
+
+    def execute(self, context):
+        try:
+            bpy.ops.wm.save_mainfile(
+                #filepath=self.filepath,
+                #check_existing=self.check_existing,
+                #copy=self.copy,
+            )
+            self.report({'INFO'}, f"File saved to: {self.filepath}")
+            return {'FINISHED'}
+        except Exception as e:
+            self.report({'ERROR'}, f"Error saving file: {e}")
+            return {'CANCELLED'}
+
+from typing import Dict,List
+addon_key_maps: Dict[bpy.types.KeyMap, List[bpy.types.KeyMapItem]] = {}
 
 def register():
     bpy.utils.register_class(TransformXYZClipboardPanel)
     bpy.utils.register_class(TransformAxisClipboardOperator)
+    bpy.utils.register_class(RecalculateNormals)
+    bpy.utils.register_class(SimpleSaveOperator)
+    addon_key_config = bpy.context.window_manager.keyconfigs.addon
+    if not addon_key_config:
+        return
+
+
+    #key_map = addon_key_config.keymaps.new(name='Window')
+    addon_keymaps = []
+    wm = bpy.context.window_manager
+    for km in wm.keyconfigs.addon.keymaps:
+        if km.name == "3D View Generic":
+            # Try to find an existing Spacebar mapping to override
+            for kmi in km.keymap_items:
+                if kmi.type == 'W':
+                    print(f"===============Found existing Spacebar mapping: {kmi.idname}")
+                    # Remove the existing mapping
+                    km.keymap_items.remove(kmi)
+                    break  # Assuming only one Spacebar mapping at the top level
+
+            # Create a new keymap item for Spacebar
+            km.keymap_items.new(idname=SimpleSaveOperator.bl_idname, type='W', value='PRESS', shift=False)
+            km.keymap_items.new(idname=SimpleSaveOperator.bl_idname, type='W', value='PRESS', shift=False)
+
+            addon_keymaps.append(km)
+
+            break
+    bpy.types.WindowManager.addon_keymaps = addon_keymaps
+    #addon_key_maps[key_map] = []
+
+    #key_map_item = key_map.keymap_items.new(idname=RecalculateNormals.bl_idname, type='E', value='PRESS', shift=False)
+    #key_map_item = key_map.keymap_items.new(idname=SimpleSaveOperator.bl_idname, type='W', value='PRESS', shift=False)
+
+    #addon_key_maps[key_map].append(key_map_item)
 
 def unregister():
     bpy.utils.unregister_class(TransformXYZClipboardPanel)
     bpy.utils.unregister_class(TransformAxisClipboardOperator)
+    bpy.utils.unregister_class(RecalculateNormals)
+    bpy.utils.unregister_class(SimpleSaveOperator)
 
 if __name__ == "__main__":
     register()

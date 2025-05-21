@@ -452,8 +452,13 @@ namespace Dir
 						str.Substring(0, 1) +	"." + str.Substring(1)
 					);
 				} else if (id == (ushort)Keys.F3) {
+					var str=Clipboard.GetText();
+					if(str.StartsWith("-"))
+						str=str.Substring(1);
+					else
+						str="-"+str;
 					Clipboard.SetText(
-						"-" + Clipboard.GetText()
+					str
 					);
 				}
 					
