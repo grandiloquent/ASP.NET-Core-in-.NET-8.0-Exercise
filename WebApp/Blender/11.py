@@ -483,7 +483,7 @@ def recalculate_normals_selected():
     print("Normals recalculated for all selected mesh objects.")
 
 
-_s = True
+_s = False
 
 def alignOutputParent(node):
     offset = 100
@@ -565,7 +565,7 @@ def alignNodes(node):
                 
         y=y-ty-offset
         
-class SortNodesInFrame(Operator):
+class SortNodesInFrame(bpy.types.Operator):
     """ ShaderNode连接 """
     bl_idname = "sn.sortoutputparent"
     bl_label = ""
@@ -595,7 +595,7 @@ class SortNodesInFrame(Operator):
              
         return {'FINISHED'}
     
-class SortNodes(Operator):
+class SortNodes(bpy.types.Operator):
     """ ShaderNode连接 """
     bl_idname = "sn.sortnodes"
     bl_label = ""
