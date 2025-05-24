@@ -27,6 +27,7 @@ namespace Dir
 		private System.Windows.Forms.ToolStripSplitButton toolStripSplitButton2;
 		private System.Windows.Forms.ToolStripMenuItem 插件ToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem 插件代码ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripTextBox _text;
 		
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -61,8 +62,9 @@ namespace Dir
 			this.翻译ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSplitButton2 = new System.Windows.Forms.ToolStripSplitButton();
 			this.插件ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.插件代码ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.textBox1 = new System.Windows.Forms.TextBox();
+			this._text = new System.Windows.Forms.ToolStripTextBox();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -71,7 +73,8 @@ namespace Dir
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
 			this.toolStripSplitButton1,
 			this.toolStripButton5,
-			this.toolStripSplitButton2});
+			this.toolStripSplitButton2,
+			this._text});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(381, 25);
@@ -163,9 +166,16 @@ namespace Dir
 			// 插件ToolStripMenuItem
 			// 
 			this.插件ToolStripMenuItem.Name = "插件ToolStripMenuItem";
-			this.插件ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.插件ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
 			this.插件ToolStripMenuItem.Text = "插件";
 			this.插件ToolStripMenuItem.Click += new System.EventHandler(this.插件ToolStripMenuItemClick);
+			// 
+			// 插件代码ToolStripMenuItem
+			// 
+			this.插件代码ToolStripMenuItem.Name = "插件代码ToolStripMenuItem";
+			this.插件代码ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+			this.插件代码ToolStripMenuItem.Text = "插件代码";
+			this.插件代码ToolStripMenuItem.Click += new System.EventHandler(this.插件代码ToolStripMenuItemClick);
 			// 
 			// textBox1
 			// 
@@ -179,12 +189,10 @@ namespace Dir
 			this.textBox1.TabIndex = 1;
 			this.textBox1.KeyUp += new System.Windows.Forms.KeyEventHandler(this.TextBox1KeyUp);
 			// 
-			// 插件代码ToolStripMenuItem
+			// _text
 			// 
-			this.插件代码ToolStripMenuItem.Name = "插件代码ToolStripMenuItem";
-			this.插件代码ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-			this.插件代码ToolStripMenuItem.Text = "插件代码";
-			this.插件代码ToolStripMenuItem.Click += new System.EventHandler(this.插件代码ToolStripMenuItemClick);
+			this._text.Name = "_text";
+			this._text.Size = new System.Drawing.Size(100, 25);
 			// 
 			// MainForm
 			// 

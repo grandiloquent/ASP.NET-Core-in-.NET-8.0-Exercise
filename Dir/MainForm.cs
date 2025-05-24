@@ -315,7 +315,16 @@ namespace Dir
 					//ShiftA();
 					//Images.Ocr(this, textBox1, 80, 220, 60);
 					//Images.Ocr(this, textBox1, 96  ,110, 30);
-					Images.Ocr(this, textBox1, 124, 110, 30);
+					//Images.Ocr(this, textBox1, 124, 110, 30);
+					var v=104;
+					try {
+						if(Regex.IsMatch(_text.Text,"^\\d+$"))
+							v=int.Parse(_text.Text);
+					} catch  {
+						
+					 
+					}
+					Images.Ocr(this, textBox1, v, 110, 30);
 				} else if (id == (ushort)Keys.D1) {
 					
 //					keybd_event((int)VK.G, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  

@@ -483,6 +483,218 @@ def recalculate_normals_selected():
     print("Normals recalculated for all selected mesh objects.")
 
 
+_s = True
+
+def alignNode(node):
+    offset = 40
+    inputs = [l for l in node.inputs if len(l.links)>0]
+    xn = node.location.x-offset
+    y = node.location.y;
+    for i in inputs:
+        tnode = i.links[0].from_node
+        x = xn - tnode.dimensions.x
+        tnode.location=mathutils.Vector((x,y))
+        y = y - offset - tnode.dimensions.y;
+        inputs = [l for l in tnode.inputs if len(l.links)>0]
+        if len(inputs)>0:
+            alignNode(tnode)
+
+_y=0
+
+def alignParent(node):
+    offset = 40
+    inputs = [l for l in node.outputs if len(l.links)>0]
+    xn = node.location.x+offset
+    global _y
+    if _y==0:
+        _y = node.location.y;
+    for i in inputs:
+        tnode = i.links[0].to_node
+        x = xn + node.dimensions.x
+        tnode.location=mathutils.Vector((x,_y))
+        print( tnode.location.y)
+        _y =_y - offset - tnode.dimensions.y;
+        inputs = [l for l in tnode.outputs if len(l.links)>0]
+        if len(inputs)>0:
+            alignParent(tnode)
+
+def alignOutput(node):
+    offset = 40
+    outputs = [l for l in node.outputs if len(l.links)>0]
+    xn = node.location.x
+    global _y
+    if _y==0:
+        _y = node.location.y;
+    for i in outputs:
+        tnode = i.links[0].to_node
+        x = xn + node.dimensions.x+offset
+        tnode.location=mathutils.Vector((x,_y))
+        _y =_y - offset - tnode.dimensions.y;
+        outputs = [l for l in tnode.outputs if len(l.links)>0]
+        if len(outputs)>0:
+            alignOutput(tnode)
+            
+def alignOutputParent(node):
+    offset = 100
+    outputs = [l for l in node.outputs if len(l.links)>0]
+    xn = node.location.x
+    global _y
+    if _y==0:
+        _y = node.location.y;
+    for i in outputs:
+        tnode = i.links[0].to_node
+        x = xn + node.dimensions.x+offset
+        tnode.location=mathutils.Vector((x,_y))
+        _y =_y - offset - tnode.dimensions.y;
+        outputs = [l for l in tnode.outputs if len(l.links)>0]
+        if len(outputs)>0 and (node.parent == tnode.parent):
+            alignOutputParent(tnode)
+
+def alignNodesParent(node):
+    offset = 40
+    inputs = [l for l in node.inputs if len(l.links)>0]
+    xn = node.location.x-offset
+    global _y
+    if _y==0:
+        _y = node.location.y;
+    for i in inputs:
+        tnode = i.links[0].from_node
+        x = xn - tnode.dimensions.x
+        tnode.location=mathutils.Vector((x,_y))
+        _y =_y - offset - tnode.dimensions.y;
+        inputs = [l for l in tnode.inputs if len(l.links)>0]
+        if len(inputs)>0 and (node.parent == tnode.parent):
+            alignNodesParent(tnode)
+            
+class SortNodes(bpy.types.Operator):
+    """ ShaderNode连接 """
+    bl_idname = "sn.sortnodes"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+
+        if _s:
+                nms = [m for m in bpy.context.active_object.modifiers if m.type=='NODES']
+                nodes = [n for n in nms[0].node_group.nodes if n.select]
+                node=nodes[0]
+                alignNode(node);
+        else:
+                nodes = bpy.context.view_layer.objects.active.active_material.node_tree.nodes
+                node =  [n for n in nodes if n.select][0]                 
+                alignNode(node);
+             
+        return {'FINISHED'}
+
+class SortParent(bpy.types.Operator):
+    bl_idname = "sn.sortparent"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+
+        global _y
+        _y=0
+        if _s:
+                nms = [m for m in bpy.context.active_object.modifiers if m.type=='NODES']
+                nodes = [n for n in nms[0].node_group.nodes if n.select]
+                node=nodes[0]
+                alignParent(node);
+        else:
+                nodes = bpy.context.view_layer.objects.active.active_material.node_tree.nodes
+                node =  [n for n in nodes if n.select][0]                 
+                alignParent(node);
+        
+        return {'FINISHED'}
+
+
+class SortOutput(bpy.types.Operator):
+    """ ShaderNode连接 """
+    bl_idname = "sn.sortoutput"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+             
+        global _y
+        _y=0
+        if _s:
+                nms = [m for m in bpy.context.active_object.modifiers if m.type=='NODES']
+                nodes = [n for n in nms[0].node_group.nodes if n.select]
+                node=nodes[0]
+                alignOutput(node);
+        else:
+                nodes = bpy.context.view_layer.objects.active.active_material.node_tree.nodes
+                node =  [n for n in nodes if n.select][0]                 
+                alignOutput(node);
+
+        return {'FINISHED'}
+
+class SortNodesInFrameBack(bpy.types.Operator):
+    """ ShaderNode连接 """
+    bl_idname = "sn.sortoutputparent"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+
+        global _y
+        _y=0
+        if _s:
+                nms = [m for m in bpy.context.active_object.modifiers if m.type=='NODES']
+                nodes = [n for n in nms[0].node_group.nodes if n.select]
+                node=nodes[0]
+                alignOutputParent(node);
+        else:
+                nodes = bpy.context.view_layer.objects.active.active_material.node_tree.nodes
+                node =  [n for n in nodes if n.select][0]                 
+                alignOutputParent(node);
+             
+        return {'FINISHED'}
+
+
+class SortNodesInFrame(bpy.types.Operator):
+    """ ShaderNode连接 """
+    bl_idname = "sn.sortoutputparent"
+    bl_label = ""
+    bl_options = {"REGISTER", "UNDO"}
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+
+        global _y
+        _y=0
+        if _s:
+                nms = [m for m in bpy.context.active_object.modifiers if m.type=='NODES']
+                nodes = [n for n in nms[0].node_group.nodes if n.select]
+                node=nodes[0]
+                alignNodesParent(node);
+        else:
+                nodes = bpy.context.view_layer.objects.active.active_material.node_tree.nodes
+                node =  [n for n in nodes if n.select][0]                 
+                alignNodesParent(node);
+             
+        return {'FINISHED'}
+
 #5
 
   
@@ -846,14 +1058,11 @@ class TransformAxisClipboardOperator(bpy.types.Operator):
             if self.axis == 'X':
 
                 bpy.ops.mesh.primitive_plane_add(enter_editmode=True)
-                if value!=-1:
-                    bpy.ops.transform.resize(value=(value, value, value))
+                
 
             elif self.axis == 'Y':
                 bpy.ops.mesh.primitive_cube_add(enter_editmode=True)
-                if value!=-1:
-                    bpy.ops.transform.resize(value=(value, value, value))
-
+              
             elif self.axis == 'Z':
                 if value==-1:
                     value=16
@@ -935,10 +1144,14 @@ class TransformAxisClipboardOperator(bpy.types.Operator):
             self.report({'WARNING'}, "No mesh object selected.")
 
         return {'FINISHED'}
+
+
 class RecalculateNormals(bpy.types.Operator):
     bl_idname = "rn.selected"
     bl_label = "Recalculate Normals"
     bl_options = {"REGISTER", "UNDO"}
+
+    my_string_prop: bpy.props.IntProperty(name="My String")
 
     @classmethod
     def poll(cls, context):
@@ -950,6 +1163,23 @@ class RecalculateNormals(bpy.types.Operator):
              
         return {'FINISHED'}
 
+class DrawCircle(bpy.types.Operator):
+    bl_idname = "draw.circle"
+    bl_label = "Draw Circle"
+    bl_options = {"REGISTER", "UNDO"}
+
+    my_string_prop: bpy.props.IntProperty(name="点数")
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+
+        bpy.ops.mesh.primitive_circle_add(vertices=self.my_string_prop, enter_editmode=True)
+
+        return {'FINISHED'}
+    
 class SimpleSaveOperator(bpy.types.Operator):
     """Simple operator to save the current Blender file."""
     bl_idname = "wm.simple_save"
@@ -990,14 +1220,60 @@ class SimpleSaveOperator(bpy.types.Operator):
             self.report({'ERROR'}, f"Error saving file: {e}")
             return {'CANCELLED'}
 
+class BevelEdge(bpy.types.Operator):
+    bl_idname = "bevel.edge"
+    bl_label = "Bevel Edge"
+    bl_options = {"REGISTER", "UNDO"}
+
+    wdith_prop: bpy.props.FloatProperty(name="宽度")
+    segments_prop: bpy.props.IntProperty(name="分段")
+    verts_prop: bpy.props.BoolProperty(name="点",default=False)
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        if not self.verts_prop:
+                bpy.ops.mesh.bevel(offset=self.wdith_prop,segments=self.segments_prop, affect='EDGES')
+        else:
+                bpy.ops.mesh.bevel(offset=self.wdith_prop,segments=self.segments_prop, affect='VERTICES')
+
+        return {'FINISHED'}
+         
+class MyPieMenu(bpy.types.Menu):
+    bl_label = "My Pie Menu"
+    bl_idname = "_MT_my.pie_MT_"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = "Object"
+
+    def draw(self, context):
+        layout = self.layout
+        pie = layout.menu_pie()
+
+        pie.operator("view3d.transform_gizmo_set", text="Move").type = {'TRANSLATE'}
+
+        # You can add more operators or sub-menus here
 from typing import Dict,List
 addon_key_maps: Dict[bpy.types.KeyMap, List[bpy.types.KeyMapItem]] = {}
 
+classes = [
+    SortNodesInFrameBack,
+    SortParent,
+    SortNodes,
+    SortNodesInFrame,
+    TransformXYZClipboardPanel,
+    TransformAxisClipboardOperator,
+    RecalculateNormals,
+    DrawCircle,
+    SimpleSaveOperator,
+    BevelEdge
+]
+
 def register():
-    bpy.utils.register_class(TransformXYZClipboardPanel)
-    bpy.utils.register_class(TransformAxisClipboardOperator)
-    bpy.utils.register_class(RecalculateNormals)
-    bpy.utils.register_class(SimpleSaveOperator)
+    for c in classes:
+        bpy.utils.register_class(c)
     addon_key_config = bpy.context.window_manager.keyconfigs.addon
     if not addon_key_config:
         return
@@ -1007,22 +1283,46 @@ def register():
     addon_keymaps = []
     wm = bpy.context.window_manager
     for km in wm.keyconfigs.addon.keymaps:
+        print(f'>>>>>>>>>>>>>>>>>>>>>>>>{km.name}')
         if km.name == "3D View Generic":
             # Try to find an existing Spacebar mapping to override
             for kmi in km.keymap_items:
+                
                 if kmi.type == 'W':
-                    print(f"===============Found existing Spacebar mapping: {kmi.idname}")
-                    # Remove the existing mapping
+                    print(f'v------{kmi.type}')
                     km.keymap_items.remove(kmi)
-                    break  # Assuming only one Spacebar mapping at the top level
+                elif kmi.type == 'Q':
+                    km.keymap_items.remove(kmi)
+                elif kmi.type == 'B':
+                    km.keymap_items.remove(kmi)
+                elif kmi.type == 'V':
+                    km.keymap_items.remove(kmi)
 
             # Create a new keymap item for Spacebar
             km.keymap_items.new(idname=SimpleSaveOperator.bl_idname, type='W', value='PRESS', shift=False)
-            km.keymap_items.new(idname=SimpleSaveOperator.bl_idname, type='W', value='PRESS', shift=False)
+            kmi = km.keymap_items.new(idname=RecalculateNormals.bl_idname, type='E', value='PRESS', shift=False)
+            kmi.properties.my_string_prop=1
+            kmi = km.keymap_items.new(idname=DrawCircle.bl_idname, type='Q', value='PRESS', shift=False)
+            kmi.properties.my_string_prop=12
+            kmi = km.keymap_items.new(idname=BevelEdge.bl_idname, type='B', value='PRESS', shift=False)
+            kmi.properties.wdith_prop=0.01
+            kmi.properties.segments_prop=1
+            kmi.properties.verts_prop=False
+            kmi = km.keymap_items.new(idname=BevelEdge.bl_idname, type='V', value='PRESS', shift=False)
+            kmi.properties.wdith_prop=0.01
+            kmi.properties.segments_prop=1
+            kmi.properties.verts_prop=True
 
             addon_keymaps.append(km)
 
-            break
+        
+        if km.name == "Node Editor":
+            km.keymap_items.new(idname=SortNodes.bl_idname, type='F1', value='PRESS', shift=False)
+            km.keymap_items.new(idname=SortNodesInFrame.bl_idname, type='F4', value='PRESS', shift=False)
+            km.keymap_items.new(idname=SortNodesInFrameBack.bl_idname, type='F3', value='PRESS', shift=False)
+            km.keymap_items.new(idname=SortParent.bl_idname, type='F5', value='PRESS', shift=False)
+            addon_keymaps.append(km)
+            
     bpy.types.WindowManager.addon_keymaps = addon_keymaps
     #addon_key_maps[key_map] = []
 
@@ -1032,10 +1332,8 @@ def register():
     #addon_key_maps[key_map].append(key_map_item)
 
 def unregister():
-    bpy.utils.unregister_class(TransformXYZClipboardPanel)
-    bpy.utils.unregister_class(TransformAxisClipboardOperator)
-    bpy.utils.unregister_class(RecalculateNormals)
-    bpy.utils.unregister_class(SimpleSaveOperator)
+    for c in classes:
+        bpy.utils.unregister_class(c)
 
 if __name__ == "__main__":
     register()
