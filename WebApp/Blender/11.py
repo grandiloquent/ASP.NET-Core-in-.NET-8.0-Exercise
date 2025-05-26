@@ -1239,6 +1239,7 @@ class NodeEditorActions(bpy.types.Operator):
         if self.mode_prop=="join":
             bpy.ops.node.join()
         elif self.mode_prop=="socket":
+            print(f'----------------{self.mode_prop}')
             nms = [m for m in bpy.context.active_object.modifiers if m.type=='NODES']
             n=nms[0].node_group
             clipboard_text = bpy.context.window_manager.clipboard
