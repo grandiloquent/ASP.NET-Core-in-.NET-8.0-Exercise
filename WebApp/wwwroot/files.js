@@ -1,7 +1,7 @@
 const imageRe = new RegExp(/\.(?:jpeg|jpg|webp|gif|png|bmp|v)$/);
 const binaryRe = new RegExp(/\.(?:pdf|epub|apk|azw3|mobi)$/);
 const audioRe = new RegExp(/\.(?:mp3|wav|m4a)$/);
-const videoRe = new RegExp(/\.(?:mp4)$/, 'i');
+const videoRe = new RegExp(/\.(?:mp4|webm)$/, 'i');
 const zipRe = new RegExp(/\.(?:zip|gzip|epub)$/);
 const txtRe = new RegExp(/\.(?:txt|java|js|css)$/);
 const runRe = new RegExp(/\.(?:blend|exe)$/);

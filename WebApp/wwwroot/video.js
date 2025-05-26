@@ -95,8 +95,8 @@ function zoomIn(video, evt) {
     const b = video.getBoundingClientRect();
     const x = evt.clientX;
     const y = evt.clientY;
-
-    const ratio=2.2;
+// 2.2
+    const ratio=1.5;
     const width = (x - b.left) / b.width * (video.videoWidth * ratio);
     const height = (y - b.top) / b.height * (video.videoHeight *ratio);
 

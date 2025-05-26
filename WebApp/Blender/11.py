@@ -5,6 +5,8 @@ import math
 import bmesh
 import mathutils
 
+_s = True
+
 def duplicate_separate(mode):
 
     bpy.ops.mesh.duplicate_move()
@@ -471,6 +473,58 @@ def align_z_center_to_cursor_z(obj):
     print(f"Object '{obj.name}' Z-axis center aligned to cursor's Z-axis.")
 
 
+def calculate_angle_relative_to_xy():
+    """
+    Calculates the angle between the vector formed by two selected vertices
+    and the XY plane.
+    """
+    obj = bpy.context.object
+
+    bm = bmesh.from_edit_mesh(obj.data)
+    selected_verts = [v for v in bm.verts if v.select]
+
+    if len(selected_verts) != 2:
+        print("Error: Please select exactly two vertices.")
+        return
+
+    v1_world = obj.matrix_world @ selected_verts[0].co
+    v2_world = obj.matrix_world @ selected_verts[1].co
+
+    # Create the vector between the two vertices
+    vector = v2_world - v1_world
+
+    # The normal vector of the XY plane is (0, 0, 1)
+    plane_normal = mathutils.Vector((0.0, 0.0, 1.0))
+
+    # Calculate the angle between the vector and the plane normal
+    # using the dot product formula:
+    # dot_product = |vector| * |plane_normal| * cos(angle)
+    # cos(angle) = dot_product / (|vector| * |plane_normal|)
+    vector_normalized = vector.normalized()
+    plane_normal_normalized = plane_normal.normalized()  # Already normalized as length is 1
+
+    dot_product = vector_normalized.dot(plane_normal_normalized)
+
+    # Handle potential floating-point errors that might lead to values slightly outside [-1, 1]
+    if dot_product > 1.0:
+        dot_product = 1.0
+    elif dot_product < -1.0:
+        dot_product = -1.0
+
+    angle_radians = math.acos(dot_product)
+    angle_degrees = math.degrees(angle_radians)
+
+    # The angle calculated is the angle between the vector and the *normal* of the XY plane.
+    # The angle relative to the XY plane itself is 90 degrees minus this angle.
+    angle_relative_radians = math.pi / 2 - angle_radians
+    angle_relative_degrees = math.degrees(angle_relative_radians)
+
+    print(f"Vertex 1 (World Coords): {v1_world}")
+    print(f"Vertex 2 (World Coords): {v2_world}")
+    print(f"Vector between vertices: {vector}")
+    print(f"Angle with the normal of the XY plane: {angle_degrees:.2f} degrees")
+    print(f"Angle relative to the XY plane: {angle_relative_degrees:.2f} degrees")
+
 def recalculate_normals_selected():
     """Recalculates the normals of all selected mesh objects."""
     for obj in bpy.context.selected_objects:
@@ -483,7 +537,7 @@ def recalculate_normals_selected():
     print("Normals recalculated for all selected mesh objects.")
 
 
-_s = False
+
 
 def alignOutputParent(node):
     offset = 100
@@ -1170,7 +1224,38 @@ class BevelEdge(bpy.types.Operator):
                 bpy.ops.mesh.bevel(offset=self.wdith_prop,segments=self.segments_prop, affect='VERTICES')
 
         return {'FINISHED'}
-         
+class NodeEditorActions(bpy.types.Operator):
+    bl_idname = "node.editor_actions"
+    bl_label = "Node Editor Actions"
+    bl_options = {"REGISTER", "UNDO"}
+
+    mode_prop:bpy.props.StringProperty(name="模式")
+
+    @classmethod
+    def poll(cls, context):
+        return True
+
+    def execute(self, context):
+        if self.mode_prop=="join":
+            bpy.ops.node.join()
+        elif self.mode_prop=="socket":
+            nms = [m for m in bpy.context.active_object.modifiers if m.type=='NODES']
+            n=nms[0].node_group
+            clipboard_text = bpy.context.window_manager.clipboard
+            lines = clipboard_text.splitlines()
+            trimmed_lines = [line.strip() for line in lines]
+            string_array = [line for line in trimmed_lines if line]
+            panel=n.interface.new_panel(name='Panel')
+            for item in string_array:
+                nn=n.interface.new_socket(name=item, socket_type="NodeSocketFloat", in_out="INPUT")
+                nn.default_value=0
+                nn.min_value=0
+                n.interface.move_to_parent(nn,panel,0)
+
+
+
+        return {'FINISHED'}
+           
 class MyPieMenu(bpy.types.Menu):
     bl_label = "My Pie Menu"
     bl_idname = "_MT_my.pie_MT_"
@@ -1196,7 +1281,8 @@ classes = [
     RecalculateNormals,
     DrawCircle,
     SimpleSaveOperator,
-    BevelEdge
+    BevelEdge,
+    NodeEditorActions
 ]
 
 def register():
@@ -1245,8 +1331,16 @@ def register():
 
         
         if km.name == "Node Editor":
+            for kmi in km.keymap_items:
+                if kmi.type == 'W':
+                    km.keymap_items.remove(kmi)
+
             km.keymap_items.new(idname=SortNodes.bl_idname, type='F3', value='PRESS', shift=False)
             km.keymap_items.new(idname=SortNodesInFrame.bl_idname, type='F1', value='PRESS', shift=False)
+            kmi = km.keymap_items.new(idname=NodeEditorActions.bl_idname, type='W', value='PRESS', shift=False)
+            kmi.properties.mode_prop="join"
+            kmi = km.keymap_items.new(idname=NodeEditorActions.bl_idname, type='E', value='PRESS', shift=False)
+            kmi.properties.mode_prop="socket"
             addon_keymaps.append(km)
             
     bpy.types.WindowManager.addon_keymaps = addon_keymaps
@@ -1257,6 +1351,7 @@ def register():
 
     #addon_key_maps[key_map].append(key_map_item)
 
+         
 def unregister():
     for c in classes:
         bpy.utils.unregister_class(c)

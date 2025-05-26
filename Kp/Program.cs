@@ -268,10 +268,10 @@ namespace Kb
 						keybd_event((int)VK.A, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
 						Thread.Sleep(20);
 						keybd_event((int)VK.SHIFT, (byte)MapVirtualKey((uint)VK.SHIFT, 0), KEYEVENTF_KEYUP, 0); // Alt Release
-						Thread.Sleep(20);
-						keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
-						Thread.Sleep(20);
-						keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
+//						Thread.Sleep(20);
+//						keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
+//						Thread.Sleep(20);
+//						keybd_event((int)VK.S, (byte)MapVirtualKey((uint)VK.Z, 0), KEYEVENTF_KEYUP, 0); // N1 Release
 
 
 //						keybd_event((int)VK.E, (byte)MapVirtualKey((uint)VK.Z, 0), 0, 0); // N1 Press  
